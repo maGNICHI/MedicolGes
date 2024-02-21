@@ -8,6 +8,8 @@ import {
   Box,
   useColorModeValue,
   Text,
+  Center,
+  Textarea,
 } from "@chakra-ui/react";
 import React, { useMemo } from "react";
 
@@ -16,6 +18,9 @@ import Card from "components/card/Card";
 import { Button } from "@chakra-ui/react";
 import SwitchField from "components/fields/SwitchField";
 import ExcelFileInput from '../components/ExcelFileInput'; // Import ExcelFileInput component
+import ProjectCard from "../components/ProjectCard";
+import { blacken } from "@chakra-ui/theme-tools";
+import { NavLink } from "react-router-dom/cjs/react-router-dom";
 
 export default function AddProject() {
   const textColor = useColorModeValue("secondaryGray.900", "white");
@@ -44,47 +49,63 @@ export default function AddProject() {
           Add New Project
         </Text>
       </Flex>
-      <Flex>
-        <Grid templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }} gap={4}>
-          {/* Left column */}
-          <form>
+      <Grid
+        templateColumns={{ base: "1fr", lg: "1fr 1fr" }} // Two columns on large screens, one column on small screens
+        gap={4} // Space between the columns
+      >
+        {/* Left column (form inputs) */}
+        <form>
+          <Box>
+            <FormControl>
+              <FormLabel>Name Of The Project</FormLabel>
+              <Input placeholder="Name" isRequired />
+            </FormControl>
+            <FormControl my="10px">
+              <FormLabel>Description</FormLabel>
+              <Textarea placeholder="Description" />
+            </FormControl>
             <Box>
-              <FormControl>
-                <FormLabel>Name Of The Project</FormLabel>
-                <Input placeholder="Name" isRequired/>
-              </FormControl>
               <FormControl my="10px">
-                <FormLabel>Description</FormLabel>
-                <Input placeholder="Description" />
-              </FormControl>
-              <Box>
-                <FormControl my="10px">
-                  <FormLabel>Upload Excel File</FormLabel>
+                <Flex className="justify-between" gap={5}>
+                  <FormLabel mt={2}>Upload Excel File</FormLabel>
                   <ExcelFileInput onFileSelect={handleFileSelect} />
-                </FormControl>
-              </Box>
-              <FormControl my="10px">
-                <FormLabel>Under The Organization</FormLabel>
-                <Select placeholder="Select Organization">
-                  <option>MISCO</option>
-                </Select>
+                </Flex>
               </FormControl>
             </Box>
-            {/* Right column */}
-            <Box>
-              
-            </Box>
-            <Flex className="justify-between">
-              <Button colorScheme="blue" mr={3}>
-                Add
-              </Button>
+            <FormControl my="10px">
+              <FormLabel>Under The Organization</FormLabel>
+              <Select placeholder="Select Organization">
+                <option>MISCO</option>
+              </Select>
+            </FormControl>
+            <FormControl my="10px">
+              <Flex className="justify-between" gap={5}>
+                <FormLabel mt={2}>Add Form</FormLabel>
+                <Button backgroundColor={"#80808082"}>
+                  Add Questionnaire
+                </Button>
+              </Flex>
+            </FormControl>
+          </Box>
+          <Flex className="justify-between">
+            <Button colorScheme="blue" mr={3}>
+              Add
+            </Button>
+            <NavLink to="/admin/projects">
               <Button colorScheme="purple" mr={3}>
-                Close
+                Back To Project List
               </Button>
-            </Flex>
-          </form>
-        </Grid>
-      </Flex>
+            </NavLink>
+          </Flex>
+        </form>
+
+        {/* Right column (ProjectCard) */}
+        <Box>
+          <Center mt="90px">
+            <ProjectCard />
+          </Center>
+        </Box>
+      </Grid>
     </Card>
   );
 }

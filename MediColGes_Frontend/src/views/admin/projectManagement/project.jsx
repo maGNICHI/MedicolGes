@@ -44,16 +44,9 @@ export default function Project() {
           }}
           gap={{ base: "20px", xl: "20px" }}
         >
-          <ProjectCard
-            gridArea='1 / 1 / 2 / 2'
-            banner={banner}
-            avatar={avatar}
-            name='Adela Parkson'
-            job='Product Designer'
-            posts='17'
-            followers='9.7k'
-            following='274'
-          />
+          <NavLink to="/admin/projects/1">
+            <ProjectCard/>
+          </NavLink>
         </Grid>
       </Box>
     </>

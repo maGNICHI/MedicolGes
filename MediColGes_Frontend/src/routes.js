@@ -14,9 +14,7 @@ import {
 
 // Admin Imports
 import MainDashboard from "views/admin/default";
-import NFTMarketplace from "views/admin/marketplace";
 import Profile from "views/admin/profile";
-import DataTables from "views/admin/dataTables";
 import UserTable from 'views/admin/userManagement/user';
 import Projects from 'views/admin/projectManagement/project';
 //import RTL from "views/admin/rtl";
@@ -24,6 +22,7 @@ import Projects from 'views/admin/projectManagement/project';
 // Auth Imports
 import SignInCentered from "views/auth/signIn";
 import AddProject from 'views/admin/projectManagement/Add/addProject';
+import ConsultProject from 'views/admin/projectManagement/ConsultProject/consultProject';
 
 const routes = [
   {
@@ -49,6 +48,12 @@ const routes = [
     secondary: true,
   },
   {
+    name: "Consult Project",
+    layout: "/admin/projects",
+    path: "/1",
+    component: ConsultProject ,
+  },
+  {
     name: "Add Project",
     layout: "/admin/projects",
     path: "/add-project",
@@ -64,21 +69,21 @@ const routes = [
   {
     name: "Form Management",
     layout: "/admin",
-    path: "/data-tables",
+    path: "/default",
     icon: <Icon as={MdDynamicForm} width='20px' height='20px' color='inherit' />,
     component: Profile,
   },
   {
     name: "Organization Management",
     layout: "/admin",
-    path: "/data-tables",
+    path: "/default",
     icon: <Icon as={MdHome} width='20px' height='20px' color='inherit' />,
     component: Profile,
   },
   {
     name: "Forum Management",
     layout: "/admin",
-    path: "/data-tables",
+    path: "/default",
     icon: <Icon as={MdOutlineFilePresent} width='20px' height='20px' color='inherit' />,
     component: Profile,
   },

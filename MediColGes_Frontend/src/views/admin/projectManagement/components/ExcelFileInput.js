@@ -18,7 +18,7 @@ const ExcelFileInput = ({ onFileSelect }) => {
         onChange={handleFileInputChange}
         display="none" // Hide the input field
       />
-      <Button as="label" htmlFor="file-input" cursor="pointer">
+      <Button backgroundColor={"#80808082"} as="label" htmlFor="file-input" cursor="pointer">
         Select Excel File
       </Button>
       {selectedFile && <p>Selected file: {selectedFile.name}</p>}
