@@ -9,7 +9,8 @@ import {
   MdSupervisedUserCircle,
   MdOutlineFilePresent,
   MdOutlineDashboard,
-  MdDynamicForm
+  MdDynamicForm,
+  MdChat
 } from "react-icons/md";
 
 // Admin Imports
@@ -48,12 +49,6 @@ const routes = [
     secondary: true,
   },
   {
-    name: "Consult Project",
-    layout: "/admin/projects",
-    path: "/1",
-    component: ConsultProject ,
-  },
-  {
     name: "Add Project",
     layout: "/admin/projects",
     path: "/add-project",
@@ -85,6 +80,13 @@ const routes = [
     layout: "/admin",
     path: "/default",
     icon: <Icon as={MdOutlineFilePresent} width='20px' height='20px' color='inherit' />,
+    component: Profile,
+  },
+  {
+    name: "Chat",
+    layout: "/admin",
+    path: "/chat",
+    icon: <Icon as={MdChat} width='20px' height='20px' color='inherit' />,
     component: Profile,
   },
   {

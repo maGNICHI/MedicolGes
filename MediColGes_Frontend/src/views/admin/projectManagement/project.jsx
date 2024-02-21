@@ -44,9 +44,7 @@ export default function Project() {
           }}
           gap={{ base: "20px", xl: "20px" }}
         >
-          <NavLink to="/admin/projects/1">
             <ProjectCard/>
-          </NavLink>
         </Grid>
       </Box>
     </>
