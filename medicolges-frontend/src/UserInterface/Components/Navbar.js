@@ -6,7 +6,7 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import "../Styles/Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { toast } from "react-toastify";
 
 function Navbar() {
@@ -20,7 +20,7 @@ function Navbar() {
   const handleChatBtnClick = () => {
     if (!isButtonDisabled) {
       toast.info("Experiencing high traffic, Please wait a moment.", {
-        position: toast.POSITION.TOP_CENTER,
+       // position: toast.POSITION.TOP_CENTER,
         onOpen: () => setIsButtonDisabled(true),
         onClose: () => setIsButtonDisabled(false),
       });
@@ -71,7 +71,7 @@ function Navbar() {
          Login
       </button>
       </ul>
-
+<NavLink to="/login2">
       <button
         className="navbar-btn"
         type="button"
@@ -80,7 +80,7 @@ function Navbar() {
       >
         <FontAwesomeIcon icon={faCommentDots} /> Live Chat
       </button>
-
+</NavLink>
       {/* Mobile */}
       <div className={`mobile-navbar ${nav ? "open-nav" : ""}`}>
         <div onClick={openNav} className="mobile-navbar-close">
