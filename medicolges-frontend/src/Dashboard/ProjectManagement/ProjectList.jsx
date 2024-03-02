@@ -39,8 +39,8 @@ export default function ProjectList() {
                     startIcon={<FaPlus />}
                   >
                     <Title title={"Add project"} /> {/* Change the button label */}
-                  </IconButton>
-                </Col>
+                   </IconButton>
+                   </Col>
               </Row>
             </Card.Header>
           </Card>

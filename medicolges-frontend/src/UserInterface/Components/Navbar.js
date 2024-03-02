@@ -53,8 +53,8 @@ function Navbar() {
           </a>
         </li>
         <li>
-          <a href="#reviews" className="navbar-links">
-            Project
+          <a href="/post" className="navbar-links">
+            Post
           </a>
         </li>
         {/* <li>
