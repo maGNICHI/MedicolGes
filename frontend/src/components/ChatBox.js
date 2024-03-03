@@ -1,5 +1,4 @@
 import React, {useContext} from 'react';
-
 import { Box } from "@chakra-ui/layout";
 import SingleChat from "./SingleChat";
 import ChatContext from '../Context/chat-context';

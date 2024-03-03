@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import ChatContext from "../../Context/chat-context";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Box, Text } from "@chakra-ui/layout";
-
 import NotificationBadge from "react-notification-badge";
 import { Effect } from "react-notification-badge";
 import {
@@ -27,7 +26,8 @@ import { Avatar } from "@chakra-ui/avatar";
 import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
 import { Input, Spinner } from "@chakra-ui/react";
-
+import ChatLoading from "../ChatLoading";
+import UserListItem from "../userAvatar/UserListItem";
 import { getSender } from "../../config/ChatLogics";
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
@@ -163,7 +163,9 @@ const SideDrawer = () => {
                   setNotification(notification.filter((n) => n !== notif));
                 }}
               >
-               
+               {notif.chat.isGroupChat
+                    ? `New Message in ${notif.chat.chatName}`
+                    : `New Message from ${getSender(user, notif.chat.users)}`}
               </MenuItem>
             ))}
           </MenuList>
@@ -197,7 +199,17 @@ const SideDrawer = () => {
             />
             <Button onClick={handleSearch}>Go</Button>
           </Box>
-         
+          {loading ? (
+              <ChatLoading />
+            ) : (
+              searchResult?.map((user) => ( //user clicked on for chat
+                <UserListItem
+                  key={user._id}
+                  user={user}
+                  handleFunction={() => accessChatCreateChat(user._id)}
+                />
+              ))
+            )} 
           {loadingChat && <Spinner ml="auto" d="flex" />}
         </DrawerBody>
       </DrawerContent>
