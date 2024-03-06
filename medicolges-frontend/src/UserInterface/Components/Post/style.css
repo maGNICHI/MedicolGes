@@ -416,7 +416,8 @@ select.form-control:not([size]):not([multiple]) {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    position: relative
+    position: relative;
+    right:13%
 }
 
 .timeline:before {
@@ -447,8 +448,10 @@ select.form-control:not([size]):not([multiple]) {
 .timeline .timeline-time .date,
 .timeline .timeline-time .time {
     display: block;
-    font-weight: 600
+    font-weight: 500;
+    font-size: 9px; /* Adjust the desired font size */
 }
+
 
 .timeline .timeline-time .date {
     line-height: 16px;
@@ -652,15 +655,19 @@ body {
 
         .gedf-wrapper {
             margin-top: 0.97rem;
+              
         }
 
         @media (min-width: 992px) {
             .gedf-main {
+                margin-right: 9rem;
                 padding-left: 4rem;
                 padding-right: 4rem;
+                
+              
             }
             .gedf-card {
-                margin-bottom: 2.77rem;
+                margin-bottom: -1rem;
             }
         }
 

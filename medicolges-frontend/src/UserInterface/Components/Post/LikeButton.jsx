@@ -4,6 +4,7 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import "./style.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
+import { FcLike } from "react-icons/fc";
 
 const LikeButton = ({ postId, initialLikes, userLiked }) => {
   // Use likeCount to handle potential undefined or null values
@@ -38,7 +39,7 @@ const LikeButton = ({ postId, initialLikes, userLiked }) => {
       <button
         onClick={handleLike}
         className="btn btn-primary f-s-12 rounded-corner blue-button"
-      >
+      > 
         {isLiked ? (
           <i className="fas fa-heart"></i>
         ) : (

@@ -34,7 +34,7 @@ function Navbar() {
           MediColGes <span className="navbar-sign"></span>
         </Link>
       </h1>
-     
+
       {/* Desktop */}
       <ul className="navbar-items">
         <li>
@@ -42,11 +42,21 @@ function Navbar() {
             Home
           </Link>
         </li>
-        <li>
-          <a href="#services" className="navbar-links">
-            Organisation
-          </a>
-        </li>
+        
+          <li>
+            <Link to="/" className="navbar-links">
+              Organisation
+            </Link>
+            <ul className="dropdown">
+              <li>
+                <Link to="/organizationFront">Create Organization</Link>
+              </li>
+              <li>
+                <Link to="/organization/show">Show Organization</Link>
+              </li>
+            </ul>
+          </li>
+        
         <li>
           <a href="#about" className="navbar-links">
             Form
@@ -63,13 +73,13 @@ function Navbar() {
           </a>
         </li> */}
         <button
-        className="navbar-btn"
-        type="button"
-        disabled={isButtonDisabled}
-        onClick={handleChatBtnClick}
-      >
-         Login
-      </button>
+          className="navbar-btn"
+          type="button"
+          disabled={isButtonDisabled}
+          onClick={handleChatBtnClick}
+        >
+          Login
+        </button>
       </ul>
 
       <button

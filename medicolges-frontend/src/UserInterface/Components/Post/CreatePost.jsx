@@ -3,9 +3,9 @@ import axios from "axios";
 import "./style.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
-//import PostList from "./UserInterface/Components/Post/PostList";
-import PostList from "./PostList"
-import  Navbar  from "../Navbar"
+import PostList from "./PostList";
+import Navbar from "../Navbar";
+
 const CreatePost = () => {
   const [message, setMessage] = useState("");
   const [file, setFile] = useState(null);
@@ -35,10 +35,11 @@ const CreatePost = () => {
 
   return (
     <>
-    <Navbar/>
+      <Navbar />
+
       <div className="container-fluid gedf-wrapper">
         <div className="row justify-content-center">
-          <div className="col-md-6 gedf-main">
+          <div className="col-lg-7">
             <div className="card gedf-card">
               <div className="card-header">
                 <ul
@@ -89,7 +90,7 @@ const CreatePost = () => {
                       <textarea
                         className="form-control"
                         id="message"
-                        rows="3"
+                        rows="5"
                         placeholder="What are you thinking?"
                         onChange={handleChange}
                         name="message"
@@ -125,10 +126,11 @@ const CreatePost = () => {
                   <div className="btn-group">
                     <button
                       type="submit"
-                      className="btn btn-primary"
+                      className="btn btn-lg btn-primary"
                       onClick={handleSubmit}
                     >
-                      Share
+                      Share{" "}
+                      {/* Utilisation de btn-lg pour un bouton plus grand */}
                     </button>
                   </div>
                   <div className="btn-group">
@@ -160,6 +162,17 @@ const CreatePost = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div
+            className="col-lg-3"
+            style={{
+              backgroundImage: `url('/dd.png')`,
+              backgroundSize: "cover",
+
+              overflow: "hidden", // Masque tout contenu débordant de l'élément
+            }}
+          >
+            {/* Contenu à afficher par-dessus l'image */}
           </div>
         </div>
         <PostList />
