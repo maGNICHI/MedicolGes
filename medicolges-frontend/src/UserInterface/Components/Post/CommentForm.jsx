@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { FaRegCommentDots } from "react-icons/fa";
 
 const CommentForm = ({ postId, onCommentAdded }) => {
   const [comment, setComment] = useState({});
@@ -34,7 +35,7 @@ const CommentForm = ({ postId, onCommentAdded }) => {
         name="text"
       />
       <button className="btn btn-primary" onClick={handleCommentSubmit}>
-        Comment
+        <FaRegCommentDots />
       </button>
     </div>
   );
