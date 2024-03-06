@@ -3,8 +3,6 @@ import { useNavigate } from "react-router-dom";
 import ChatContext from "../../Context/chat-context";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Box, Text } from "@chakra-ui/layout";
-import NotificationBadge from "react-notification-badge";
-import { Effect } from "react-notification-badge";
 import {
   Menu,
   MenuButton,
@@ -28,21 +26,29 @@ import { useToast } from "@chakra-ui/toast";
 import { Input, Spinner } from "@chakra-ui/react";
 import ChatLoading from "../ChatLoading";
 import UserListItem from "../userAvatar/UserListItem";
+import NotificationBadge from "react-notification-badge";
+import { Effect } from "react-notification-badge";
 import { getSender } from "../../config/ChatLogics";
+
+
 const SideDrawer = () => {
   const [search, setSearch] = useState("");
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
 
-  const { user,setSelectedChat, chats, setChats,notification, setNotification  } = useContext(ChatContext);
+  const { user, setSelectedChat, chats, setChats, notification, setNotification } = useContext(ChatContext);
+
   const navigate = useNavigate();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
+
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   const logoutHandler = () => {
     localStorage.removeItem("userInformation");
     navigate("/");
   };
+
   const handleSearch = async() => {
 
     if (!search) {
@@ -82,6 +88,10 @@ const SideDrawer = () => {
       });
     }
   };
+
+
+  
+
   const accessChatCreateChat = async (userId) => {
     //console.log(userId); id of selected user
 
@@ -117,89 +127,90 @@ const SideDrawer = () => {
       });
     }
   };
+
   return (
     <React.Fragment>
-    <Box
-      d="flex"
-      justifyContent="space-between"
-      alignItems="center"
-      w="100%"
-      p="5px 10px 5px 10px"
-      borderWidth="5px"
-      borderColor="white.600"
-      bg="blue.400"
-      color="black"
-    >
-      <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
-        <Button variant="ghost" bg ='blue.700' onClick={onOpen} color="white"
-          _hover={{ background: "purple.800", color:"blue.400" }} _active={{ background: "purple.800", color:"blue.400" }}>
-            <i className="fas fa-search"></i>
-            <Text d={{ base: "none", md: "flex" }} px={4} fontWeight="bold">
-              Search User
-            </Text>
-        </Button>
-      </Tooltip>
+      <Box
+        d="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        w="100%"
+        p="5px 10px 5px 10px"
+        borderWidth="5px"
+        borderColor="white.600"
+        bg="blue.400"
+        color="black"
+      >
+        <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
+          <Button variant="ghost" bg ='blue.700' onClick={onOpen} color="white"
+            _hover={{ background: "purple.800", color:"blue.400" }} _active={{ background: "purple.800", color:"blue.400" }}>
+              <i className="fas fa-search"></i>
+              <Text d={{ base: "none", md: "flex" }} px={4} fontWeight="bold">
+                Search User
+              </Text>
+          </Button>
+        </Tooltip>
 
-      <Text fontSize="3xl" fontFamily="Work sans bold" fontWeight='bold' color="purple.700" >
-        Chat
-      </Text>
+        <Text fontSize="3xl" fontFamily="Work sans bold" fontWeight='bold' color="purple.700" >
+          Chat
+        </Text>
 
-      <div>
-        <Menu>
-          <MenuButton p={1}>
-            <NotificationBadge
-              count={notification.length}
-              effect={Effect.SCALE}
-            />
-            <BellIcon fontSize="2xl" m={1} color="blue.700"/>
-          </MenuButton>
-          <MenuList pl={2}>
-            {!notification.length && "No New Messages"}
-            {notification.map((notif) => (
-              <MenuItem
-                key={notif._id}
-                onClick={() => {
-                  setSelectedChat(notif.chat);
-                  setNotification(notification.filter((n) => n !== notif));
-                }}
-              >
-               {notif.chat.isGroupChat
+        <div>
+          <Menu>
+            <MenuButton p={1}>
+              <NotificationBadge
+                count={notification.length}
+                effect={Effect.SCALE}
+              />
+              <BellIcon fontSize="2xl" m={1} color="blue.700"/>
+            </MenuButton>
+            <MenuList pl={2}>
+              {!notification.length && "No New Messages"}
+              {notification.map((notif) => (
+                <MenuItem
+                  key={notif._id}
+                  onClick={() => {
+                    setSelectedChat(notif.chat);
+                    setNotification(notification.filter((n) => n !== notif));
+                  }}
+                >
+                  {notif.chat.isGroupChat
                     ? `New Message in ${notif.chat.chatName}`
                     : `New Message from ${getSender(user, notif.chat.users)}`}
+                </MenuItem>
+              ))}
+            </MenuList>
+          </Menu>
+          <Menu>
+            <MenuButton as={Button} bg="blue.700"  rightIcon={<ChevronDownIcon/>}  
+              _hover={{background: "purple.800", color:"yellow.400"}} _active={{background: "purple.800", color:"yellow.400"}}>
+              <Avatar size="sm" cursor="pointer" name={user.name} borderColor="black" borderWidth="2px" bg="yellow.400" color="black"/>
+            </MenuButton>
+            <MenuList bg = "purple.600" borderColor="black" borderWidth="2px">
+              
+              <MenuDivider/>
+              <MenuItem fontWeight="bold" color="black" onClick={logoutHandler} _hover={{background: "yellow.400"}}>
+                Logout
               </MenuItem>
-            ))}
-          </MenuList>
-        </Menu>
-        <Menu>
-          <MenuButton as={Button} bg="blue.700"  rightIcon={<ChevronDownIcon/>}  
-            _hover={{background: "purple.800", color:"yellow.400"}} _active={{background: "purple.800", color:"yellow.400"}}>
-            <Avatar size="sm" cursor="pointer" name={user.name} borderColor="black" borderWidth="2px" bg="yellow.400" color="black"/>
-          </MenuButton>
-          <MenuList bg = "purple.600" borderColor="black" borderWidth="2px">
-            
-            <MenuDivider/>
-            <MenuItem fontWeight="bold" color="black" onClick={logoutHandler} _hover={{background: "yellow.400"}}>
-              Logout
-            </MenuItem>
-          </MenuList>
-        </Menu>
-      </div>
-    </Box>
-    <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
-      <DrawerOverlay />
-      <DrawerContent>
-        <DrawerHeader borderBottomWidth="1px">Search Users</DrawerHeader>
-        <DrawerBody>
-          <Box d="flex" pb={2}>
-            <Input
-              placeholder="Search by name or email"
-              mr={2}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
-            <Button onClick={handleSearch}>Go</Button>
-          </Box>
-          {loading ? (
+            </MenuList>
+          </Menu>
+        </div>
+      </Box>
+      <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
+        <DrawerOverlay />
+        <DrawerContent>
+          <DrawerHeader borderBottomWidth="1px">Search Users</DrawerHeader>
+          <DrawerBody>
+            <Box d="flex" pb={2}>
+              <Input
+                placeholder="Search by name or email"
+                mr={2}
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+              <Button onClick={handleSearch}>Go</Button>
+            </Box>
+            {loading ? (
               <ChatLoading />
             ) : (
               searchResult?.map((user) => ( //user clicked on for chat
@@ -210,11 +221,12 @@ const SideDrawer = () => {
                 />
               ))
             )} 
-          {loadingChat && <Spinner ml="auto" d="flex" />}
-        </DrawerBody>
-      </DrawerContent>
-    </Drawer>
-  </React.Fragment>
+            {loadingChat && <Spinner ml="auto" d="flex" />}
+          </DrawerBody>
+        </DrawerContent>
+      </Drawer>
+    </React.Fragment>
   );
 };
+
 export default SideDrawer;

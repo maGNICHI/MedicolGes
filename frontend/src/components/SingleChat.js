@@ -2,13 +2,13 @@ import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 import "./styles.css";
-import { IconButton, Spinner } from "@chakra-ui/react";
-//import { getSender, getSenderFull } from "../config/ChatLogics";
+import { IconButton, Spinner, useToast } from "@chakra-ui/react";
+import { getSender, getSenderFull } from "../config/ChatLogics";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import ScrollableChat from "./ScrollableChat";
-//import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
+import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import ChatContext from "../Context/chat-context";
 import Lottie from "react-lottie";
 //import animationData from "../animations/typing.json";
@@ -24,7 +24,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
-  //const toast = useToast();
+  const toast = useToast();
   const { selectedChat, setSelectedChat, user, notification, setNotification } = useContext(ChatContext);
 
   const defaultOptions = {
@@ -52,8 +52,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       console.log(data, "fetched messsages of the selected chat data");
       socket.emit("join chat", selectedChat._id);
     } catch (error) {
-      console.log(error.message);
-      /* 
+      console.log(error.message); 
        toast({
         title: "Error Occured!",
         description: "Failed to Load the Messages",
@@ -62,7 +61,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         isClosable: true,
         position: "bottom",
       });
-      */
     }
   };
 
@@ -89,14 +87,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setMessages([...messages, data]);
       } catch (error) {
         console.log(error.message);
-        /* toast({
+       toast({
           title: "Error Occured!",
           description: "Failed to send the Message",
           status: "error",
           duration: 3000,
           isClosable: true,
           position: "bottom",
-        });*/
+        });
       }
     }
   };
@@ -169,7 +167,21 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               icon={<ArrowBackIcon />}
               onClick={() => setSelectedChat("")}
             />
-
+   {messages && !selectedChat.isGroupChat ? (
+              <>
+                {getSender(user, selectedChat.users)}
+                
+              </>
+            ) : (
+              <>
+                {selectedChat.chatName.toUpperCase()}
+                <UpdateGroupChatModal
+                  fetchAgain={fetchAgain}
+                  setFetchAgain={setFetchAgain}
+                  fetchMessages={fetchMessages}
+                />
+              </>
+            )}
 
           </Text>
           <Box
