@@ -7,6 +7,7 @@ import { getSender, getSenderFull } from "../config/ChatLogics";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { ArrowBackIcon } from "@chakra-ui/icons";
+import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import ChatContext from "../Context/chat-context";
@@ -170,7 +171,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
    {messages && !selectedChat.isGroupChat ? (
               <>
                 {getSender(user, selectedChat.users)}
-                
+                <ProfileModal user={getSenderFull(user, selectedChat.users)} />
               </>
             ) : (
               <>
