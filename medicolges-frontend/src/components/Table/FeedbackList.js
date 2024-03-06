@@ -32,7 +32,7 @@ const FeedbackList = () => {
   const handleDelete = async () => {
     try {
       await axios.delete(
-        `http://localhost:3001/api/feedback/${feedbackToDelete}`
+        `http://localhost:5000/api/feedback/${feedbackToDelete}`
       );
       setFeedback(feedback.filter((item) => item.id !== feedbackToDelete));
       handleCloseDeleteModal();
@@ -43,7 +43,7 @@ const FeedbackList = () => {
 
   const getFeedback = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/api/feedback/");
+      const response = await axios.get("http://localhost:5000/api/feedback/");
       setFeedback(response.data);
     } catch (error) {
       console.log("Error fetching feedback:", error);

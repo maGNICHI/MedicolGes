@@ -1,10 +1,10 @@
 import React from "react";
 import './FileInput.css';
 
-export default function FileInput() {
+export default function FileInput({ onChange }) {
   return (
     <div className="custom-input-div">
-      <input className="custom-input" name="file" type="file" />
+      <input className="custom-input" name="file" type="file" accept=".xlsx, .xls, .csv" onChange={onChange} /> {/* Pass onChange prop */}
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="1em"

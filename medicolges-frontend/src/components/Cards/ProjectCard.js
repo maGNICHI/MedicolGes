@@ -12,7 +12,7 @@ export default function ProjectCard({ project }) {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:3001/api/project/${project._id}`);
+      await axios.delete(`http://localhost:5000/api/project/${project._id}`);
       handleCloseDeleteModal();
       window.location.reload();
     } catch (error) {
@@ -21,7 +21,7 @@ export default function ProjectCard({ project }) {
   };
   return (
     <>
-      <Col md={4} xs={12} className="project-card">
+      <Col xs={12} className="project-card"> {/* Remove md={4} */}
         <div className="project-top-section">
           <div className="project-border"></div>
           <div className="project-icons">

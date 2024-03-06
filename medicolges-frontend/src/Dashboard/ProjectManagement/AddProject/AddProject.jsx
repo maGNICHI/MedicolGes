@@ -16,6 +16,7 @@ export default function AddProject() {
     name: "",
     description: "",
     organization: "",
+    file: null, // Add image field to formData state
   });
   const navigate = useNavigate();
 
@@ -27,15 +28,31 @@ export default function AddProject() {
     });
   };
 
+  const handleFileChange = (e) => {
+    // Set the image file in formData
+    setFormData({
+      ...formData,
+      file: e.target.files[0],
+    });
+  };
+
   const addProject = async () => {
     try {
-      const data = await axios.post("http://localhost:3001/api/project/addProject", formData);
-      console.log(data.data);
+      const formDataToSend = new FormData();
+      formDataToSend.append("name", formData.name);
+      formDataToSend.append("description", formData.description);
+      formDataToSend.append("organization", formData.organization);
+      formDataToSend.append("file", formData.file);
+  
+      const response = await axios.post("http://localhost:5000/api/project/addProject", formDataToSend);
+      console.log(response.data);
       navigate("/projectList");
-    } catch (e) {
-      console.log(e);
+    } catch (error) {
+      console.error("Error adding project:", error);
+      // Handle the error here, such as displaying a toast or error message to the user
     }
   };
+  
 
   return (
     <Layout selectedName={selectedName}>
@@ -106,7 +123,7 @@ export default function AddProject() {
                       fontWeight={600}
                       className={"mb-2"}
                     />
-                    <FileInput />
+                    <FileInput onChange={handleFileChange} /> {/* Pass handleFileChange function */}
                   </div>
                   <div className="mb-4">
                     <Title

@@ -14,6 +14,7 @@ import ProjectList from './Dashboard/ProjectManagement/ProjectList';
 import OrganizationList from './Dashboard/OrganizationManagement/OrganizationList';
 import FeedbackList from './Dashboard/FeedBackManagement/FeedbackList';
 import AddProject from './Dashboard/ProjectManagement/AddProject/AddProject';
+import ConsultProject from './Dashboard/ProjectManagement/CosultProject/ConsultProject';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/userList" element={<UserManagement />} />
         <Route path="/projectList" element={<ProjectList />} />
         <Route path="/addProject" element={<AddProject />} />
+        <Route path="/consultProject/:id" element={<ConsultProject />} />
         <Route path="/organizationList" element={<OrganizationList />} />
         <Route path="/feedbackList" element={<FeedbackList />} />
         <Route path="/" element={<Home />} />

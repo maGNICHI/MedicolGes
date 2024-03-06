@@ -14,7 +14,7 @@ export default function ProjectList() {
 
   const getProjects = async () => {
     try {
-      const data = await axios.get("http://localhost:3001/api/project/");
+      const data = await axios.get("http://localhost:5000/api/project/");
       console.log(data.data);
       setProjects(data.data);
     } catch (e) {
@@ -35,11 +35,7 @@ export default function ProjectList() {
       >
         <Row className="align-items-center" style={{ padding: "20px" }}>
           <Col xs={12} md={10}>
-            <Title
-              title={"Project List"}
-              fontWeight={600}
-              fontSize={"24px"}
-            />
+            <Title title={"Project List"} fontWeight={600} fontSize={"24px"} />
           </Col>
           <Col xs={12} md={2} className="text-md-end mt-3 mt-md-0">
             <NavLink style={{ textDecoration: "none" }} to="/addProject">
@@ -61,11 +57,18 @@ export default function ProjectList() {
             </NavLink>
           </Col>
         </Row>
-        <Row className="my-5 flex gap-5 mx-5">
+        <Row>
           {projects.map(
             (item) =>
               item.isDeleted === false && (
-                <ProjectCard  key={item.id} project={item} />
+                <Col key={item._id} xs={12} md={4} className="mb-3">
+                  <NavLink
+                    to={`/consultProject/${item._id}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <ProjectCard project={item} />
+                  </NavLink>
+                </Col>
               )
           )}
         </Row>
