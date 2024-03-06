@@ -8,10 +8,11 @@ const storage = multer.diskStorage({
   }
 })
 const fileFilter = (req, file, cb) => { 
-    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') { 
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'image/.xlsx' || // XLS
+    file.mimetype === 'image/.xls' || // XLSX
+    file.mimetype === 'image/csv' ) { 
       cb(null, true) 
     } else { 
-      // prevent the upload 
       cb({message: 'Unsupported File Format'}, false) 
     }
   }

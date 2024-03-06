@@ -10,7 +10,8 @@ const ProjectSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    isDeleted: Boolean
+    isDeleted: Boolean,
+    file: String
 },
 {
     timestamps: true
