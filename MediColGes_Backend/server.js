@@ -2,6 +2,9 @@ const express = require('express');
 const app = express();
 require('dotenv').config(); 
 const db = require('./ConfigDB/connection');
+const cookieParser = require('cookie-parser');
+const cors = require('cors');
+
 const upload = require('./multer')
 const cloudinary= require('./cloudinary')
 const fs = require ('fs')
@@ -13,9 +16,17 @@ db();
 
 app.use(express.json())
 
+app.use(cors({
+  origin: 'http://localhost:3000' // Allow requests from localhost:3000
+}));
+
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
 // routes
 app.use('/api/project', require('./ProjectManagement/Routes/Project'))
 app.use('/api/feedback', require('./ProjectManagement/Routes/Feedback'))
+app.use('/form', require('./FormManagement/routes/FormRoutes'));
 
 //upload images
 // app.post('/upload-images', upload.array('image'), async (req, res) => {
