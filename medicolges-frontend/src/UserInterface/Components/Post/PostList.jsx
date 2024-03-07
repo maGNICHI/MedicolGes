@@ -10,7 +10,7 @@ const PostList = () => {
   useEffect(() => {
     // Fetch posts from the backend
     axios
-      .get("http://localhost:8000/api/posts")
+      .get("http://localhost:5000/api/posts")
       .then((response) => {
         setPosts(response.data);
       })

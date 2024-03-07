@@ -15,7 +15,7 @@ export default function OrganizationList() {
     const fetchOrganizations = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8000/api/organization/"
+          "http://localhost:5000/api/organization/"
         );
         setOrganizations(response.data);
       } catch (error) {
@@ -33,7 +33,7 @@ export default function OrganizationList() {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8000/api/organization/${id}`);
+      await axios.delete(`http://localhost:5000/api/organization/${id}`);
       // If delete is successful, update organizations state to remove the deleted organization
       setOrganizations(organizations.filter((org) => org._id !== id));
     } catch (error) {

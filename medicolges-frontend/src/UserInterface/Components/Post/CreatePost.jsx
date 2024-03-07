@@ -23,7 +23,7 @@ const CreatePost = () => {
     try {
       // Send a POST request to create a new post
       const response = await axios.post(
-        "http://localhost:8000/api/posts",
+        "http://localhost:5000/api/posts",
         post
       );
       console.log("Post created successfully:", response.data);

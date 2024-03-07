@@ -18,13 +18,13 @@ const LikeButton = ({ postId, initialLikes, userLiked }) => {
       if (isLiked) {
         // Unlike the post
         await axios.patch(
-          `http://localhost:8000/api/posts/unlike-post/${postId}`
+          `http://localhost:5000/api/posts/unlike-post/${postId}`
         );
         setLikes((prevLikes) => prevLikes - 1);
       } else {
         // Like the post
         await axios.patch(
-          `http://localhost:8000/api/posts/like-post/${postId}`
+          `http://localhost:5000/api/posts/like-post/${postId}`
         );
         setLikes((prevLikes) => prevLikes + 1);
       }

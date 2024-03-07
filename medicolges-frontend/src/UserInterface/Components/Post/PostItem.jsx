@@ -15,7 +15,7 @@ const PostItem = ({ post }) => {
   useEffect(() => {
     if (post) { // Vérification de nullité sur post
       axios
-        .get(`http://localhost:8000/api/users/${post.posterId}`)
+        .get(`http://localhost:5000/api/users/${post.posterId}`)
         .then((response) => {
           setPosterName(response.data.username);
         })
@@ -24,7 +24,7 @@ const PostItem = ({ post }) => {
         });
 
       axios
-        .get(`http://localhost:8000/api/posts/comment-count/${post._id}`)
+        .get(`http://localhost:5000/api/posts/comment-count/${post._id}`)
         .then((response) => {
           setCommentCount(response.data.count);
         })
@@ -33,7 +33,7 @@ const PostItem = ({ post }) => {
         });
 
       axios
-        .get(`http://localhost:8000/api/posts/comment-post/${post._id}`)
+        .get(`http://localhost:5000/api/posts/comment-post/${post._id}`)
         .then((response) => {
           setComments(response.data);
         })
@@ -50,7 +50,7 @@ const PostItem = ({ post }) => {
   const handleCommentAdded = () => {
     if (post) { // Vérification de nullité sur post
       axios
-        .get(`http://localhost:8000/api/posts/comment-post/${post._id}`)
+        .get(`http://localhost:5000/api/posts/comment-post/${post._id}`)
         .then((response) => {
           setComments(response.data);
         })
@@ -59,7 +59,7 @@ const PostItem = ({ post }) => {
         });
 
       axios
-        .get(`http://localhost:8000/api/posts/comment-count/${post._id}`)
+        .get(`http://localhost:5000/api/posts/comment-count/${post._id}`)
         .then((response) => {
           setCommentCount(response.data.count);
         })

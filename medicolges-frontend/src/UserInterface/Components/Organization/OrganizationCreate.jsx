@@ -61,7 +61,7 @@ function CreateOrganization() {
 
     if (validateForm()) {
       try {
-        await axios.post("http://localhost:8000/api/organization/", {
+        await axios.post("http://localhost:5000/api/organization/", {
           name,
           address,
           phoneNumber,

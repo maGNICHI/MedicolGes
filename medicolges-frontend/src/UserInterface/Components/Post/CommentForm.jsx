@@ -11,7 +11,7 @@ const CommentForm = ({ postId, onCommentAdded }) => {
   const handleCommentSubmit = async () => {
     try {
       await axios.patch(
-        `http://localhost:8000/api/posts/comment-post/${postId}`,
+        `http://localhost:5000/api/posts/comment-post/${postId}`,
 
         comment
       );

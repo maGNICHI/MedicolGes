@@ -12,7 +12,7 @@ const CommentList = ({ postId }) => {
   const fetchComments = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/posts/ShowComments/${postId}`
+        `http://localhost:5000/api/posts/ShowComments/${postId}`
       );
       setComments(response.data);
     } catch (error) {
@@ -23,7 +23,7 @@ const CommentList = ({ postId }) => {
   const handleDeleteComment = async (commentId) => {
     try {
       await axios.patch(
-        `http://localhost:8000/api/posts/delete-comment-post/${postId}`,
+        `http://localhost:5000/api/posts/delete-comment-post/${postId}`,
         { commentId }
       );
       // Fetch comments again after deletion
