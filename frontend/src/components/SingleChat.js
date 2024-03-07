@@ -12,7 +12,10 @@ import ScrollableChat from "./ScrollableChat";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
 import ChatContext from "../Context/chat-context";
 import Lottie from "react-lottie";
-//import animationData from "../animations/typing.json";
+import animationData from "../animations/typing.json";
+import { Button } from "@chakra-ui/react";
+import { BsMicFill } from 'react-icons/bs';
+import SendAudioModal from "./miscellaneous/SendAudioModal";
 import io from "socket.io-client";
 
 const ENDPOINT = "http://localhost:5000"; //development
@@ -31,7 +34,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const defaultOptions = {
     loop: true,
     autoplay: true,
-    // animationData: animationData,
+    animationData: animationData,
     rendererSettings: {
       preserveAspectRatio: "xMidYMid slice",
     },
@@ -228,6 +231,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ) : (
                 <></>
               )}
+              <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
+                   
               <Input
                 variant="filled"
                 bg="#E0E0E0"
@@ -235,6 +240,15 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 value={newMessage}
                 onChange={typingHandler}
               />
+               <SendAudioModal>
+                              <Button
+                                 rightIcon={<BsMicFill />}
+                                 padding="5px"
+                              >
+                                 Send
+                              </Button>
+                           </SendAudioModal>
+                           </div>
             </FormControl>
           </Box>
         </>

@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { Avatar } from "@chakra-ui/avatar";
 import { Tooltip } from "@chakra-ui/tooltip";
 import ScrollableFeed from "react-scrollable-feed";
@@ -13,6 +13,22 @@ import ChatContext from "../Context/chat-context";
 const ScrollableChat = ({ messages }) => {
 
   const { user } =  useContext(ChatContext);
+  const [blobUrls, setBlobUrls] = useState([]);
+  useEffect(() => {
+    const fetchBlobUrls = async () => {
+      const urls = await Promise.all(messages.map(async (message) => {
+        if (message.isMedia) {
+          const uint8Array = Uint8Array.from(message.buffer);
+          const blob = new Blob([uint8Array], { type: 'audio/wav' });
+          return URL.createObjectURL(blob);
+        }
+        return null;
+      }));
+      setBlobUrls(urls);
+    };
+
+    fetchBlobUrls();
+  }, [messages]);
 
   return (
     <ScrollableFeed>
@@ -43,10 +59,19 @@ const ScrollableChat = ({ messages }) => {
                 maxWidth: "75%",
               }}
             >
-              {message.content}
+             {
+                !message.isMedia ?
+                  (<span>{message.content}</span>) :
+                  (
+                    <audio controls>
+                      <source src={blobUrls[i]} type="audio/wav" />
+                    </audio>
+                  )
+              }
             </span>
           </div>
         ))}
+        <div id='only-audio'></div>
     </ScrollableFeed>
   );
 };

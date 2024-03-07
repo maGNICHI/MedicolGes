@@ -2,7 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Message = require("../models/messageModel");
 const User = require("../models/userModel");
 const Chat = require("../models/chatModel");
-
+const {Buffer}=require('buffer');
 const allMessages = asyncHandler(async (req, res) => {
   try {
     //:chatId in routes //request params
@@ -22,7 +22,7 @@ const allMessages = asyncHandler(async (req, res) => {
 
 const sendMessage = asyncHandler(async (req, res) => {
 
-  const { content, chatId } = req.body;
+  const { content, chatId, isMedia, buffer:b  } = req.body;
 
   if (!content || !chatId) {
     console.log("Invalid data passed into request");
@@ -33,6 +33,8 @@ const sendMessage = asyncHandler(async (req, res) => {
     sender: req.user._id,
     content: content,
     chat: chatId,
+    isMedia,
+    buffer:b?b:null
   };
 
   try {

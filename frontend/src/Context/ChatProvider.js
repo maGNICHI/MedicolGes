@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, {useContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatContext from "./chat-context";
 
@@ -40,3 +40,6 @@ const ChatProvider = (props) => {
 };
 
 export default ChatProvider;
+export const ChatState = () => {
+  return useContext(ChatContext);
+}
