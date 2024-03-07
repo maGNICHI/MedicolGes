@@ -25,7 +25,7 @@ export default function FeedbackList() {
             </Row>
           </Card.Header>
           <Card.Body className="p-0">
-              <FeedbackTable fee />
+              <FeedbackTable />
           </Card.Body>
         </Card>
       </Container>

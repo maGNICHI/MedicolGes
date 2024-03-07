@@ -124,3 +124,31 @@
         display: block;
     }
 }
+
+
+/* Style du dropdown */
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  border-radius: 4px; /* Ajoutez des coins arrondis au dropdown */
+}
+
+.navbar-items > li:hover .dropdown {
+  display: block;
+}
+
+.dropdown li {
+  display: block;
+  padding: 10px;
+}
+
+/* Changement de couleur lorsqu'on survole les liens */
+.navbar-links:hover {
+  color: #007bff; /* Couleur bleue lorsque survolé */
+}
+
