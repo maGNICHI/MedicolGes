@@ -19,6 +19,13 @@ import { reducers } from './reducers';
 import {thunk }from 'redux-thunk';
 import { Provider } from 'react-redux';
 import Form from './Dashboard/FormGeneration/Form';
+import CreateOrganization from './Dashboard/OrganizationManagement/OrganizationCreate';
+import CreatePost from './UserInterface/Components/Post/CreatePost'
+import PostList from './UserInterface/Components/Post/PostList'
+import HomePage  from './UserInterface/Components/Post/HomePage'
+import Organization from  './UserInterface/Components/Organization/OrganizationCreate'
+import AddProject from './Dashboard/ProjectManagement/AddProject/AddProject';
+import ConsultProject from './Dashboard/ProjectManagement/CosultProject/ConsultProject';
 
 function App() {
   const store = createStore(reducers, compose(applyMiddleware(thunk)));
@@ -33,7 +40,14 @@ function App() {
         <Route path="/userList" element={<UserManagement />} />
         <Route path="/projectList" element={<ProjectList />} />
         <Route path="/formGeneration" element={<Form />} />
+        <Route path="/addProject" element={<AddProject />} />
+        <Route path="/post" element={<CreatePost />} />
+        <Route path="/liste" element={<PostList />} />
+        <Route path="/consultProject/:id" element={<ConsultProject />} />
         <Route path="/organizationList" element={<OrganizationList />} />
+        <Route path="/organizationCreate" element={<CreateOrganization />} />
+        <Route path="/organizationFront" element={<Organization />} />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/feedbackList" element={<FeedbackList />} />
         <Route path="/" element={<Home />} />
         <Route path="/legal" element={<Legal />} />
