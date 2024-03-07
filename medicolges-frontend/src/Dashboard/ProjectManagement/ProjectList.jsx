@@ -1,54 +1,76 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Layout from "../SuperAdminLayout/Layout";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Col, Container, Row } from "react-bootstrap";
 import Title from "../../components/Title/Title";
 import IconButton from "../../components/Button/IconButton";
 import { FaPlus } from "react-icons/fa";
-import CheckTable from "../../components/Table/UserTable";
-import "../Dashboard/Dashboard.css";
 import ProjectCard from "../../components/Cards/ProjectCard";
+import axios from "axios";
+import { NavLink } from "react-router-dom";
 
 export default function ProjectList() {
   const [selectedName, setSelectedName] = useState("Project Management");
+  const [projects, setProjects] = useState([]);
+
+  const getProjects = async () => {
+    try {
+      const data = await axios.get("http://localhost:5000/api/project/");
+      console.log(data.data);
+      setProjects(data.data);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getProjects();
+  }, []);
 
   return (
     <Layout selectedName={selectedName}>
       <Container
         fluid
         className="mt-4 h-screen"
-        style={{ overflowY: "auto", maxHeight: "100%", zIndex: 0 }}
+        style={{ overflow: "auto", maxHeight: "100%", zIndex: 0 }} // Set overflow to hidden
       >
-        <Row>
-          <Card className="card"> {/* Add a different class */}
-            <Card.Header style={{ padding: "20px" }}>
-              <Row className="align-items-center">
-                <Col xs={12} md={10}>
-                  <Title title={"Project List"} fontWeight={600} fontSize={"24px"} /> {/* Change the title */}
-                </Col>
-                <Col xs={12} md={2} className="text-md-end mt-3 mt-md-0">
-                  <IconButton
-                    className="h-100 border-0"
-                    style={{
-                      background: "#0ea9f991",
-                      color: "white",
-                      fontSize: "16px",
-                      fontWeight: 600,
-                      padding: "8px 16px",
-                      borderRadius: "20px",
-                    }}
-                    startIcon={<FaPlus />}
-                  >
-                    <Title title={"Add project"} /> {/* Change the button label */}
-                   </IconButton>
-                   </Col>
-              </Row>
-            </Card.Header>
-          </Card>
+        <Row className="align-items-center" style={{ padding: "20px" }}>
+          <Col xs={12} md={10}>
+            <Title title={"Project List"} fontWeight={600} fontSize={"24px"} />
+          </Col>
+          <Col xs={12} md={2} className="text-md-end mt-3 mt-md-0">
+            <NavLink style={{ textDecoration: "none" }} to="/addProject">
+              <IconButton
+                className="h-100 border-0"
+                style={{
+                  background:
+                    "linear-gradient(45deg, rgb(4, 159, 187) 0%, rgb(80, 246, 255) 100%)",
+                  color: "white",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  padding: "8px 16px",
+                  borderRadius: "20px",
+                }}
+                startIcon={<FaPlus />}
+              >
+                <Title title={"Add project"} />
+              </IconButton>
+            </NavLink>
+          </Col>
         </Row>
-        <Row className="my-5 flex gap-5 mx-5">
-            <ProjectCard />
-            <ProjectCard />
-            <ProjectCard />
+        <Row>
+          {projects.map(
+            (item) =>
+              item.isDeleted === false && (
+                <Col key={item._id} xs={12} md={4} className="mb-3">
+                  <NavLink
+                    to={`/consultProject/${item._id}`}
+                    style={{ textDecoration: "none" }}
+                  >
+                    <ProjectCard project={item} />
+                  </NavLink>
+                </Col>
+              )
+          )}
         </Row>
       </Container>
     </Layout>

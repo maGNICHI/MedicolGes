@@ -12,28 +12,32 @@ import NotFound from "./UserInterface/Pages/NotFound";
 import Appointment from "./UserInterface/Pages/Appointment";
 import ProjectList from './Dashboard/ProjectManagement/ProjectList';
 import OrganizationList from './Dashboard/OrganizationManagement/OrganizationList';
-//import OrganizationCreate from './Dashboard/OrganizationManagement/OrganizationCreate';
 import FeedbackList from './Dashboard/FeedBackManagement/FeedbackList';
 import CreateOrganization from './Dashboard/OrganizationManagement/OrganizationCreate';
 import CreatePost from './UserInterface/Components/Post/CreatePost'
 import PostList from './UserInterface/Components/Post/PostList'
 import HomePage  from './UserInterface/Components/Post/HomePage'
 import Organization from  './UserInterface/Components/Organization/OrganizationCreate'
+import AddProject from './Dashboard/ProjectManagement/AddProject/AddProject';
+import ConsultProject from './Dashboard/ProjectManagement/CosultProject/ConsultProject';
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-        <Route path="/post" element={<CreatePost />} />
-        <Route path="/liste" element={<PostList />} />
-        <Route path="/home" element={<HomePage />} />
+        <Route path='/signup' element={<Signup />} />
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/userList" element={<UserManagement />} />
         <Route path="/projectList" element={<ProjectList />} />
+        <Route path="/addProject" element={<AddProject />} />
+        <Route path="/post" element={<CreatePost />} />
+        <Route path="/liste" element={<PostList />} />
+        <Route path="/consultProject/:id" element={<ConsultProject />} />
         <Route path="/organizationList" element={<OrganizationList />} />
         <Route path="/organizationCreate" element={<CreateOrganization />} />
         <Route path="/organizationFront" element={<Organization />} />
+        <Route path="/home" element={<HomePage />} />
         <Route path="/feedbackList" element={<FeedbackList />} />
         <Route path="/" element={<Home />} />
         <Route path="/legal" element={<Legal />} />

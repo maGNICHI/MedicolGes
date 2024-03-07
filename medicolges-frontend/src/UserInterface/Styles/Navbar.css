@@ -125,27 +125,6 @@
     }
 }
 
-/* Styles CSS pour rendre la barre de navigation plus esthétique */
-
-/* Style de base pour la barre de navigation */
-.navbar-items {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-}
-
-.navbar-items li {
-  margin-right: 20px;
-}
-
-.navbar-links {
-  text-decoration: none;
-  color: #333;
-  padding: 10px;
-  display: block;
-  transition: color 0.3s ease; /* Ajoute une transition fluide lors du changement de couleur */
-}
 
 /* Style du dropdown */
 .dropdown {
@@ -173,4 +152,3 @@
   color: #007bff; /* Couleur bleue lorsque survolé */
 }
 
-/* Ajoutez d'autres styles selon vos besoins */

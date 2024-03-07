@@ -34,7 +34,6 @@ function Navbar() {
           MediColGes <span className="navbar-sign"></span>
         </Link>
       </h1>
-
       {/* Desktop */}
       <ul className="navbar-items">
         <li>
@@ -56,7 +55,6 @@ function Navbar() {
               </li>
             </ul>
           </li>
-        
         <li>
           <a href="#about" className="navbar-links">
             Form
