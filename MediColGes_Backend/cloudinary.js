@@ -18,5 +18,3 @@ cloudinary.config({
       });
     });
   }
-  
-

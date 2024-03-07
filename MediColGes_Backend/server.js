@@ -27,6 +27,11 @@ app.use(cookieParser());
 app.use('/api/project', require('./ProjectManagement/Routes/Project'))
 app.use('/api/feedback', require('./ProjectManagement/Routes/Feedback'))
 app.use('/form', require('./FormManagement/routes/FormRoutes'));
+app.use("/api/posts", require("./ForumAndOrganizationManagement/routes/post.routes"));
+app.use(
+  "/api/organization",
+  require("./ForumAndOrganizationManagement/routes/organization.routes")
+);
 
 //upload images
 // app.post('/upload-images', upload.array('image'), async (req, res) => {
