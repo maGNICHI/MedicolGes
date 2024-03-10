@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ChatContext from "../../Context/chat-context";
-import ProfileModal from "./ProfileModal";
+//import ProfileModal from "./ProfileModal";
 import { useDisclosure } from "@chakra-ui/hooks";
 import { Box, Text } from "@chakra-ui/layout";
 import {
@@ -37,21 +37,15 @@ const SideDrawer = () => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingChat, setLoadingChat] = useState(false);
-
   const { user, setSelectedChat, chats, setChats, notification, setNotification } = useContext(ChatContext);
-
   const navigate = useNavigate();
   const toast = useToast();
-
   const { isOpen, onOpen, onClose } = useDisclosure();
-
-  const logoutHandler = () => {
-    localStorage.removeItem("userInformation");
-    navigate("/");
-  };
-
-  const handleSearch = async() => {
-
+  // const logoutHandler = () => {
+  //   localStorage.removeItem("userInformation");
+  //   navigate("/");
+  // };
+  const handleSearch = async () => {
     if (!search) {
       toast({
         title: "Please Enter something in search",
@@ -62,22 +56,15 @@ const SideDrawer = () => {
       });
       return;
     }
-
     try {
       setLoading(true);
-
       const config = {
-        headers: { Authorization: `Bearer ${user.token}`}
+        headers: { Authorization: `Bearer ${user.token}` }
       };
-
       const { data } = await axios.get(`/api/user?search=${search}`, config);
-      //console.log(data, 'searchQuerry keyword response data');
-
       setLoading(false);
       setSearchResult(data);
-
     } catch (error) {
-
       console.log(error.message);
       toast({
         title: "Error Occured!",
@@ -90,9 +77,6 @@ const SideDrawer = () => {
     }
   };
 
-
-  
-
   const accessChatCreateChat = async (userId) => {
     try {
       setLoadingChat(true);
@@ -103,11 +87,11 @@ const SideDrawer = () => {
         },
       };
       const { data } = await axios.post(`/api/chat`, { userId }, config);
-      if (!chats.find((chat) => chat._id === data._id)) setChats([data, ...chats]); 
+      if (!chats.find((chat) => chat._id === data._id)) setChats([data, ...chats]);
       setSelectedChat(data);
       console.log(data, 'access new/existing chat response data');
       setLoadingChat(false);
-      onClose(); //drawer close afterwards
+      onClose();
     } catch (error) {
       console.log(error.message);
       toast({
@@ -134,27 +118,25 @@ const SideDrawer = () => {
         color="black"
       >
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
-          <Button variant="ghost" bg ='blue.700' onClick={onOpen} color="white"
-            _hover={{ background: "purple.800", color:"blue.400" }} _active={{ background: "purple.800", color:"blue.400" }}>
-              <i className="fas fa-search"></i>
-              <Text d={{ base: "none", md: "flex" }} px={4} fontWeight="bold">
-                Search User
-              </Text>
+          <Button variant="ghost" bg='blue.700' onClick={onOpen} color="white"
+            _hover={{ background: "purple.800", color: "blue.400" }} _active={{ background: "purple.800", color: "blue.400" }}>
+            <i className="fas fa-search"></i>
+            <Text d={{ base: "none", md: "flex" }} px={4} fontWeight="bold">
+              Search User
+            </Text>
           </Button>
         </Tooltip>
-
-        <Text fontSize="3xl" fontFamily="Work sans bold" fontWeight='bold' color="purple.700" >
+        <Text fontSize="3xl" fontFamily="Work sans bold" fontWeight='bold' color="purple.700">
           Chat
         </Text>
-
-        <div>
+        <div >
           <Menu>
             <MenuButton p={1}>
               <NotificationBadge
                 count={notification.length}
                 effect={Effect.SCALE}
               />
-              <BellIcon fontSize="2xl" m={1} color="blue.700"/>
+              <BellIcon fontSize="2xl" m={1} color="blue.700" />
             </MenuButton>
             <MenuList pl={2}>
               {!notification.length && "No New Messages"}
@@ -212,7 +194,7 @@ const SideDrawer = () => {
                   handleFunction={() => accessChatCreateChat(user._id)}
                 />
               ))
-            )} 
+            )}
             {loadingChat && <Spinner ml="auto" d="flex" />}
           </DrawerBody>
         </DrawerContent>
