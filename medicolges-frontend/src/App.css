@@ -1,0 +1,113 @@
+* {
+  margin: 0;
+  padding: 0;
+  text-decoration: none;
+}
+body{
+  background-color: #a3bee3;
+}
+
+.container {
+  display: flex;
+  position: relative; /* Ensure container is positioned relative */
+}
+
+main {
+  flex: 0;
+  padding: 10px;/* Set a lower z-index than the sidebar */
+}
+
+.sidebar {
+  position: fixed;
+  z-index: 3;
+  background: #fdfdfdd2; /* White background */
+  color: #000000; /* Black text */
+  height: 100vh;
+  width: 300px;
+  transition: all 0.5s;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+}
+
+@media (max-width: 768px) {
+  main{
+    padding: 20px;
+  }
+  .sidebar {
+    transition: all 0.5s;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
+    position: fixed; 
+    z-index: 3; /* Set a higher z-index on smaller screens */
+  }
+  body{
+    background-color:#a3bee3;
+  }
+}
+
+.top_section {
+  display: flex;
+  align-items: center;
+  padding: 20px 15px;
+}
+
+.footer{
+  color: #333333;
+    font-size: 14px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 400;
+}
+
+.bars {
+  display: flex;
+  font-size: 25px;
+  margin-left: 50px;
+}
+
+.link {
+  display: flex;
+  padding: 10px 15px;
+  gap: 15px;
+  transition: all 0.5s;
+  text-decoration: none;
+}
+.link {
+  text-decoration: none; /* Remove underline from links */
+  position: relative;
+}
+
+.link:hover {
+  background: #e3f2fd; /* Light blue background on hover */
+  transition: all 0.5s;
+  text-decoration: none;
+}
+
+.active {
+  background: #e3f2fd; /* Light blue background for active link */
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 5px; /* Adjust width as needed */
+  background-color: #007bff; /* Adjust color as needed */
+}
+
+.link_text {
+  font-size: 20px;
+  font-family: 'Work Sans', sans-serif; /* Use the imported font */
+  font-weight: 600;
+  font-size: 16px; /* Adjust the font weight */
+  line-height: 2.2; /* Adjust line height */
+}
+.icon{
+  color: #0236be;
+  font-size: 20px;
+}
+
+
+
+
