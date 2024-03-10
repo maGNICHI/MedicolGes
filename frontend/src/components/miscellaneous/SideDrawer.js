@@ -94,8 +94,6 @@ const SideDrawer = () => {
   
 
   const accessChatCreateChat = async (userId) => {
-    //console.log(userId); id of selected user
-
     try {
       setLoadingChat(true);
       const config = {
@@ -105,18 +103,12 @@ const SideDrawer = () => {
         },
       };
       const { data } = await axios.post(`/api/chat`, { userId }, config);
-
       if (!chats.find((chat) => chat._id === data._id)) setChats([data, ...chats]); 
-      //already existing check clause //newly created chat above the rest
-
       setSelectedChat(data);
-
       console.log(data, 'access new/existing chat response data');
-
       setLoadingChat(false);
       onClose(); //drawer close afterwards
     } catch (error) {
-
       console.log(error.message);
       toast({
         title: "Error fetching the chat",
@@ -128,7 +120,6 @@ const SideDrawer = () => {
       });
     }
   };
-
   return (
     <React.Fragment>
       <Box
@@ -182,7 +173,7 @@ const SideDrawer = () => {
               ))}
             </MenuList>
           </Menu>
-          <Menu>
+          {/* <Menu>
             <MenuButton as={Button} bg="blue.700"  rightIcon={<ChevronDownIcon/>}  
               _hover={{background: "purple.800", color:"yellow.400"}} _active={{background: "purple.800", color:"yellow.400"}}>
               <Avatar size="sm" cursor="pointer" name={user.name} borderColor="black" borderWidth="2px" bg="yellow.400" color="black"/>
@@ -192,9 +183,9 @@ const SideDrawer = () => {
               <MenuDivider/>
               <MenuItem fontWeight="bold" color="black" onClick={logoutHandler} _hover={{background: "yellow.400"}}>
                 Logout
-              </MenuItem>
+              </MenuItem> 
             </MenuList>
-          </Menu>
+          </Menu> */}
         </div>
       </Box>
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>

@@ -3,7 +3,15 @@ const User = require("../models/userModel");
 const generateToken = require("../config/generateToken");
 
 const allUsers = asyncHandler(async (req, res) => {
-  const users = await User.find(keyword).find(); 
+  const keyword = req.query.search
+    ? {
+        $or: [
+          { name: { $regex: req.query.search, $options: "i" } }, //case insensitive
+          { email: { $regex: req.query.search, $options: "i" } },
+        ],
+      }
+    : {};
+  const users = await User.find(keyword).find({ _id: { $ne: req.user._id } }); 
   res.send(users);
 });
 
