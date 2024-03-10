@@ -58,7 +58,7 @@ router.post('/', async(req,res)=>{
      console.log(formData);
      await formData.save();
 
-     res.status(201).json('formes created successfully');
+     res.status(201).json(formData);
   } catch (error) {
       res.status(500).json({ message: error.message });
   }
