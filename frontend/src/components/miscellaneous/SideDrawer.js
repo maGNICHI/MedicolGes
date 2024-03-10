@@ -7,7 +7,7 @@ import { Box, Text } from "@chakra-ui/layout";
 import {
   Menu,
   MenuButton,
-  MenuDivider,
+  //MenuDivider,
   MenuItem,
   MenuList,
 } from "@chakra-ui/menu";
@@ -20,8 +20,10 @@ import {
 } from "@chakra-ui/modal";
 import { Button } from "@chakra-ui/button";
 import { Tooltip } from "@chakra-ui/tooltip";
-import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
-import { Avatar } from "@chakra-ui/avatar";
+import { BellIcon, 
+//  ChevronDownIcon
+ } from "@chakra-ui/icons";
+//import { Avatar } from "@chakra-ui/avatar";
 import axios from "axios";
 import { useToast } from "@chakra-ui/toast";
 import { Input, Spinner } from "@chakra-ui/react";
