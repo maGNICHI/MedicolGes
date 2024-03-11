@@ -300,11 +300,7 @@ const AjouterForm = () => {
       }
       return question;
     });
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      questions: updatedOptions,
-    }));
-  };
+   
   const renderInputField = (question) => {
     console.log("im here");
     switch (question.questionType) {

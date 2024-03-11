@@ -62,7 +62,10 @@ const Form = () => {
   const [modalResponse, setModalResponse] = useState("");
   const navigate = useNavigate();
 
-
+//email
+// const [email, setEmail] = React.useState('');
+// const [selectedDomain, setSelectedDomain] = React.useState('');
+// const allowedDomains = ["@gmail.com", "@yahoo.com", "@hotmail.com"];
 
 //couleur
 const [inputColor, setInputColor] = useState('#000000');
@@ -425,8 +428,23 @@ const handleToggleChange = (questionId, checked) => {
 
 
         case "file":
-        
-     
+        // const file = responseValue;
+        // console.log("ggggggggggggggggggggggg",file)
+        // const reader = new FileReader();
+        // reader.readAsDataURL(file);
+        // reader.onload = () => {
+        //   const fileContent  = reader.result;
+        //   setFormData((prev) => ({
+        //     ...prev,
+        //     questions: prev.questions.map((obj) => {
+        //       if (obj.id === id) {
+        //         return { ...obj, responseValue: file }; // Mettre à jour la valeur de réponse avec le contenu du fichier
+        //       }
+        //       return obj;
+        //     }),
+        //   }));
+        // };
+        // break;
         const fileName = responseValue.name; // Récupérer le nom du fichier
         setFormData((prev) => ({
           ...prev,
