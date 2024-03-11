@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableHead,
@@ -14,8 +14,9 @@ import { FaInfoCircle, FaPen, FaShower, FaTrash } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import Title from "../Title/Title";
 import "./UserTable";
+import axios from "axios";
 
-const OrganizationTable = ({ data }) => {
+const OrganizationTable = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
@@ -27,6 +28,22 @@ const OrganizationTable = ({ data }) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  const [organizations, setOrganizations] = useState([]);
+
+  useEffect(() => {
+    const fetchOrganizations = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/organization/"
+        );
+        setOrganizations(response.data);
+      } catch (error) {
+        console.error("Error fetching organizations:", error);
+      }
+    };
+
+    fetchOrganizations();
+  }, []);
 
   return (
     <Paper>
@@ -44,19 +61,19 @@ const OrganizationTable = ({ data }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {/* {data &&
-              data
+            {organizations &&
+              organizations
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row, index) => ( */}
+                .map((row, index) => (
                   <TableRow 
                   // key={index}
                   >
                     <TableCell><Checkbox/></TableCell>
-                    <TableCell>{/* {row.username} */}</TableCell>
-                    <TableCell>{/* {row.firstname} */}</TableCell>
-                    <TableCell>{/* {row.lastname} */}</TableCell>
-                    <TableCell>{/* {row.email} */}</TableCell>
-                    <TableCell>{/* {row.birthdate} */}</TableCell>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell>{row.address}</TableCell>
+                    <TableCell>{row.phoneNumber}</TableCell>
+                    <TableCell>{row.category}</TableCell>
+                    <TableCell>{row.type}</TableCell>
                     <TableCell>
                       <div style={{ display: "flex" }}>
                         <NavLink ><FaTrash color="#0236be" /></NavLink> 
@@ -65,14 +82,14 @@ const OrganizationTable = ({ data }) => {
                       </div>
                     </TableCell>
                   </TableRow>
-                {/* ))} */}
+                ))}
           </TableBody>
         </Table>
       </div>
       <TablePagination
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={data ? data.length : 0} // Added null check for data
+        count={organizations ? organizations.length : 0} // Added null check for data
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

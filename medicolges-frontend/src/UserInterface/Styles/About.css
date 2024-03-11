@@ -1,3 +1,7 @@
+body {
+    background-color: white !important;
+}
+
 .about-section {
     padding: 32px;
     display: flex;

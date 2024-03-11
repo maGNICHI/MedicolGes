@@ -7,6 +7,7 @@ import axios from "axios";
 import { NavLink, useParams } from "react-router-dom";
 import IconButton from "../../../components/Button/IconButton";
 import { FaPlus, FaFileDownload } from "react-icons/fa";
+import PostList from "../../../UserInterface/Components/Post/PostList";
 
 function ConsultProject() {
   const [selectedName, setSelectedName] = useState("Consult Project");
@@ -37,11 +38,10 @@ function ConsultProject() {
     aTag.click();
     aTag.remove();
   };
-  
 
   return (
     <Layout selectedName={selectedName}>
-      <Container fluid className="mt-4 h-screen">
+      <Container fluid className="mt-4">
         <Row className="mb-4">
           <Col md={12}>
             <Card className="card h-screen">
@@ -90,21 +90,27 @@ function ConsultProject() {
                   fontWeight={600}
                   fontSize={"16px"}
                 />
-                <IconButton
-                  className={"my-3"}
-                  style={{
-                    background:
-                      "linear-gradient(45deg, rgb(4, 159, 187) 0%, rgb(80, 246, 255) 100%)",
-                    color: "white",
-                    fontSize: "16px",
-                    fontWeight: 600,
-                    padding: "8px 16px",
-                    borderRadius: "20px",
-                  }}
-                  startIcon={<FaPlus />}
+                <NavLink
+                  to="/formGeneration"
+                  style={{ textDecoration: "none", outline: "none" }}
                 >
-                  Add Questionnaire
-                </IconButton>
+                  <IconButton
+                    className={"my-3"}
+                    style={{
+                      background:
+                        "linear-gradient(45deg, rgb(4, 159, 187) 0%, rgb(80, 246, 255) 100%)",
+                      color: "white",
+                      fontSize: "16px",
+                      fontWeight: 600,
+                      padding: "8px 16px",
+                      borderRadius: "20px",
+                      outline: "none", // Add outline: "none" here to remove the outline
+                    }}
+                    startIcon={<FaPlus />}
+                  >
+                    Add Questionnaire
+                  </IconButton>
+                </NavLink>
               </Card.Body>
             </Card>
           </Col>
@@ -117,6 +123,7 @@ function ConsultProject() {
                   fontSize={"24px"}
                   className="mb-4"
                 />
+                <PostList />
                 <hr />
               </Card.Body>
             </Card>
@@ -142,7 +149,9 @@ function ConsultProject() {
                     padding: "8px 16px",
                     borderRadius: "20px",
                   }}
-                  onClick={() => { downloadFileAtURL(projectData.file); }}
+                  onClick={() => {
+                    downloadFileAtURL(projectData.file);
+                  }}
                   startIcon={<FaFileDownload />}
                 >
                   Export Data File

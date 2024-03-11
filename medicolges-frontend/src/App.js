@@ -26,6 +26,9 @@ import HomePage  from './UserInterface/Components/Post/HomePage'
 import Organization from  './UserInterface/Components/Organization/OrganizationCreate'
 import AddProject from './Dashboard/ProjectManagement/AddProject/AddProject';
 import ConsultProject from './Dashboard/ProjectManagement/CosultProject/ConsultProject';
+import ListProject from './UserInterface/Components/ProjectManagement/ListProject';
+import Add from './UserInterface/Components/ProjectManagement/AddProject/AddProject';
+
 
 function App() {
   const store = createStore(reducers, compose(applyMiddleware(thunk)));
@@ -53,7 +56,8 @@ function App() {
         <Route path="/legal" element={<Legal />} />
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/ajouterForm" element={<AjouterForm />} />
-
+        <Route path='/projects' element={<ListProject />} />
+        <Route path='/projects/add' element={<Add />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Provider>

@@ -15,7 +15,8 @@ import {
   Radio,
   FormControlLabel,
   Container,
-  Grid
+  Grid,
+  Checkbox,
 } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -41,22 +42,22 @@ const Form = () => {
   const [selectedQuestionType, setSelectedQuestionType] = useState("");
   const [modalQuestion, setModalQuestion] = useState("");
   const [modalResponse, setModalResponse] = useState("");
-  const navigate= useNavigate();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     createForm();
-    console.log("hhhhh",formData); 
-  navigate('/ajouterForm' , { state: { formData } });
+    console.log("hhhhh", formData);
+    navigate("/ajouterForm", { state: { formData } });
   };
-////ajouter
-// const cards = useSelector((state) => state.cards);
-// {cards.map((formData, index) => (
-//   <Grid key={index} item xs={12} sm={6} md={6}>
+  ////ajouter
+  // const cards = useSelector((state) => state.cards);
+  // {cards.map((formData, index) => (
+  //   <Grid key={index} item xs={12} sm={6} md={6}>
 
-//     <AjouterForm formData={formData}  />
-//     </Grid>
-// ))}
+  //     <AjouterForm formData={formData}  />
+  //     </Grid>
+  // ))}
   const clear = () => {
     setFormData({ name: "", questions: [] });
   };
@@ -68,19 +69,37 @@ const Form = () => {
   const handleCloseModal = () => {
     setOpenModal(false);
   };
+  //radioButton
   const [showRadioButtons, setShowRadioButtons] = useState(false); // Etat pour afficher ou cacher les boutons radio
   const [radioButtonStates, setRadioButtonStates] = useState([]);
+  //combox
+  const [showNumberOfInputs, setShowNumberOfInputs] = useState(false);
+  const [numberOfInputs, setNumberOfInputs] = useState(2);
 
+  //checkbox
+  const [showCheckbox, setShowCheckbox] = useState(false);
+  const [checkboxStates, setCheckboxStates] = useState([]);
+  const handleNumberOfInputsChange = (e) => {
+    const value = parseInt(e.target.value);
+    setNumberOfInputs(value);
+    setCheckboxStates([...Array(value)].fill(false));
+  };
   const handleQuestionTypeChange = (e) => {
     setSelectedQuestionType(e.target.value);
     //ajouter
     if (e.target.value === "multipleChoice") {
-      setShowNumberOfOptions(true); // Step 2: Show number of options only if the selected question type is 'multipleChoice'
+      setShowNumberOfOptions(true); // Afficher le champ numberOfOptions si le type de question est 'multipleChoice'
       setShowRadioButtons(true); // Affiche les boutons radio si le type de question est "multipleChoice"
       setRadioButtonStates([...Array(numberOfOptions)].fill(false)); // Initialiser le tableau d'états avec 'false' pour chaque bouton radio
+    } else if (e.target.value === "combobox") {
+      setShowCheckbox(true);
+      setCheckboxStates([...Array(numberOfInputs)].fill(false));
+      setShowNumberOfInputs(true); // Mettre à jour l'état showNumberOfInputs
     } else {
-      setShowNumberOfOptions(false); // Step 3: Hide number of options for other question types
+      setShowNumberOfOptions(false); // Masquer le champ numberOfOptions pour les autres types de questions
       setShowRadioButtons(false); // Cache les boutons radio pour d'autres types de questions
+      setShowNumberOfInputs(false); // Mettre à jour l'état showNumberOfInputs
+      setShowCheckbox(false);
     }
   };
 
@@ -101,6 +120,18 @@ const Form = () => {
           },
           optionsCount: numberOfOptions,
         };
+      }
+      else if (selectedQuestionType === "combobox") {
+        newQuestion = {
+          id: idCount,
+          questionType: selectedQuestionType,
+          question: modalQuestion,
+          responseValue: {
+            checked: [],
+            checkboxes: Array.from({ length: numberOfInputs }, () => ""),
+          },
+          optionsCount: numberOfInputs,
+        };
       } else {
         newQuestion = {
           id: idCount,
@@ -118,8 +149,10 @@ const Form = () => {
       setSelectedQuestionType("");
       setShowNumberOfOptions(false);
       setNumberOfOptions(2);
+      setNumberOfInputs(2); // Réinitialiser le nombre de checkboxes
       setIdCount(idCount + 1);
       handleCloseModal();
+      setShowNumberOfInputs(false);
     }
   };
 
@@ -140,6 +173,7 @@ const Form = () => {
     console.log(event);
     setModalResponse(event.target.value);
   };
+
   const [numberOfOptions, setNumberOfOptions] = useState(2); // Step 1: State for number of options
   const [selectedOptions, setSelectedOptions] = useState([]);
   //ajoute
@@ -189,19 +223,23 @@ const Form = () => {
           }),
         }));
         break;
-        case "gender":
-          if (responseValue === "Homme" || responseValue === "Femme") {
-            setFormData((prev) => ({
-              ...prev,
-              questions: prev.questions.map((obj) => {
-                if (obj.id === id) {
-                  return { ...obj, responseValue: responseValue, questionType: "gender" };
-                }
-                return obj;
-              }),
-            }));
-          }
-          break;
+      case "gender":
+        if (responseValue === "Homme" || responseValue === "Femme") {
+          setFormData((prev) => ({
+            ...prev,
+            questions: prev.questions.map((obj) => {
+              if (obj.id === id) {
+                return {
+                  ...obj,
+                  responseValue: responseValue,
+                  questionType: "gender",
+                };
+              }
+              return obj;
+            }),
+          }));
+        }
+        break;
       case "date":
         setFormData((prev) => ({
           ...prev,
@@ -215,18 +253,18 @@ const Form = () => {
           }),
         }));
         break;
-        case "time":
-          // Mise à jour de la réponse pour le type 'time'
-          setFormData((prev) => ({
-            ...prev,
-            questions: prev.questions.map((obj) => {
-              if (obj.id === id) {
-                return { ...obj, responseValue: responseValue };
-              }
-              return obj;
-            }),
-          }));
-          break;
+      case "time":
+        // Mise à jour de la réponse pour le type 'time'
+        setFormData((prev) => ({
+          ...prev,
+          questions: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              return { ...obj, responseValue: responseValue };
+            }
+            return obj;
+          }),
+        }));
+        break;
       case "file":
         // const file = responseValue;
         // console.log("ggggggggggggggggggggggg",file)
@@ -265,6 +303,29 @@ const Form = () => {
               return {
                 ...obj,
                 responseValue: { selectedValue: "", options: [""] },
+              }; // Add or update other properties as needed
+            }
+            // If the id doesn't match, return the original object
+            return obj;
+          }),
+        }));
+        break;
+      case "combobox":
+        setFormData((prev) => ({
+          ...prev,
+          ["questions"]: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              // Update the properties for the object with id 2
+              return {
+                ...obj,
+                ["responseValue"]: {
+                  ...obj.responseValue,
+                  ["checked"]: obj.responseValue.checked.includes(responseValue)
+                    ? obj.responseValue.checked.filter(
+                        (x) => x != responseValue
+                      )
+                    : obj.responseValue.push(responseValue),
+                },
               }; // Add or update other properties as needed
             }
             // If the id doesn't match, return the original object
@@ -316,32 +377,34 @@ const Form = () => {
             fullWidth
           />
         );
-        
-    case "time":
-      return (
-        <TimePickerInput
-          value={question.responseValue}
-          onChange={(e) => handleResponse(question.id, e.target.value, "time")}
-        />
-      );
-        case "gender":
-  return (
-      <FormControl variant="outlined" fullWidth>
-        <InputLabel id={`dropdown-label-${question.id}`}>Genre</InputLabel>
-        <Select
-          labelId={`dropdown-label-${question.id}`}
-          id={`dropdown-${question.id}`}
-          value={question.responseValue}
-          onChange={(e) => {
-            handleResponse(question.id, e.target.value, "gender");
-          }}
-          label="Genre"
-        >
-          <MenuItem value="Homme">Homme</MenuItem>
-          <MenuItem value="Femme">Femme</MenuItem>
-        </Select>
-      </FormControl>
-);
+
+      case "time":
+        return (
+          <TimePickerInput
+            value={question.responseValue}
+            onChange={(e) =>
+              handleResponse(question.id, e.target.value, "time")
+            }
+          />
+        );
+      case "gender":
+        return (
+          <FormControl variant="outlined" fullWidth>
+            <InputLabel id={`dropdown-label-${question.id}`}>Genre</InputLabel>
+            <Select
+              labelId={`dropdown-label-${question.id}`}
+              id={`dropdown-${question.id}`}
+              value={question.responseValue}
+              onChange={(e) => {
+                handleResponse(question.id, e.target.value, "gender");
+              }}
+              label="Genre"
+            >
+              <MenuItem value="Homme">Homme</MenuItem>
+              <MenuItem value="Femme">Femme</MenuItem>
+            </Select>
+          </FormControl>
+        );
       case "text":
         return (
           <TextField
@@ -365,23 +428,25 @@ const Form = () => {
             } // Utilisez 'event' au lieu de 'e'
           />
         );
-        case "dropdown":
-          return (
-            <FormControl variant="outlined" fullWidth>
-              <InputLabel id={`dropdown-label-${question.id}`}>{question.question}</InputLabel>
-              <Select
-                labelId={`dropdown-label-${question.id}`}
-                id={`dropdown-${question.id}`}
-                value={question.responseValue}
-                onChange={(e) => {
-                  handleResponse(question.id, e.target.value, "dropdown");
-                }}
-                label={question.question}
-              >
-                {/* Mettez ici les options de votre liste déroulante */}
-              </Select>
-            </FormControl>
-          );
+      case "dropdown":
+        return (
+          <FormControl variant="outlined" fullWidth>
+            <InputLabel id={`dropdown-label-${question.id}`}>
+              {question.question}
+            </InputLabel>
+            <Select
+              labelId={`dropdown-label-${question.id}`}
+              id={`dropdown-${question.id}`}
+              value={question.responseValue}
+              onChange={(e) => {
+                handleResponse(question.id, e.target.value, "dropdown");
+              }}
+              label={question.question}
+            >
+              {/* Mettez ici les options de votre liste déroulante */}
+            </Select>
+          </FormControl>
+        );
       case "dropdown":
         return (
           <TextField
@@ -399,6 +464,7 @@ const Form = () => {
           />
         );
       case "multipleChoice":
+        console.log(("rrrrrrrrrrrrr", question));
         return (
           <div>
             {[...Array(question.optionsCount)].map((item, index) => (
@@ -413,7 +479,7 @@ const Form = () => {
                 <FormControlLabel
                   value={
                     formData.questions.find((q) => q.id == question.id)
-                      .responseValue.options[index]
+                      ?.responseValue.options[index]
                   }
                   control={<Radio />}
                   checked={
@@ -478,6 +544,56 @@ const Form = () => {
             ))}
           </div>
         );
+      ///cmobox
+      case "combobox":
+        return (
+          <div>
+            {[...Array(question.optionsCount)].map((item, index) => (
+              <div key={index}>
+                <TextField
+                  name={`input_${index}`} // Utilisez un nom unique pour chaque input
+                  label={`Input ${index + 1}`}
+                  fullWidth
+                  value={
+                    formData.questions.find((q) => q.id == question.id)
+                      .responseValue.checkboxes[index]
+                  }
+                  onChange={(e) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      ["questions"]: prev.questions.map((obj) => {
+                        if (obj.id === question.id) {
+                          // Update the properties for the object with id 2
+                          return {
+                            ...obj,
+                            responseValue: {
+                              ...obj.responseValue,
+                              ["checkboxes"]: obj.responseValue.checkboxes.map(
+                                (x, i) => (i == index ? e.target.value : x)
+                              ),
+                            },
+                          }; // Add or update other properties as needed
+                        }
+                        // If the id doesn't match, return the original object
+                        return obj;
+                      }),
+                    }));
+                  }}
+                  // Ajoutez ici les autres propriétés nécessaires pour chaque input
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      
+                    />
+                  }
+                  label={`Checkbox ${index + 1}`} // Mettez à jour le label en conséquence
+                />
+              </div>
+            ))}
+          </div>
+        );
+
       default:
         return null;
     }
@@ -588,7 +704,7 @@ const Form = () => {
             </div>
           ))}
           <div className="row mb-4">
-          <div className="col-md-2"></div>
+            <div className="col-md-2"></div>
             <div className="col-md-3 col-xs-12">
               <IconButton
                 className="h-100 border-0"
@@ -626,25 +742,25 @@ const Form = () => {
                 {/* Change the button label */}
               </IconButton>
             </div>
-            
+
             <div className="col-md-3 col-xs-12">
-                <IconButton
-                  className="h-100 border-0"
-                  style={{
-                    background: "#047db9",
-                    color: "white",
-                    fontSize: "16px",
-                    fontWeight: 600,
-                    padding: "8px 16px",
-                    borderRadius: "20px",
-                  }}
-                  startIcon={<FaSave />}
-                  type="submit"
-                  fullWidth // Add fullWidth prop to make button take full width
-                >
-                  <Title title={"Submit"} /> {/* Change the button label */}
-                </IconButton>
-              </div>
+              <IconButton
+                className="h-100 border-0"
+                style={{
+                  background: "#047db9",
+                  color: "white",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  padding: "8px 16px",
+                  borderRadius: "20px",
+                }}
+                startIcon={<FaSave />}
+                type="submit"
+                fullWidth // Add fullWidth prop to make button take full width
+              >
+                <Title title={"Submit"} /> {/* Change the button label */}
+              </IconButton>
+            </div>
           </div>
 
           {/* <IconButton
@@ -659,7 +775,6 @@ const Form = () => {
           </IconButton> */}
         </Container>
       </form>
-
       <Modal open={openModal} onClose={handleCloseModal}>
         <div
           style={{
@@ -721,9 +836,10 @@ const Form = () => {
               <MenuItem value="multipleChoice">Choix multiple</MenuItem>
               <MenuItem value="gender">Gender</MenuItem>
               <MenuItem value="time">Time</MenuItem>
-
+              <MenuItem value="combobox">Combobox</MenuItem>
             </Select>
           </FormControl>
+
           <TextField
             name="numberOfOptions"
             variant="outlined"
@@ -736,6 +852,19 @@ const Form = () => {
             }}
             style={{ display: showNumberOfOptions ? "block" : "none" }}
           />
+
+          <TextField
+            name="numberOfInputs"
+            type="number"
+            label="Number of Inputs"
+            value={numberOfInputs}
+            onChange={(e) => setNumberOfInputs(parseInt(e.target.value))}
+            fullWidth
+            style={{
+              display: selectedQuestionType === "combobox" ? "block" : "none",
+            }}
+          />
+
           <div></div>
           <div
             style={{

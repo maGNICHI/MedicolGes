@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import HeaderDash from "../../components/HeaderDash/HeaderDash";
 import Dropdown from "../../components/HeaderDash/Dropdown";
 import Sidebar from "../SideBar/SideBar";
+import '../Dashboard.css'
 
 const Layout = ({ children, selectedName }) => {
     const [showProfileSelect, setShowProfileSelect] = useState(false);

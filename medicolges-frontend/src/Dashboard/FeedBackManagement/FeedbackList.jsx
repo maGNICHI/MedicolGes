@@ -7,6 +7,7 @@ import { FaPlus } from "react-icons/fa";
 import CheckTable from "../../components/Table/UserTable";
 import "../Dashboard/Dashboard.css"
 import FeedbackTable from "../../components/Table/FeedbackList";
+import '../Dashboard.css'
 
 export default function FeedbackList() {
   const [selectedName, setSelectedName] = useState("Feedback Management");

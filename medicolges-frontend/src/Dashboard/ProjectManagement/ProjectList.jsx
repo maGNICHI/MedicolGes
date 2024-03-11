@@ -7,6 +7,7 @@ import { FaPlus } from "react-icons/fa";
 import ProjectCard from "../../components/Cards/ProjectCard";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
+import '../Dashboard.css'
 
 export default function ProjectList() {
   const [selectedName, setSelectedName] = useState("Project Management");
@@ -27,12 +28,9 @@ export default function ProjectList() {
   }, []);
 
   return (
-    <Layout selectedName={selectedName}>
-      <Container
-        fluid
-        className="mt-4 h-screen"
-        style={{ overflow: "auto", maxHeight: "100%", zIndex: 0 }} // Set overflow to hidden
-      >
+    <Layout selectedName={selectedName} style={{backgroundColor: `#a3bee3 !important`, height: "screen"}}>
+      <Container fluid className="mt-4" style={{ height: "screen" }}>
+        {/* Adjust the height accordingly */}
         <Row className="align-items-center" style={{ padding: "20px" }}>
           <Col xs={12} md={10}>
             <Title title={"Project List"} fontWeight={600} fontSize={"24px"} />

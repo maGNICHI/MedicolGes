@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { FaBars } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import menuItem from "./MenuItem";
+import '../Dashboard.css'
 
 const Footer = () => {
   const currentDate = new Date().getFullYear(); // Get the current year

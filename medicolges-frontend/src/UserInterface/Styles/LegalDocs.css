@@ -1,3 +1,6 @@
+body {
+    background-color: #FBFCFF !important;
+}
 .legal-text-content{
     padding: 12px 32px;
     background: linear-gradient(to right, #ECF2FF, #FBFCFF);

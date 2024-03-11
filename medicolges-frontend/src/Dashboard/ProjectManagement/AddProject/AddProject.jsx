@@ -58,8 +58,8 @@ export default function AddProject() {
     <Layout selectedName={selectedName}>
       <Container
         fluid
-        className="my-8 h-screen"
-        style={{ overflow: "auto", maxHeight: "150%", zIndex: 0 }}
+        className="my-8"
+        style={{ height: "screen" }}
       >
         <Card className="card mx-3 -mr-3">
           <Card.Body

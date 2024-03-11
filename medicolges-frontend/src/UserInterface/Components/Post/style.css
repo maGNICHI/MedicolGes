@@ -1,6 +1,16 @@
+
 body{
     margin-top:20px;
-    background:#eee;
+    background-color: white !important;
+    height: 100%;
+}
+
+
+.about-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, #ECF2FF, #FBFCFF);
 }
 
 .profile-header {
@@ -178,10 +188,10 @@ body{
     border: none
 }
 
-.profile-header .profile-header-tab>li.active>a,
+/* .profile-header .profile-header-tab>li.active>a,
 .profile-header .profile-header-tab>li>a.active {
     color: #242a30
-}
+} */
 
 .profile-content {
     padding: 25px;
@@ -684,7 +694,7 @@ body {
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  background: #fff;
 }
 
 .form-group {
@@ -707,15 +717,6 @@ select {
   box-sizing: border-box;
 }
 
-button {
-  background-color: #4caf50;
-  color: #fff;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
+.contentUser {
+    padding-top: 80px; /* Adjust this value based on the height of your navbar */
 }

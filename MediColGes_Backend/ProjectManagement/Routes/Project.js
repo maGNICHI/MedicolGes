@@ -20,7 +20,9 @@ const upload = multer({ storage: storage });
 // @desc Get all projects
 router.get("/", async (req, res) => {
   try {
-    const projects = await Project.find();
+    const projects = await Project.find()
+    .sort({ createdAt: -1 })
+    .exec();;
     res.json(projects);
   } catch (err) {
     console.error(err.message);

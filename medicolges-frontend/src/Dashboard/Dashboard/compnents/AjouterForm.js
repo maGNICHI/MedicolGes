@@ -22,11 +22,15 @@ import {
   RadioGroup,
   Radio,
   Checkbox,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@material-ui/core/";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import IconButton from "../../../components/Button/IconButton";
 import { FaSave } from "react-icons/fa";
+import { addForm, } from "../compnents/api/index";
 
 const AjouterForm = () => {
   const [formData, setFormData] = useState({});
@@ -43,12 +47,166 @@ const AjouterForm = () => {
     }
   }, [location.state]);
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState({});
+  const handleSave = async (e) => {
+    e.preventDefault();
+    createForm();
+  };
+  const createForm = () => {
+    console.log("ggggggggggggggggggggg", formData.responseValue);
 
-  const handleResponse = (questionId, answer, answerType) => {
-    // Logique pour gérer la réponse de l'utilisateur
-    console.log("Question ID:", questionId);
-    console.log("Answer:", answer);
-    console.log("Answer Type:", answerType);
+    addForm({
+      name: formData.name,
+      questions: JSON.stringify(formData.questions),
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const handleResponse = (id, responseValue, responseType) => {
+    console.log(id, responseValue, responseType);
+    switch (responseType) {
+      case "text":
+        setFormData((prev) => ({
+          ...prev,
+          ["questions"]: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              // Update the properties for the object with id 2
+              return { ...obj, responseValue: responseValue }; // Add or update other properties as needed
+            }
+            // If the id doesn't match, return the original object
+            return obj;
+          }),
+        }));
+        break;
+      case "paragraph":
+        setFormData((prev) => ({
+          ...prev,
+          ["questions"]: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              // Update the properties for the object with id 2
+              return { ...obj, responseValue: responseValue }; // Add or update other properties as needed
+            }
+            // If the id doesn't match, return the original object
+            return obj;
+          }),
+        }));
+        break;
+      case "gender":
+        if (responseValue === "Homme" || responseValue === "Femme") {
+          setFormData((prev) => ({
+            ...prev,
+            questions: prev.questions.map((obj) => {
+              if (obj.id === id) {
+                return {
+                  ...obj,
+                  responseValue: responseValue,
+                  questionType: "gender",
+                };
+              }
+              return obj;
+            }),
+          }));
+        }
+        break;
+      case "date":
+        setFormData((prev) => ({
+          ...prev,
+          ["questions"]: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              // Update the properties for the object with id 2
+              return { ...obj, responseValue: responseValue }; // Add or update other properties as needed
+            }
+            // If the id doesn't match, return the original object
+            return obj;
+          }),
+        }));
+        break;
+      case "time":
+        // Mise à jour de la réponse pour le type 'time'
+        setFormData((prev) => ({
+          ...prev,
+          questions: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              return { ...obj, responseValue: responseValue };
+            }
+            return obj;
+          }),
+        }));
+        break;
+      case "file":
+        // const file = responseValue;
+        // console.log("ggggggggggggggggggggggg",file)
+        // const reader = new FileReader();
+        // reader.readAsDataURL(file);
+        // reader.onload = () => {
+        //   const fileContent  = reader.result;
+        //   setFormData((prev) => ({
+        //     ...prev,
+        //     questions: prev.questions.map((obj) => {
+        //       if (obj.id === id) {
+        //         return { ...obj, responseValue: file }; // Mettre à jour la valeur de réponse avec le contenu du fichier
+        //       }
+        //       return obj;
+        //     }),
+        //   }));
+        // };
+        // break;
+        const fileName = responseValue.name; // Récupérer le nom du fichier
+        setFormData((prev) => ({
+          ...prev,
+          questions: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              return { ...obj, responseValue: fileName };
+            }
+            return obj;
+          }),
+        }));
+        break;
+      case "multipleChoice":
+        setFormData((prev) => ({
+          ...prev,
+          ["questions"]: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              // Update the properties for the object with id 2
+              return {
+                ...obj,
+                responseValue: { selectedValue: "", options: [""] },
+              }; // Add or update other properties as needed
+            }
+            // If the id doesn't match, return the original object
+            return obj;
+          }),
+        }));
+        break;
+      case "combobox":
+        setFormData((prev) => ({
+          ...prev,
+          ["questions"]: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              // Update the properties for the object with id 2
+              return {
+                ...obj,
+                ["responseValue"]: {
+                  ...obj.responseValue,
+                  ["checked"]: obj.responseValue.checked.includes(responseValue)
+                    ? obj.responseValue.checked.filter(
+                        (x) => x != responseValue
+                      )
+                    : obj.responseValue.checked.push(responseValue),
+                },
+              }; // Add or update other properties as needed
+            }
+            // If the id doesn't match, return the original object
+            return obj;
+          }),
+        }));
+        break;
+      default:
+        break;
+    }
   };
 
   const handleMultipleChoiceResponse = (questionId, option) => {
@@ -93,6 +251,26 @@ const AjouterForm = () => {
             fullWidth
           />
         );
+      case "gender":
+        return (
+          <FormControl variant="outlined" fullWidth>
+            <InputLabel htmlFor="gender-select">Gender</InputLabel>
+            <Select
+              label="Gender"
+              value={formData.gender || ""}
+              onChange={(e) =>
+                setFormData({ ...formData, gender: e.target.value })
+              }
+              inputProps={{
+                name: "gender",
+                id: "gender-select",
+              }}
+            >
+              <MenuItem value="male">Male</MenuItem>
+              <MenuItem value="female">Female</MenuItem>
+            </Select>
+          </FormControl>
+        );
       case "paragraph":
         return (
           <TextField
@@ -123,6 +301,18 @@ const AjouterForm = () => {
               }
             />
           </div>
+        );
+      case "time":
+        return (
+          <TextField
+            name="timeAnswer"
+            type="time"
+            variant="outlined"
+            fullWidth
+            InputLabelProps={{
+              shrink: true,
+            }}
+          />
         );
       case "dropdown":
         return (
@@ -174,6 +364,64 @@ const AjouterForm = () => {
             </FormGroup>
           </FormControl>
         );
+
+      case "combobox":
+        return (
+          <div>
+            {[...Array(question.optionsCount)].map((item, index) => (
+              <div key={index}>
+                {/* <TextField
+                  name={`input_${index}`} 
+                  label={` ${question.question}`}
+                  fullWidth
+                  value={
+                    question.question
+                  }
+                  onChange={(e) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      ["questions"]: prev.questions.map((obj) => {
+                        if (obj.id === question.id) {
+                          // Update the properties for the object with id 2
+                          return {
+                            ...obj,
+                            responseValue: {
+                              ...obj.responseValue,
+                              ["checkboxes"]: obj.responseValue.checkboxes.map(
+                                (x, i) => (i == index ? e.target.value : x)
+                              ),
+                            },
+                          }; // Add or update other properties as needed
+                        }
+                        // If the id doesn't match, return the original object
+                        return obj;
+                      }),
+                    }));
+                  }}
+                  disabled
+                  
+                /> */}
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={question.responseValue.checked.includes(question.responseValue.checkboxes[index])}
+                      onChange={(event) => {
+                        handleResponse(
+                          question.id,
+                          question.responseValue.checkboxes[index],
+                          "combobox",
+                          null
+                        );
+                      }}
+                    />
+                  }
+                  label={` ${question.responseValue.checkboxes[index]}`} // Mettez à jour le label en conséquence
+                />
+              </div>
+            ))}
+          </div>
+        );
+
       default:
         return null;
     }
@@ -304,6 +552,7 @@ const AjouterForm = () => {
                       borderRadius: "20px",
                     }}
                     startIcon={<FaSave />}
+                    onClick={handleSave}
                     fullWidth // Add fullWidth prop to make button take full width
                   >
                     <Title title={"Save"} /> {/* Change the button label */}
@@ -318,3 +567,4 @@ const AjouterForm = () => {
   );
 };
 export default AjouterForm;
+

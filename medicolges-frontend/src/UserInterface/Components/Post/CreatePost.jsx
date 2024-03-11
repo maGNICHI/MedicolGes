@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./style.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import PostList from "./PostList";
 import Navbar from "../Navbar";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
 
 const CreatePost = () => {
   const [message, setMessage] = useState("");
@@ -32,12 +34,32 @@ const CreatePost = () => {
       console.error("Error creating post:", error);
     }
   };
+  const [goUp, setGoUp] = useState(false);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    const onPageScroll = () => {
+      if (window.scrollY > 600) {
+        setGoUp(true);
+      } else {
+        setGoUp(false);
+      }
+    };
+    window.addEventListener("scroll", onPageScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onPageScroll);
+    };
+  }, []);
 
   return (
     <>
-      <Navbar />
+    <Navbar />
 
-      <div className="container-fluid gedf-wrapper">
+      <div className="container-fluid gedf-wrapper pt-32">
         <div className="row justify-content-center">
           <div className="col-lg-7">
             <div className="card gedf-card">
@@ -176,6 +198,12 @@ const CreatePost = () => {
           </div>
         </div>
         <PostList />
+      </div>
+      <div
+        onClick={scrollToTop}
+        className={`scroll-up ${goUp ? "show-scroll" : ""}`}
+      >
+        <FontAwesomeIcon icon={faAngleUp} />
       </div>
     </>
   );

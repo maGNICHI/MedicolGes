@@ -11,7 +11,11 @@ const ProjectSchema = new mongoose.Schema({
         required: true
     },
     isDeleted: Boolean,
-    file: String
+    file: String,
+    organization: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Organization'
+    }
 },
 {
     timestamps: true
