@@ -144,6 +144,46 @@ const handleToggleChange = (questionId, checked) => {
 };
 
 
+//pour listderoulante
+const handleInputChange = (id, value) => {
+  // Find the index of the question with the matching ID
+  const questionIndex = questions.findIndex(question => question.id === id);
+
+  if (questionIndex !== -1) {
+    // Create a copy of the questions array
+    const updatedQuestions = [...questions];
+
+    // Update the inputValue of the question at the found index
+    updatedQuestions[questionIndex].inputValue = value;
+
+    // Update the state with the modified questions array
+    setQuestions(updatedQuestions);
+  }
+};
+
+const handleSelectChange = (id, value) => {
+  // Find the index of the question with the matching ID
+  const questionIndex = questions.findIndex(question => question.id === id);
+
+  if (questionIndex !== -1) {
+    // Create a copy of the questions array
+    const updatedQuestions = [...questions];
+
+    // Update the selectedOption of the question at the found index
+    updatedQuestions[questionIndex].selectedOption = value;
+
+    // Update the state with the modified questions array
+    setQuestions(updatedQuestions);
+  }
+};
+
+
+
+
+
+
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -587,6 +627,42 @@ const handleToggleChange = (questionId, checked) => {
             }
           />
         );
+        case "listederoulate":
+      return (
+<>
+          {question.responseValue && question.responseValue.map((item, index) => (
+            <div key={index}>
+              <TextField
+                value={item}
+                disabled
+                fullWidth
+              />
+            </div>
+          ))}
+          <TextField
+            label="Enter Option"
+            value={question.inputValue}
+            onChange={(e) => {
+              handleInputChange(question.id, e.target.value);
+            }}
+            fullWidth
+          />
+          <Select
+            label="Select Option"
+            value={question.selectedOption}
+            onChange={(e) => {
+              handleSelectChange(question.id, e.target.value);
+            }}
+            fullWidth
+          >
+            {question.responseValue && question.responseValue.map((item, index) => (
+              <MenuItem key={index} value={item}>
+                {item}
+              </MenuItem>
+            ))}
+          </Select>
+        </>
+      );
       case "gender":
         return (
           <FormControl variant="outlined" fullWidth>
