@@ -56,8 +56,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       console.log(data, "fetched messsages of the selected chat data");
       socket.emit("join chat", selectedChat._id);
     } catch (error) {
-      console.log(error.message); 
-       toast({
+      console.log(error.message);
+      toast({
         title: "Error Occured!",
         description: "Failed to Load the Messages",
         status: "error",
@@ -91,7 +91,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         setMessages([...messages, data]);
       } catch (error) {
         console.log(error.message);
-       toast({
+        toast({
           title: "Error Occured!",
           description: "Failed to send the Message",
           status: "error",
@@ -102,7 +102,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       }
     }
   };
-// Effect hook for initializing socket connection
+  // Effect hook for initializing socket connection
   useEffect(() => {
     socket = io(ENDPOINT);
     socket.emit("setup", user);
@@ -115,14 +115,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     fetchMessages();
     selectedChatCompare = selectedChat;
   }, [selectedChat]);
- // Effect hook for handling incoming messages
+  // Effect hook for handling incoming messages
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
       if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id) {
 
         if (!notification.includes(newMessageRecieved)) {
           setNotification([newMessageRecieved, ...notification]);
-          setFetchAgain(!fetchAgain); 
+          setFetchAgain(!fetchAgain);
           console.log(notification, "notification bell-icon check");
         }
       } else {
@@ -171,7 +171,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               icon={<ArrowBackIcon />}
               onClick={() => setSelectedChat("")}
             />
-   {messages && !selectedChat.isGroupChat ? (
+            {messages && !selectedChat.isGroupChat ? (
               <>
                 {getSender(user, selectedChat.users)}
                 <ProfileModal user={getSenderFull(user, selectedChat.users)} />
@@ -232,23 +232,23 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 <></>
               )}
               <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
-                   
-              <Input
-                variant="filled"
-                bg="#E0E0E0"
-                placeholder="Enter a message.."
-                value={newMessage}
-                onChange={typingHandler}
-              />
-               <SendAudioModal>
-                              <Button
-                                 rightIcon={<BsMicFill />}
-                                 padding="5px"
-                              >
-                                 Send
-                              </Button>
-                           </SendAudioModal>
-                           </div>
+
+                <Input
+                  variant="filled"
+                  bg="#E0E0E0"
+                  placeholder="Enter a message.."
+                  value={newMessage}
+                  onChange={typingHandler}
+                />
+                <SendAudioModal>
+                  <Button
+                    rightIcon={<BsMicFill />}
+                    padding="5px"
+                  >
+                    Send
+                  </Button>
+                </SendAudioModal>
+              </div>
             </FormControl>
           </Box>
         </>
