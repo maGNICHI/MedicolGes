@@ -46,6 +46,7 @@ const MyChats = ({ fetchAgain }) => {
       flexDir="column"
       alignItems="center"
       p={3}
+      pb={20}
       bg="white"
       w={{ base: "100%", md: "31%" }}
       borderRadius="lg"
@@ -57,7 +58,6 @@ const MyChats = ({ fetchAgain }) => {
         fontSize={{ base: "28px", md: "30px" }}
         fontFamily="Work sans"
         d="flex"
-        w="100%"
         justifyContent="space-between"
         alignItems="center"
       >
@@ -80,7 +80,7 @@ const MyChats = ({ fetchAgain }) => {
         w="100%"
         h="100%"
         borderRadius="lg"
-        overflowY="hidden"
+        overflowY="auto"
       >
       {chats ? (
           <Stack overflowY="scroll">
