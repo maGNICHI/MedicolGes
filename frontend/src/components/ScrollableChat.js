@@ -25,11 +25,14 @@ const ScrollableChat = ({ messages }) => {
         return null;
       }));
       setBlobUrls(urls);
+      //console.log( setBlobUrls(urls));
     };
 
     fetchBlobUrls();
+    //console.log(fetchBlobUrls());
   }, [messages]);
-
+//console.log(messages);
+//console.log(fetchBlobUrls);
   return (
     <ScrollableFeed>
       {messages &&
