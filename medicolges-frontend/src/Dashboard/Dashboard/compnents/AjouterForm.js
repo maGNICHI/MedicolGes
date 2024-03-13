@@ -4,12 +4,15 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 import Title from "../../../components/Title/Title";
 import Layout from "../../../Dashboard/SuperAdminLayout/Layout";
 import "../../Dashboard/Dashboard.css";
+import TimePickerInput from "../compnents/Form/TimePickerInput"; 
+
 import { AppBar } from "@material-ui/core";
 import useStyles from "../../../styless";
 import { useDispatch } from "react-redux";
 import Dashboard from "../Dashboard"; // Import the Dashboard component
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css'; 
+
 import {
   CardActions,
   CardContent,
@@ -31,17 +34,45 @@ import {
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import IconButton from "../../../components/Button/IconButton";
-import { FaSave } from "react-icons/fa";
+import { FaAd, FaAngleDown, FaArchive, FaSave } from "react-icons/fa";
 import { addForm, } from "../compnents/api/index";
 import Switch from '@mui/material/Switch';
+import { useNavigate } from "react-router-dom";
+
 
 const AjouterForm = () => {
-  const [formData, setFormData] = useState({});
+  const [formData, setFormData] = useState({nam:"",questions:[]});
   const [selectedName, setSelectedName] = useState("Dashboard");
   const dispatch = useDispatch();
   const classes = useStyles();
   const location = useLocation();
   const [canEditQuestions, setcanEditQuestions] = useState(true);
+  const navigate = useNavigate();
+//forUdpate
+const [questions, setQuestions] = useState([]);
+
+const handleUpdate = async (e) => {
+  e.preventDefault();
+  
+  const updatedQuestions = []; // Tableau pour stocker les questions mises à jour
+  
+  // Parcours de chaque question
+  questions.forEach(question => {
+    const inputElement = document.querySelector(`[name="${question.name}"]`); // Sélectionner l'élément d'entrée correspondant
+    const inputValue = inputElement ? inputElement.value : ''; // Récupérer la valeur de l'entrée, ou une chaîne vide si l'élément n'est pas trouvé
+    
+    // Ajouter la question mise à jour au tableau
+    updatedQuestions.push({ ...question, inputValue });
+  });
+
+  console.log("Updated questions:", updatedQuestions);
+  
+  // Redirection vers la page de génération de formulaire avec les données mises à jour
+  navigate("/formGeneration", { state: { formData: updatedQuestions } });
+};
+
+
+
   //togle
   const handleToggleChange = (questionId, checked) => {
     setFormData((prevFormData) => ({
@@ -68,24 +99,35 @@ const AjouterForm = () => {
   const [multipleChoiceAnswers, setMultipleChoiceAnswers] = useState({});
   const handleSave = async (e) => {
     e.preventDefault();
-    createForm();
-  };
-  const createForm = () => {
-    console.log("ggggggggggggggggggggg", formData.responseValue);
+    console.log("Form data before saving:", formData); // Vérifiez les données du formulaire avant la sauvegarde
 
-    addForm({
-      name: formData.name,
-      questions: JSON.stringify(formData.questions),
-    })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err);
+    createForm(formData);
+  };
+  const createForm = async (formData) => {
+    console.log("ggggggggggggggggggggg", formData.responseValue);
+    try {
+      console.log("Form data to save:", formData); // Vérifier les données du formulaire avant de les envoyer
+      await addForm({
+        name: formData.name,
+        questions: JSON.stringify(formData.questions),
       });
+      console.log("Form saved successfully!");
+    } catch (err) {
+      console.log("Error saving form: ", err);
+    }
+    // addForm({
+    //   name: formData.name,
+    //   questions: JSON.stringify(formData.questions),
+    // })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //   });
   };
   const handleResponse = (id, responseValue, responseType) => {
-    console.log(id, responseValue, responseType);
+    console.log("kkkkkk",id, responseValue, responseType);
     switch (responseType) {
       case "toggle":
     setFormData((prev) => ({
@@ -180,23 +222,7 @@ const AjouterForm = () => {
         }));
         break;
       case "file":
-        // const file = responseValue;
-        // console.log("ggggggggggggggggggggggg",file)
-        // const reader = new FileReader();
-        // reader.readAsDataURL(file);
-        // reader.onload = () => {
-        //   const fileContent  = reader.result;
-        //   setFormData((prev) => ({
-        //     ...prev,
-        //     questions: prev.questions.map((obj) => {
-        //       if (obj.id === id) {
-        //         return { ...obj, responseValue: file }; // Mettre à jour la valeur de réponse avec le contenu du fichier
-        //       }
-        //       return obj;
-        //     }),
-        //   }));
-        // };
-        // break;
+       
         const fileName = responseValue.name; // Récupérer le nom du fichier
         setFormData((prev) => ({
           ...prev,
@@ -308,28 +334,42 @@ const AjouterForm = () => {
   const renderInputField = (question) => {
     console.log("im here");
     switch (question.questionType) {
+      // case "date":
+      //   return (
+      //     <TextField
+      //       name="dateAnswer"
+      //       type="date"
+      //       variant="outlined"
+      //       fullWidth
+      //     />
+      //   );
       case "date":
         return (
           <TextField
             name="dateAnswer"
             type="date"
             variant="outlined"
+            value={question.responseValue}
+            onChange={(e) => {
+              handleResponse(question.id, e.target.value, "date");
+            }}
+            label={question.questionType === "date"}
             fullWidth
           />
         );
         case "telephone":
           return (
             <PhoneInput
-            placeholder="Enter phone number"
-            value={question.responseValue}
-            onChange={(value, country) => {
-              handleResponse(question.id, value, "telephone");
-            }}
-            countryCodeEditable={false} // Empêche l'édition manuelle du code de pays
-            enableSearch={true} // Activer la recherche pour choisir le code de pays
-            style={{ width: '50px', height: '30px', fontSize: '14px' }} // Styles personnalisés pour ajuster la taille
-          />
-        );
+              placeholder="Enter phone number"
+              value={question.responseValue}
+              onChange={(value, country) => {
+                handleResponse(question.id, value, "telephone");
+              }}
+              countryCodeEditable={false} // Empêche l'édition manuelle du code de pays
+              enableSearch={true} // Activer la recherche pour choisir le code de pays
+              style={{ width: "50px", height: "30px", fontSize: "14px" }} // Styles personnalisés pour ajuster la taille
+            />
+          );
         case "toggle":
           return (
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -346,20 +386,20 @@ const AjouterForm = () => {
               />
             </div>
           );
-        case "email":
-          return (
-            <TextField
-              type="email"
-              label="Email"
-              placeholder="Enter email"
-              variant="outlined"
-              value={question.responseValue}
-              onChange={(e) => {
-                handleResponse(question.id, e.target.value, "email");
-              }}
-              fullWidth
-            />
-          );
+          case "email":
+        return (
+          <TextField
+            type="email"
+            label="Email"
+            placeholder="Enter email"
+            variant="outlined"
+            value={question.responseValue}
+            onChange={(e) => {
+              handleResponse(question.id, e.target.value, "email");
+            }}
+            fullWidth
+          />
+        );
         case "number":
           return (
             <TextField
@@ -370,50 +410,63 @@ const AjouterForm = () => {
               onChange={(e) => {
                 handleResponse(question.id, e.target.value, "number");
               }}
-              label={question.questionType === "number" ? "Your Number Answer" : ""}
+              label={
+                question.questionType === "number" ? "Your Number Answer" : ""
+              }
               fullWidth
             />
           );
-      case "gender":
-        return (
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel htmlFor="gender-select">Gender</InputLabel>
-            <Select
-              label="Gender"
-              value={formData.gender || ""}
-              onChange={(e) =>
-                setFormData({ ...formData, gender: e.target.value })
-              }
-              inputProps={{
-                name: "gender",
-                id: "gender-select",
+          case "gender":
+            return (
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel id={`dropdown-label-${question.id}`}>Genre</InputLabel>
+                <Select
+                  labelId={`dropdown-label-${question.id}`}
+                  id={`dropdown-${question.id}`}
+                  value={question.responseValue}
+                  onChange={(e) => {
+                    handleResponse(question.id, e.target.value, "gender");
+                  }}
+                  label="Genre"
+                >
+                  <MenuItem value="Homme">Homme</MenuItem>
+                  <MenuItem value="Femme">Femme</MenuItem>
+                </Select>
+              </FormControl>
+            );
+        case "paragraph":
+          return (
+            <TextField
+              name="paragraphAnswer"
+              multiline
+              rows={4}
+              variant="outlined"
+              value={question.responseValue}
+              onChange={(e) => {
+                handleResponse(question.id, e.target.value, "paragraph");
               }}
-            >
-              <MenuItem value="male">Male</MenuItem>
-              <MenuItem value="female">Female</MenuItem>
-            </Select>
-          </FormControl>
-        );
-      case "paragraph":
-        return (
-          <TextField
-            name="paragraphAnswer"
-            multiline
-            rows={4}
-            variant="outlined"
-            label="Your Paragraph Answer"
-            fullWidth
-          />
-        );
-      case "text":
-        return (
-          <TextField
-            name="textAnswer"
-            variant="outlined"
-            label="Your Text Answer"
-            fullWidth
-          />
-        );
+              label={
+                question.questionType === "paragraph"
+                  ? "Your Paragraph Answer"
+                  : ""
+              }
+              fullWidth
+            />
+          );
+        case "text":
+          return (
+            <TextField
+              name="textAnswer"
+              rows={4}
+              variant="outlined"
+              value={question.responseValue}
+              onChange={(e) => {
+                handleResponse(question.id, e.target.value, "text");
+              }}
+              label={question.questionType === "text" ? "Your Text Answer" : ""}
+              fullWidth
+            />
+          );
       case "file":
         return (
           <div style={{ marginLeft: "-1017px" }}>
@@ -425,18 +478,21 @@ const AjouterForm = () => {
             />
           </div>
         );
-      case "time":
-        return (
-          <TextField
-            name="timeAnswer"
-            type="time"
-            variant="outlined"
-            fullWidth
-            InputLabelProps={{
-              shrink: true,
-            }}
-          />
-        );
+        case "time":
+          return (
+            <div style={{ marginRight: "1400px", color: "black" }}> {/* Décalage à gauche */}
+
+            <TimePickerInput
+              value={question.responseValue}
+              
+              style={{ width: "100%", maxWidth: "400px"}} 
+              onChange={(e) =>
+                handleResponse(question.id, e.target.value, "time")
+              }
+              fullWidth
+              variant="outlined"
+            />
+         </div> );
       case "dropdown":
         return (
           <TextField
@@ -679,6 +735,22 @@ const AjouterForm = () => {
                     fullWidth // Add fullWidth prop to make button take full width
                   >
                     <Title title={"Save"} /> {/* Change the button label */}
+                  </IconButton>
+                  <IconButton
+                    className="h-100 border-0"
+                    style={{
+                      background: "#047db9",
+                      color: "white",
+                      fontSize: "16px",
+                      fontWeight: 600,
+                      padding: "8px 16px",
+                      borderRadius: "20px",
+                    }}
+                    startIcon={<FaSave />}
+                    onClick={handleUpdate}
+                    fullWidth // Add fullWidth prop to make button take full width
+                  >
+                    <Title title={"Update"} /> {/* Change the button label */}
                   </IconButton>
                 </div>
               </Col>

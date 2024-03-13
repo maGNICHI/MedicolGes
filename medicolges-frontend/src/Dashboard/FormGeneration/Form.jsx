@@ -8,6 +8,7 @@ import useStyles from "../../styless";
 import { useDispatch } from "react-redux";
 import { getForms } from "../../actions/cards";
 import Form from "../Dashboard/compnents/Form/Form";
+import Customizer from "../Dashboard/compnents/Form/Customizer";
 
 function Dashboard() {
   const [selectedName, setSelectedName] = useState("Form Generation");
@@ -57,6 +58,7 @@ function Dashboard() {
             <Row>
               <Col xs={12} md={12}>
                 <Form />
+                {/* <Customizer /> */}
               </Col>
             </Row>
           </Card.Body>
