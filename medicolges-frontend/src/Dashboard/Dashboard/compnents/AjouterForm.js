@@ -296,6 +296,17 @@ const handleUpdate = async (e) => {
             }),
           }));
           break;
+          case "listederoulate":
+            setFormData((prev) => ({
+              ...prev,
+              questions: prev.questions.map((obj) => {
+                if (obj.id === id) {
+                  return { ...obj, responseValue: responseValue };
+                }
+                return obj;
+              }),
+            }));
+            break;
       default:
         break;
     }
@@ -469,9 +480,10 @@ const handleUpdate = async (e) => {
           );
       case "file":
         return (
-          <div style={{ marginLeft: "-1017px" }}>
+          <div style={{ marginLeft: "-1208px" }}>
             <input
               type="file"
+              accept=".pdf, .mp4, .avi, .mov, .wmv, .flv, .mkv"
               onChange={(event) =>
                 handleResponse(question.id, event.target.files[0], "file")
               }
@@ -503,47 +515,129 @@ const handleUpdate = async (e) => {
             fullWidth
           />
         );
+      // case "multipleChoice":
+      //   return (
+      //     <FormControl component="fieldset">
+      //       <FormGroup>
+      //         {question.responseValue.options.map((option, index) => (
+      //           <div
+      //             key={index}
+      //             style={{
+      //               display: "flex",
+      //               alignItems: "center",
+      //               marginTop: "10px",
+      //             }}
+      //           >
+      //             <FormControlLabel
+      //               control={<Radio />}
+      //               checked={multipleChoiceAnswers[question.id] === option}
+      //               onChange={() =>
+      //                 handleMultipleChoiceResponse(question.id, option)
+      //               }
+      //             />
+      //             <TextField
+      //               disabled={!canEditQuestions}
+      //               variant="outlined"
+      //               value={option}
+      //               onChange={(e) =>
+      //                 handleOptionInputChange(
+      //                   question.id,
+      //                   index,
+      //                   e.target.value
+      //                 )
+      //               }
+      //               fullWidth
+      //               style={{ width: "1258px" }}
+      //             />
+      //             {/* Afficher la réponse de l'utilisateur pour cette option */}
+      //           </div>
+      //         ))}
+      //       </FormGroup>
+      //     </FormControl>
+      //   );
       case "multipleChoice":
+        console.log(("rrrrrrrrrrrrr", question));
         return (
-          <FormControl component="fieldset">
-            <FormGroup>
-              {question.responseValue.options.map((option, index) => (
-                <div
-                  key={index}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    marginTop: "10px",
+          <div>
+            {[...Array(question.optionsCount)].map((item, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "10px",
+                }}
+              >
+                <FormControlLabel
+                  value={
+                    formData.questions.find((q) => q.id == question.id)
+                      ?.responseValue.options[index]
+                  }
+                  control={<Radio />}
+                  checked={
+                    formData.questions.find((q) => q.id == question.id)
+                      .responseValue.selectedOption ==
+                      formData.questions.find((q) => q.id == question.id)
+                        .responseValue.options[index] &&
+                    formData.questions.find((q) => q.id == question.id)
+                      .responseValue.selectedOption != ""
+                  }
+                  onChange={(e) => {
+                    console.log(e);
+                    setFormData((prev) => ({
+                      ...prev,
+                      ["questions"]: prev.questions.map((obj) => {
+                        if (obj.id === question.id) {
+                          // Update the properties for the object with id 2
+                          return {
+                            ...obj,
+                            responseValue: {
+                              ...obj.responseValue,
+                              ["selectedOption"]: e.target.value,
+                            },
+                          }; // Add or update other properties as needed
+                        }
+                        // If the id doesn't match, return the original object
+                        return obj;
+                      }),
+                    }));
                   }}
-                >
-                  <FormControlLabel
-                    control={<Radio />}
-                    checked={multipleChoiceAnswers[question.id] === option}
-                    onChange={() =>
-                      handleMultipleChoiceResponse(question.id, option)
-                    }
-                  />
-                  <TextField
-                    disabled={!canEditQuestions}
-                    variant="outlined"
-                    value={option}
-                    onChange={(e) =>
-                      handleOptionInputChange(
-                        question.id,
-                        index,
-                        e.target.value
-                      )
-                    }
-                    fullWidth
-                    style={{ width: "1258px" }}
-                  />
-                  {/* Afficher la réponse de l'utilisateur pour cette option */}
-                </div>
-              ))}
-            </FormGroup>
-          </FormControl>
-        );
+                />
+                <TextField
+                            disabled={!canEditQuestions}
 
+                  variant="outlined"
+                  size="small"
+                  value={
+                    formData.questions.find((q) => q.id == question.id)
+                      .responseValue.options[index]
+                  }
+                  onChange={(e) => {
+                    setFormData((prev) => ({
+                      ...prev,
+                      ["questions"]: prev.questions.map((obj) => {
+                        if (obj.id === question.id) {
+                          // Update the properties for the object with id 2
+                          return {
+                            ...obj,
+                            responseValue: {
+                              ...obj.responseValue,
+                              ["options"]: obj.responseValue.options.map(
+                                (x, i) => (i == index ? e.target.value : x)
+                              ),
+                            },
+                          }; // Add or update other properties as needed
+                        }
+                        // If the id doesn't match, return the original object
+                        return obj;
+                      }),
+                    }));
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        );
       case "combobox":
         return (
           <div>
@@ -600,7 +694,57 @@ const handleUpdate = async (e) => {
             ))}
           </div>
         );
-
+        case "listederoulate":
+          return (
+            <>
+            
+                         {/* <TextField
+                // label="Enter Option"
+                id="selectChoicesInput"
+                onKeyDown={(e) => {
+                  if (e.key == "Enter") {
+                    e.preventDefault();
+                    setFormData((prev) => ({
+                      ...prev,
+                      ["questions"]: prev.questions.map((obj) => {
+                        if (obj.id === question.id) {
+                          // Update the properties for the object with id 2
+                          return {
+                            ...obj,
+                            responseValue: {
+                              ...obj.responseValue,
+                              ["options"]: [
+                                ...obj.responseValue.options,
+                                e.target.value,
+                              ],
+                            },
+                          }; // Add or update other properties as needed
+                        }
+                        // If the id doesn't match, return the original object
+                        return obj;
+                      }),
+                    }));
+                    document.getElementById('selectChoicesInput').value = ''
+                  }
+                }}
+                fullWidth
+              /> */}
+              {question.responseValue ? (
+                <Select
+                  label="Select Option"
+                 
+                  fullWidth
+                >
+                  {question.responseValue &&
+                    question.responseValue.options.map((item, index) => (
+                      <MenuItem key={index} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                </Select>
+              ) : null}
+            </>
+          );
       default:
         return null;
     }
