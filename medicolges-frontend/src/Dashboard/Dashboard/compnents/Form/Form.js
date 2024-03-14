@@ -85,21 +85,21 @@ const Form = () => {
     number: "#000000",
     toggle: "#000000",
   });
-  // const [questions, setQuestions] = useState({
-  //     listederoulate: "listederoulate",
-  //     toggle: "toggle",
-  //     date: "date",
-  //     email: "email",
-  //     paragraph: "paragraph",
-  //     text: "text",
-  //     file: "file",
-  //     multipleChoice: "multipleChoice",
-  //     gender :"gender",
-  //     time: "time",
-  //     combobox:"combobox",
-  //     telephone: "telephone",
-  //     number:"number",
-  // });
+  const [questions, setQuestions] = useState({
+      listederoulate: "listederoulate",
+      toggle: "toggle",
+      date: "date",
+      email: "email",
+      paragraph: "paragraph",
+      text: "text",
+      file: "file",
+      multipleChoice: "multipleChoice",
+      gender :"gender",
+      time: "time",
+      combobox:"combobox",
+      telephone: "telephone",
+      number:"number",
+  });
 
   // Effet pour mettre à jour la couleur de la police lorsque la couleur de la question est modifiée
   useEffect(() => {
@@ -144,7 +144,7 @@ const Form = () => {
   };
 
   //pour listderoulante
-  const [questions, setQuestions] = useState([]);
+  // const [questions, setQuestions] = useState([]);
 
   const handleInputChange = (id, value) => {
     // Mettre à jour la valeur d'entrée de la question spécifiée par id

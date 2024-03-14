@@ -4,14 +4,14 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 import Title from "../../../components/Title/Title";
 import Layout from "../../../Dashboard/SuperAdminLayout/Layout";
 import "../../Dashboard/Dashboard.css";
-import TimePickerInput from "../compnents/Form/TimePickerInput"; 
+import TimePickerInput from "../compnents/Form/TimePickerInput";
 
 import { AppBar } from "@material-ui/core";
 import useStyles from "../../../styless";
 import { useDispatch } from "react-redux";
 import Dashboard from "../Dashboard"; // Import the Dashboard component
-import PhoneInput from 'react-phone-input-2';
-import 'react-phone-input-2/lib/style.css'; 
+import PhoneInput from "react-phone-input-2";
+import "react-phone-input-2/lib/style.css";
 
 import {
   CardActions,
@@ -35,43 +35,40 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import IconButton from "../../../components/Button/IconButton";
 import { FaAd, FaAngleDown, FaArchive, FaSave } from "react-icons/fa";
-import { addForm, } from "../compnents/api/index";
-import Switch from '@mui/material/Switch';
+import { addForm } from "../compnents/api/index";
+import Switch from "@mui/material/Switch";
 import { useNavigate } from "react-router-dom";
 
-
 const AjouterForm = () => {
-  const [formData, setFormData] = useState({nam:"",questions:[]});
+  const [formData, setFormData] = useState({ nam: "", questions: [] });
   const [selectedName, setSelectedName] = useState("Dashboard");
   const dispatch = useDispatch();
   const classes = useStyles();
   const location = useLocation();
   const [canEditQuestions, setcanEditQuestions] = useState(true);
   const navigate = useNavigate();
-//forUdpate
-const [questions, setQuestions] = useState([]);
+  //forUdpate
+  const [questions, setQuestions] = useState([]);
 
-const handleUpdate = async (e) => {
-  e.preventDefault();
-  
-  const updatedQuestions = []; // Tableau pour stocker les questions mises à jour
-  
-  // Parcours de chaque question
-  questions.forEach(question => {
-    const inputElement = document.querySelector(`[name="${question.name}"]`); // Sélectionner l'élément d'entrée correspondant
-    const inputValue = inputElement ? inputElement.value : ''; // Récupérer la valeur de l'entrée, ou une chaîne vide si l'élément n'est pas trouvé
-    
-    // Ajouter la question mise à jour au tableau
-    updatedQuestions.push({ ...question, inputValue });
-  });
+  const handleUpdate = async (e) => {
+    e.preventDefault();
 
-  console.log("Updated questions:", updatedQuestions);
-  
-  // Redirection vers la page de génération de formulaire avec les données mises à jour
-  navigate("/formGeneration", { state: { formData: updatedQuestions } });
-};
+    const updatedQuestions = []; // Tableau pour stocker les questions mises à jour
 
+    // Parcours de chaque question
+    questions.forEach((question) => {
+      const inputElement = document.querySelector(`[name="${question.name}"]`); // Sélectionner l'élément d'entrée correspondant
+      const inputValue = inputElement ? inputElement.value : ""; // Récupérer la valeur de l'entrée, ou une chaîne vide si l'élément n'est pas trouvé
 
+      // Ajouter la question mise à jour au tableau
+      updatedQuestions.push({ ...question, inputValue });
+    });
+
+    console.log("Updated questions:", updatedQuestions);
+
+    // Redirection vers la page de génération de formulaire avec les données mises à jour
+    navigate("/formGeneration", { state: { formData: updatedQuestions } });
+  };
 
   //togle
   const handleToggleChange = (questionId, checked) => {
@@ -81,14 +78,16 @@ const handleUpdate = async (e) => {
         if (question.id === questionId) {
           return {
             ...question,
-            responseValue: checked // Met à jour la valeur de responseValue avec l'état du commutateur
+            responseValue: checked, // Met à jour la valeur de responseValue avec l'état du commutateur
           };
         }
         return question;
-      })
+      }),
     }));
   };
-  
+useEffect(() => {
+ console.log(formData);
+}, [formData])
   useEffect(() => {
     if (location.state && location.state.formData) {
       console.log(location.state.formData);
@@ -127,19 +126,19 @@ const handleUpdate = async (e) => {
     //   });
   };
   const handleResponse = (id, responseValue, responseType) => {
-    console.log("kkkkkk",id, responseValue, responseType);
+    console.log("kkkkkk", id, responseValue, responseType);
     switch (responseType) {
       case "toggle":
-    setFormData((prev) => ({
-      ...prev,
-      questions: prev.questions.map((obj) => {
-        if (obj.id === id) {
-          return { ...obj, responseValue: responseValue };
-        }
-        return obj;
-      }),
-    }));
-    break;
+        setFormData((prev) => ({
+          ...prev,
+          questions: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              return { ...obj, responseValue: responseValue };
+            }
+            return obj;
+          }),
+        }));
+        break;
       case "text":
         setFormData((prev) => ({
           ...prev,
@@ -153,19 +152,19 @@ const handleUpdate = async (e) => {
           }),
         }));
         break;
-        case "telephone":
-          setFormData((prev) => ({
-            ...prev,
-            ["questions"]: prev.questions.map((obj) => {
-              if (obj.id === id) {
-                // Mettre à jour les propriétés pour l'objet avec l'id correspondant
-                return { ...obj, responseValue: responseValue }; // Ajouter ou mettre à jour d'autres propriétés si nécessaire
-              }
-              // Si l'id ne correspond pas, retourner l'objet original
-              return obj;
-            }),
-          }));
-          break;
+      case "telephone":
+        setFormData((prev) => ({
+          ...prev,
+          ["questions"]: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              // Mettre à jour les propriétés pour l'objet avec l'id correspondant
+              return { ...obj, responseValue: responseValue }; // Ajouter ou mettre à jour d'autres propriétés si nécessaire
+            }
+            // Si l'id ne correspond pas, retourner l'objet original
+            return obj;
+          }),
+        }));
+        break;
       case "paragraph":
         setFormData((prev) => ({
           ...prev,
@@ -222,7 +221,6 @@ const handleUpdate = async (e) => {
         }));
         break;
       case "file":
-       
         const fileName = responseValue.name; // Récupérer le nom du fichier
         setFormData((prev) => ({
           ...prev,
@@ -234,18 +232,18 @@ const handleUpdate = async (e) => {
           }),
         }));
         break;
-        case "number":
-          // Mise à jour de la réponse pour le type 'number'
-          setFormData((prev) => ({
-            ...prev,
-            questions: prev.questions.map((obj) => {
-              if (obj.id === id) {
-                return { ...obj, responseValue: responseValue };
-              }
-              return obj;
-            }),
-          }));
-          break;
+      case "number":
+        // Mise à jour de la réponse pour le type 'number'
+        setFormData((prev) => ({
+          ...prev,
+          questions: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              return { ...obj, responseValue: responseValue };
+            }
+            return obj;
+          }),
+        }));
+        break;
       case "multipleChoice":
         setFormData((prev) => ({
           ...prev,
@@ -285,28 +283,34 @@ const handleUpdate = async (e) => {
           }),
         }));
         break;
-        case "email":
-          setFormData((prev) => ({
-            ...prev,
-            questions: prev.questions.map((obj) => {
-              if (obj.id === id) {
-                return { ...obj, responseValue: responseValue };
-              }
-              return obj;
-            }),
-          }));
-          break;
-          case "listederoulate":
-            setFormData((prev) => ({
-              ...prev,
-              questions: prev.questions.map((obj) => {
-                if (obj.id === id) {
-                  return { ...obj, responseValue: responseValue };
-                }
-                return obj;
-              }),
-            }));
-            break;
+      case "email":
+        setFormData((prev) => ({
+          ...prev,
+          questions: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              return { ...obj, responseValue: responseValue };
+            }
+            return obj;
+          }),
+        }));
+        break;
+      case "listederoulate":
+        setFormData((prev) => ({
+          ...prev,
+          questions: prev.questions.map((obj) => {
+            if (obj.id === id) {
+              return {
+                ...obj,
+                responseValue: {
+                  ...obj.responseValue,
+                  ["selectedOption"]: responseValue,
+                },
+              };
+            }
+            return obj;
+          }),
+        }));
+        break;
       default:
         break;
     }
@@ -368,36 +372,36 @@ const handleUpdate = async (e) => {
             fullWidth
           />
         );
-        case "telephone":
-          return (
-            <PhoneInput
-              placeholder="Enter phone number"
-              value={question.responseValue}
-              onChange={(value, country) => {
-                handleResponse(question.id, value, "telephone");
-              }}
-              countryCodeEditable={false} // Empêche l'édition manuelle du code de pays
-              enableSearch={true} // Activer la recherche pour choisir le code de pays
-              style={{ width: "50px", height: "30px", fontSize: "14px" }} // Styles personnalisés pour ajuster la taille
+      case "telephone":
+        return (
+          <PhoneInput
+            placeholder="Enter phone number"
+            value={question.responseValue}
+            onChange={(value, country) => {
+              handleResponse(question.id, value, "telephone");
+            }}
+            countryCodeEditable={false} // Empêche l'édition manuelle du code de pays
+            enableSearch={true} // Activer la recherche pour choisir le code de pays
+            style={{ width: "50px", height: "30px", fontSize: "14px" }} // Styles personnalisés pour ajuster la taille
+          />
+        );
+      case "toggle":
+        return (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={question.responseValue} // Utilisez responseValue pour indiquer si le toggle est activé ou désactivé
+                  onChange={(e) => {
+                    handleToggleChange(question.id, e.target.checked); // Mettez à jour la valeur de la réponse avec l'état du toggle
+                  }}
+                />
+              }
+              label="Reponse"
             />
-          );
-        case "toggle":
-          return (
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <FormControlLabel
-                control={
-                  <Switch
-                    checked={question.responseValue} // Utilisez responseValue pour indiquer si le toggle est activé ou désactivé
-                    onChange={(e) => {
-                      handleToggleChange(question.id, e.target.checked); // Mettez à jour la valeur de la réponse avec l'état du toggle
-                    }}
-                  />
-                }
-                label="Reponse"
-              />
-            </div>
-          );
-          case "email":
+          </div>
+        );
+      case "email":
         return (
           <TextField
             type="email"
@@ -411,73 +415,73 @@ const handleUpdate = async (e) => {
             fullWidth
           />
         );
-        case "number":
-          return (
-            <TextField
-              name="numberAnswer"
-              type="number"
-              variant="outlined"
+      case "number":
+        return (
+          <TextField
+            name="numberAnswer"
+            type="number"
+            variant="outlined"
+            value={question.responseValue}
+            onChange={(e) => {
+              handleResponse(question.id, e.target.value, "number");
+            }}
+            label={
+              question.questionType === "number" ? "Your Number Answer" : ""
+            }
+            fullWidth
+          />
+        );
+      case "gender":
+        return (
+          <FormControl variant="outlined" fullWidth>
+            <InputLabel id={`dropdown-label-${question.id}`}>Genre</InputLabel>
+            <Select
+              labelId={`dropdown-label-${question.id}`}
+              id={`dropdown-${question.id}`}
               value={question.responseValue}
               onChange={(e) => {
-                handleResponse(question.id, e.target.value, "number");
+                handleResponse(question.id, e.target.value, "gender");
               }}
-              label={
-                question.questionType === "number" ? "Your Number Answer" : ""
-              }
-              fullWidth
-            />
-          );
-          case "gender":
-            return (
-              <FormControl variant="outlined" fullWidth>
-                <InputLabel id={`dropdown-label-${question.id}`}>Genre</InputLabel>
-                <Select
-                  labelId={`dropdown-label-${question.id}`}
-                  id={`dropdown-${question.id}`}
-                  value={question.responseValue}
-                  onChange={(e) => {
-                    handleResponse(question.id, e.target.value, "gender");
-                  }}
-                  label="Genre"
-                >
-                  <MenuItem value="Homme">Homme</MenuItem>
-                  <MenuItem value="Femme">Femme</MenuItem>
-                </Select>
-              </FormControl>
-            );
-        case "paragraph":
-          return (
-            <TextField
-              name="paragraphAnswer"
-              multiline
-              rows={4}
-              variant="outlined"
-              value={question.responseValue}
-              onChange={(e) => {
-                handleResponse(question.id, e.target.value, "paragraph");
-              }}
-              label={
-                question.questionType === "paragraph"
-                  ? "Your Paragraph Answer"
-                  : ""
-              }
-              fullWidth
-            />
-          );
-        case "text":
-          return (
-            <TextField
-              name="textAnswer"
-              rows={4}
-              variant="outlined"
-              value={question.responseValue}
-              onChange={(e) => {
-                handleResponse(question.id, e.target.value, "text");
-              }}
-              label={question.questionType === "text" ? "Your Text Answer" : ""}
-              fullWidth
-            />
-          );
+              label="Genre"
+            >
+              <MenuItem value="Homme">Homme</MenuItem>
+              <MenuItem value="Femme">Femme</MenuItem>
+            </Select>
+          </FormControl>
+        );
+      case "paragraph":
+        return (
+          <TextField
+            name="paragraphAnswer"
+            multiline
+            rows={4}
+            variant="outlined"
+            value={question.responseValue}
+            onChange={(e) => {
+              handleResponse(question.id, e.target.value, "paragraph");
+            }}
+            label={
+              question.questionType === "paragraph"
+                ? "Your Paragraph Answer"
+                : ""
+            }
+            fullWidth
+          />
+        );
+      case "text":
+        return (
+          <TextField
+            name="textAnswer"
+            rows={4}
+            variant="outlined"
+            value={question.responseValue}
+            onChange={(e) => {
+              handleResponse(question.id, e.target.value, "text");
+            }}
+            label={question.questionType === "text" ? "Your Text Answer" : ""}
+            fullWidth
+          />
+        );
       case "file":
         return (
           <div style={{ marginLeft: "-1208px" }}>
@@ -490,21 +494,22 @@ const handleUpdate = async (e) => {
             />
           </div>
         );
-        case "time":
-          return (
-            <div style={{ marginRight: "1400px", color: "black" }}> {/* Décalage à gauche */}
-
+      case "time":
+        return (
+          <div style={{ marginRight: "1400px", color: "black" }}>
+            {" "}
+            {/* Décalage à gauche */}
             <TimePickerInput
               value={question.responseValue}
-              
-              style={{ width: "100%", maxWidth: "400px"}} 
+              style={{ width: "100%", maxWidth: "400px" }}
               onChange={(e) =>
                 handleResponse(question.id, e.target.value, "time")
               }
               fullWidth
               variant="outlined"
             />
-         </div> );
+          </div>
+        );
       case "dropdown":
         return (
           <TextField
@@ -604,8 +609,7 @@ const handleUpdate = async (e) => {
                   }}
                 />
                 <TextField
-                            disabled={!canEditQuestions}
-
+                  disabled={!canEditQuestions}
                   variant="outlined"
                   size="small"
                   value={
@@ -677,13 +681,14 @@ const handleUpdate = async (e) => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={question.responseValue.checked.includes(question.responseValue.checkboxes[index])}
+                      checked={question.responseValue.checked.some( x => 
+                       x ==  question.responseValue.checkboxes[index]
+                      )}
                       onChange={(event) => {
                         handleResponse(
                           question.id,
                           question.responseValue.checkboxes[index],
-                          "combobox",
-                          null
+                          "combobox"
                         );
                       }}
                     />
@@ -694,11 +699,10 @@ const handleUpdate = async (e) => {
             ))}
           </div>
         );
-        case "listederoulate":
-          return (
-            <>
-            
-                         {/* <TextField
+      case "listederoulate":
+        return (
+          <>
+            {/* <TextField
                 // label="Enter Option"
                 id="selectChoicesInput"
                 onKeyDown={(e) => {
@@ -729,22 +733,24 @@ const handleUpdate = async (e) => {
                 }}
                 fullWidth
               /> */}
-              {question.responseValue ? (
-                <Select
-                  label="Select Option"
-                 
-                  fullWidth
-                >
-                  {question.responseValue &&
-                    question.responseValue.options.map((item, index) => (
-                      <MenuItem key={index} value={item}>
-                        {item}
-                      </MenuItem>
-                    ))}
-                </Select>
-              ) : null}
-            </>
-          );
+            {question.responseValue ? (
+              <Select
+                label="Select Option"
+                onChange={(e) => {
+                  handleResponse(question.id, e.target.value, "listederoulate");
+                }}
+                fullWidth
+              >
+                {question.responseValue &&
+                  question.responseValue.options.map((item, index) => (
+                    <MenuItem key={index} value={item}>
+                      {item}
+                    </MenuItem>
+                  ))}
+              </Select>
+            ) : null}
+          </>
+        );
       default:
         return null;
     }

@@ -23,18 +23,20 @@ function Dashboard() {
   return (
     <Layout selectedName={selectedName}>
       <Container fluid className="mt-4" style={{ height: "100vh" }}>
-        <Card className="card h-100" style={{ overflowY: "auto" }}>
-          <Card.Body
+        {/* <Card className="card h-100" style={{ overflowY: "auto" }}> */}
+          {/* <Card.Body
             style={{
               backgroundColor: "#ffffffa9",
               padding: "20px",
               borderRadius: "20px",
             }}
-          >
+          > */}
             <Title title={"Create Form"} fontWeight={600} fontSize={"24px"} />
-            <hr />
-            <Row>
-              <Col xs={12} md={12} className="text-center">
+            {/* <hr /> */}
+          {/* </Card.Body>
+        </Card> */}
+        <Row className="d-flex justify-content-center justify-elements-center justify-items-center">
+              <Col xs={12} md={8} className="text-center">
                 <AppBar
                   className={classes.appBar}
                   position="static"
@@ -53,16 +55,9 @@ function Dashboard() {
                     fontWeight={900}
                   />
                 </AppBar>
+                <Form className="-pt-5" />
               </Col>
             </Row>
-            <Row>
-              <Col xs={12} md={12}>
-                <Form />
-                {/* <Customizer /> */}
-              </Col>
-            </Row>
-          </Card.Body>
-        </Card>
       </Container>
     </Layout>
   );
