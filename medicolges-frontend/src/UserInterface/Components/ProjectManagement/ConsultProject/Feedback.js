@@ -93,7 +93,7 @@ export default function Feedback() {
   };
 
   return (
-    <div class="row mt-3">
+    <div class="row mt-5">
       <div class="col-lg-4 col-md-5 col-12 mb-4 mb-lg-0 pr-lg-6">
       <div className="mb-6">
           <h4 className="mb-3">User reviews</h4>
