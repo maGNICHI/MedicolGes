@@ -5,14 +5,17 @@ const connectDB = require("./config/db");
 const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
+const cors = require('cors');
 //configure et initialise le serveur Express, en utilisant le middleware 
 //express.json() pour traiter les requêtes au format JSON
 dotenv.config();
 connectDB(); 
 const app = express();
-
+const corsOptions = {
+  origin: "http://localhost:3000", // Allow requests from this origin
+};
 app.use(express.json()); 
-
+app.use(cors(corsOptions));
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
@@ -53,7 +56,10 @@ io.on("connection", (socket) => {
       if (user._id == newMessageRecieved.sender._id) return;
 
       socket.in(user._id).emit("message recieved", newMessageRecieved);
+     // if (user._id === newMessageReceived.data.sender._id) return;
 
+      //Send the message back to add it to the messages array:
+     // socket.in(newMessageReceived.room).emit("message received", {newMessageReceived:newMessageReceived.data,chat});
     });
   });
   socket.off("setup", () => {

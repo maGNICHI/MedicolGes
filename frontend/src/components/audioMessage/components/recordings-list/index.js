@@ -1,14 +1,17 @@
+import React, {useContext} from 'react';
 import useRecordingsList from '../../hooks/use-recordings-list';
 import { AiFillWarning } from 'react-icons/ai'
 import axios from 'axios';
 import { useToast } from '@chakra-ui/react';
-import { ChatState } from '../../../../Context/ChatProvider';
+//import { ChatState } from '../../../../Context/ChatProvider';
+import ChatContext from "../../../../Context/chat-context";
 import {Buffer} from 'buffer';
 //const ENDPOINT = 'http://localhost:5000';
 
 const RecordingsList = ({ audio }) => {
    const { recordings, deleteAudio } = useRecordingsList(audio);
-   const { user, selectedChat } = ChatState();
+   //const { user, selectedChat } = ChatState();
+   const { user, selectedChat } = useContext(ChatContext);
    const toast=useToast();
 
    const getUint8ArrayFromBlobUrl= async (blobUrl) => {

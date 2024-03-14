@@ -13,24 +13,13 @@ import ChatContext from "../Context/chat-context";
 const ScrollableChat = ({ messages }) => {
 
   const { user } =  useContext(ChatContext);
-  const [blobUrls, setBlobUrls] = useState([]);
-  useEffect(() => {
-    const fetchBlobUrls = async () => {
-      const urls = await Promise.all(messages.map(async (message) => {
-        if (message.isMedia) {
-          const uint8Array = Uint8Array.from(message.buffer);
-          const blob = new Blob([uint8Array], { type: 'audio/wav' });
-          return URL.createObjectURL(blob);
-        }
-        return null;
-      }));
-      setBlobUrls(urls);
-      //console.log( setBlobUrls(urls));
-    };
-
-    fetchBlobUrls();
-    //console.log(fetchBlobUrls());
-  }, [messages]);
+  const binaryToBlob = async (binary) => {
+    const uint8Array = Uint8Array.from(binary);
+    const blob = new Blob([uint8Array], { type: 'audio/wav' });
+    const blobUrl = URL.createObjectURL(blob);
+    console.log(blobUrl);
+    return blobUrl;
+ }
 //console.log(messages);
 //console.log(fetchBlobUrls);
   return (
@@ -52,6 +41,7 @@ const ScrollableChat = ({ messages }) => {
             )}
             <span
               style={{
+                //display: "flex",
                 backgroundColor: `${
                   message.sender._id === user._id ? "#BEE3F8" : "#B9F5D0"
                 }`,
@@ -63,14 +53,15 @@ const ScrollableChat = ({ messages }) => {
               }}
             >
              {
-                !message.isMedia ?
-                  (<span>{message.content}</span>) :
-                  (
-                    <audio controls>
-                      <source src={blobUrls[i]} type="audio/wav" />
-                    </audio>
-                  )
-              }
+                     !message.isMedia ?
+                        (<span>{message.content}</span>) :
+                        (
+                           <audio controls>
+                              <source src={binaryToBlob(message.buffer)} type="audio/mpeg"/>
+                           </audio>
+                        )
+
+                  }
             </span>
           </div>
         ))}

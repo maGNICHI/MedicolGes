@@ -40,6 +40,6 @@ const ChatProvider = (props) => {
 };
 
 export default ChatProvider;
-export const ChatState = () => {
-  return useContext(ChatContext);
-}
+// export const ChatState = () => {
+//   return useContext(ChatContext);
+// }
