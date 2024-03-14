@@ -153,17 +153,6 @@ export default function AddProject() {
                       Description is required.
                     </Form.Control.Feedback>
                   </div>
-                </Col>
-                <Col md={4}>
-                  <div className="mb-4">
-                    <Title
-                      secondTitle={"Upload Excel File"}
-                      fontSize={"18px"}
-                      fontWeight={600}
-                      className={"mb-2"}
-                    />
-                    <FileInput onChange={handleFileChange} />
-                  </div>
                   <div className="mb-4">
                     <Title
                       secondTitle={"Organization"}
@@ -177,6 +166,7 @@ export default function AddProject() {
                       value={formData.organization}
                       onChange={handleChange}
                       onBlur={() => handleBlur('organization')}
+                      style={{borderRadius:"50px"}}
                       required
                       isInvalid={touched.organization && formData.organization === ""}
                     >
@@ -200,7 +190,18 @@ export default function AddProject() {
                   </div>
                 </Col>
                 <Col md={4}>
-                  <ProjectCard className="-pt-10" project={formData} />
+                  <div className="mb-4">
+                    <Title
+                      secondTitle={"Upload Excel File"}
+                      fontSize={"18px"}
+                      fontWeight={600}
+                      className={"mb-2"}
+                    />
+                    <FileInput onChange={handleFileChange} />
+                  </div>
+                </Col>
+                <Col md={4}>
+                  <ProjectCard project={formData} />
                 </Col>
               </Row>
               <Row className="justify-content-center">

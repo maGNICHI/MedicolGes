@@ -53,7 +53,7 @@ function Hero() {
             className="text-appointment-btn"
             type="button"
           >
-            <i class="fa fa-sign-in" aria-hidden="true"></i> Create an account
+            <i className="fa fa-sign-in" aria-hidden="true"></i> Create an account
           </button>
           {/* <div className="text-stats">
             <div className="text-stats-container">

@@ -1,7 +1,4 @@
-html {
-    background-color: #a3bee3 !important;
-}
-body {
+body, html {
   background-color: #a3bee3 !important; /* Set background color for the entire body */
   margin: 0; /* Remove default margin */
   padding: 0; /* Remove default padding */ /* Hide overflow initially */

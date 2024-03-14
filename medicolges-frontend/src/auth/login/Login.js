@@ -12,7 +12,7 @@ function Login() {
   };
 
   return (
-    <Container fluid className="p-3 my-5 d-flex align-items-center justify-content-center">
+    <Container fluid className="p-9 d-flex align-items-center justify-content-center">
       <Row>
         <Col xs={12} md={7} className="order-md-1 order-2">
           <img

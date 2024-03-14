@@ -1,8 +1,6 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
-import Sidebar from './Dashboard/SideBar/SideBar';
 import Dashboard from '../src/Dashboard/Dashboard/Dashboard';
-import HeaderDash from './components/HeaderDash/HeaderDash';
 import UserManagement from './Dashboard/UserManagement/UserList';
 import Login from './auth/login/Login'
 import AjouterForm from './Dashboard/Dashboard/compnents/AjouterForm'
@@ -28,6 +26,7 @@ import AddProject from './Dashboard/ProjectManagement/AddProject/AddProject';
 import ConsultProject from './Dashboard/ProjectManagement/CosultProject/ConsultProject';
 import ListProject from './UserInterface/Components/ProjectManagement/ListProject';
 import Add from './UserInterface/Components/ProjectManagement/AddProject/AddProject';
+import Consult from './UserInterface/Components/ProjectManagement/ConsultProject/ConsultProject';
 
 
 function App() {
@@ -58,6 +57,7 @@ function App() {
         <Route path="/ajouterForm" element={<AjouterForm />} />
         <Route path='/projects' element={<ListProject />} />
         <Route path='/projects/add' element={<Add />} />
+        <Route path='/projects/consult/:id' element={<Consult />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Provider>

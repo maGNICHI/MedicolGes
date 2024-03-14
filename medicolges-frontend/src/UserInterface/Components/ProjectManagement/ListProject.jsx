@@ -17,56 +17,12 @@ export default function ListProject() {
   const [projects, setProjects] = useState([]);
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedTheme, setSelectedTheme] = useState(""); // State to track selected theme
-  const navigate=useNavigate();
-
-  const handleCloseAddModal = () => setShowAddModal(false);
+  const navigate = useNavigate();
   const handleShowAddModal = () => navigate("/projects/add");
-
+  const [searchTerm, setSearchTerm] = useState("");
   const [goUp, setGoUp] = useState(false);
-
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    organization: "",
-    file: null, // Add image field to formData state
-  });
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleFileChange = (e) => {
-    // Set the image file in formData
-    setFormData({
-      ...formData,
-      file: e.target.files[0],
-    });
-  };
-
-  const addProject = async () => {
-    try {
-      const formDataToSend = new FormData();
-      formDataToSend.append("name", formData.name);
-      formDataToSend.append("description", formData.description);
-      formDataToSend.append("organization", formData.organization);
-      formDataToSend.append("file", formData.file);
-
-      const response = await axios.post(
-        "http://localhost:5000/api/project/addProject",
-        formDataToSend
-      );
-      console.log(response.data);
-      handleCloseAddModal();
-      window.location.reload();
-    } catch (error) {
-      console.error("Error adding project:", error);
-      // Handle the error here, such as displaying a toast or error message to the user
-    }
-  };
+  const [currentPage, setCurrentPage] = useState(1);
+  const projectsPerPage = 6;
 
   const getProjects = async () => {
     try {
@@ -80,6 +36,14 @@ export default function ListProject() {
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  const handleChange = (e) => {
+    setSearchTerm(e.target.value); // Update search term state
+  };
+
+  const handlePaginate = (pageNumber) => {
+    setCurrentPage(pageNumber);
   };
 
   useEffect(() => {
@@ -98,10 +62,31 @@ export default function ListProject() {
     };
   }, []);
 
-  // Function to handle theme selection
-  const handleThemeSelection = (theme) => {
-    setSelectedTheme(theme);
-  };
+  // Filter projects based on search term
+  const filteredProjects = projects.filter((project) => {
+    return (
+      project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.description.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+  });
+
+  // Calculate indexes for pagination
+  const indexOfLastProject = currentPage * projectsPerPage;
+  const indexOfFirstProject = indexOfLastProject - projectsPerPage;
+  const currentProjects = filteredProjects.slice(
+    indexOfFirstProject,
+    indexOfLastProject
+  );
+
+  // Generate pagination items
+  const pageNumbers = [];
+  for (
+    let i = 1;
+    i <= Math.ceil(filteredProjects.length / projectsPerPage);
+    i++
+  ) {
+    pageNumbers.push(i);
+  }
 
   return (
     <div className="home-section">
@@ -114,7 +99,7 @@ export default function ListProject() {
                 <span>Our Projects</span>
               </h3>
             </div>
-            <div className="col-md-2 col-xs-6">
+            <div className="col-md-2 col-xs-7 mt-3">
               <button
                 className="button type1"
                 onClick={handleShowAddModal}
@@ -122,13 +107,15 @@ export default function ListProject() {
                 <span className="btn-txt">Add New Project</span>
               </button>
             </div>
-            <div className="col-md-2 col-xs-6">
+            <div className="col-md-2 col-xs-5 mt-3">
               <div className="input-wrapper">
                 <input
                   type="text"
                   name="text"
                   className="input"
-                  placeholder="search.."
+                  placeholder="Search..."
+                  value={searchTerm}
+                  onChange={handleChange}
                 />
                 <FaSearch
                   className="search-icon -ml-12"
@@ -139,20 +126,35 @@ export default function ListProject() {
             </div>
           </div>
           <div className="row pb-24">
-            {projects.map(
-              (item) =>
-                item.isDeleted === false && (
-                  <Col key={item._id} xs={12} md={4} className="mb-3">
-                    <ProjectCard project={item} theme={selectedTheme} /> {/* Pass selected theme as prop */}
-                  </Col>
-                )
-            )}
+            {currentProjects.map((item) => (
+              <Col key={item._id} xs={12} md={4} className="mb-3">
+                <ProjectCard project={item} />
+              </Col>
+            ))}
+          </div>
+          <div className="pagination-container">
+            <ul className="pagination">
+              {pageNumbers.map((number) => (
+                <li
+                  key={number}
+                  className={`page-item ${
+                    number === currentPage ? "active" : ""
+                  }`}
+                >
+                  <button
+                    className="page-link"
+                    onClick={() => handlePaginate(number)}
+                  >
+                    {number}
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
       </div>
 
-      <div
-        onClick={scrollToTop}
+      <div onClick={scrollToTop}
         className={`scroll-up ${goUp ? "show-scroll" : ""}`}
       >
         <FontAwesomeIcon icon={faAngleUp} />

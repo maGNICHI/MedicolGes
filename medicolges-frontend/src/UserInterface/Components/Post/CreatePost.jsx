@@ -5,8 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import PostList from "./PostList";
 import Navbar from "../Navbar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import Footer from "../Footer";
 
 const CreatePost = () => {
   const [message, setMessage] = useState("");
@@ -34,34 +33,14 @@ const CreatePost = () => {
       console.error("Error creating post:", error);
     }
   };
-  const [goUp, setGoUp] = useState(false);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  useEffect(() => {
-    const onPageScroll = () => {
-      if (window.scrollY > 600) {
-        setGoUp(true);
-      } else {
-        setGoUp(false);
-      }
-    };
-    window.addEventListener("scroll", onPageScroll);
-
-    return () => {
-      window.removeEventListener("scroll", onPageScroll);
-    };
-  }, []);
 
   return (
     <>
-    <Navbar />
+    {/* <Navbar /> */}
 
-      <div className="container-fluid gedf-wrapper pt-32">
+      <div className="container-fluid gedf-wrapper ">
         <div className="row justify-content-center">
-          <div className="col-lg-7">
+          <div className="col-md-12">
             <div className="card gedf-card">
               <div className="card-header">
                 <ul
@@ -185,7 +164,7 @@ const CreatePost = () => {
               </div>
             </div>
           </div>
-          <div
+          {/* <div
             className="col-lg-3"
             style={{
               backgroundImage: `url('/dd.png')`,
@@ -194,17 +173,11 @@ const CreatePost = () => {
               overflow: "hidden", // Masque tout contenu débordant de l'élément
             }}
           >
-            {/* Contenu à afficher par-dessus l'image */}
-          </div>
+          </div> */}
         </div>
-        <PostList />
       </div>
-      <div
-        onClick={scrollToTop}
-        className={`scroll-up ${goUp ? "show-scroll" : ""}`}
-      >
-        <FontAwesomeIcon icon={faAngleUp} />
-      </div>
+      
+      <PostList />
     </>
   );
 };

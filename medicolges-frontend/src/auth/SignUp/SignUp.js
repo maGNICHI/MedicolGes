@@ -12,7 +12,7 @@ function Signup() {
   };
 
   return (
-    <Container fluid className="p-3 my-5 d-flex align-items-center justify-content-center">
+    <Container fluid className="d-flex align-items-center justify-content-center">
       <Row>
         <Col xs={12} md={5} className='d-flex align-items-center order-md-1 order-2'>
           <Form className="mb-4 w-100 ">

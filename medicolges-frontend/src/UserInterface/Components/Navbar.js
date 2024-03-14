@@ -135,7 +135,7 @@ function Navbar() {
             </a>
           </li>
           <li>
-          <a href="/projects" className="navbar-links">
+          <a href="/projects" onClick={openNav}>
             Projects
           </a>
         </li>

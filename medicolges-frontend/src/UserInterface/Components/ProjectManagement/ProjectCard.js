@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Col } from "react-bootstrap";
-import { FaDatabase } from "react-icons/fa";
+import { FaArrowRight, FaDatabase } from "react-icons/fa";
 import IconButton from "../../../components/Button/IconButton";
-import Title from "@material-ui/core/Typography";
+import axios from "axios";
+import { NavLink } from "react-router-dom";
 
-export default function ProjectCard({ project }) {
-  // Function to truncate the description text
+export default function ProjectCard({ project, onFollow }) {
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [followersCount, setFollowersCount] = useState(project.numberFollowers);
+
   const truncateDescription = (text, maxLength) => {
     if (text.length > maxLength) {
       return text.substring(0, maxLength) + "...";
@@ -14,34 +17,105 @@ export default function ProjectCard({ project }) {
     }
   };
 
+  const handleFollow = async () => {
+    try {
+      setIsFollowing(true);
+      setFollowersCount((prevCount) => prevCount + 1);
+      const response = await axios.post(
+        `http://localhost:5000/api/project/${project._id}/follow`,
+        {
+          userId: "65ee427a26afa5d7eaddcc67",
+        }
+      );
+      onFollow(response.data.project);
+    } catch (error) {
+      console.error("Error following project:", error);
+    }
+  };
+
+  const handleUnfollow = async () => {
+    try {
+      setIsFollowing(false);
+      setFollowersCount((prevCount) => prevCount - 1);
+      const response = await axios.delete(
+        `http://localhost:5000/api/project/${project._id}/unfollow`,
+        {
+          userId: "65ee427a26afa5d7eaddcc67",
+        }
+      );
+      onFollow(response.data.project);
+    } catch (error) {
+      console.error("Error unfollowing project:", error);
+    }
+  };
+
   return (
     <div className="box">
       <div className="our-services settings">
-        <div className="icon" style={{ background: `linear-gradient(-45deg, #3615e7 0%, #44a2f6 100%)`, borderRadius: "50%", width: "80px", height: "80px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          {/* Circle with a background color */}
-          <span style={{ color: "white" }}><FaDatabase /></span>
+        <div
+          className="icon"
+          style={{
+            background: `linear-gradient(-45deg, #3615e7 0%, #44a2f6 100%)`,
+            borderRadius: "50%",
+            width: "80px",
+            height: "80px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <span style={{ color: "white" }}>
+            <FaDatabase />
+          </span>
         </div>
         <h4>{project.name}</h4>
-        <p className="pb-3">{truncateDescription(project.description, 100)}</p>
-        
+        <p className="pb-3 inline-content">{truncateDescription(project.description, 100)}</p>
+        <NavLink to={`/projects/consult/${project._id}`}>
+          <p style={{ fontWeight: "bold" }}>
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <FaArrowRight style={{ marginRight: "5px" }} />
+              Click Here To See More Details.
+            </span>
+          </p>
+        </NavLink>
         <div className="row">
           <Col md={6} className="mt-2">
-            <p style={{fontWeight:"bold"}}>30 Followers</p>
+            <p style={{ fontWeight: "bold" }}>{followersCount} Followers</p>
           </Col>
           <Col md={6} className="mb-5">
-            <IconButton
-              className="border-0 w-100"
-              style={{
-                background: "linear-gradient(-45deg, #3615e7 0%, #44a2f6 100%)",
-                color: "white",
-                fontSize: "16px",
-                fontWeight: 600,
-                padding: "8px 16px",
-                borderRadius: "20px",
-              }}
-            >
-              Follow
-            </IconButton>
+            {isFollowing ? (
+              <IconButton
+                className="border-0 w-100"
+                style={{
+                  background:
+                    "linear-gradient(-45deg, #ff7e5f 0%, #feb47b 100%)",
+                  color: "white",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  padding: "8px 16px",
+                  borderRadius: "20px",
+                }}
+                onClick={handleUnfollow}
+              >
+                Unfollow
+              </IconButton>
+            ) : (
+              <IconButton
+                className="border-0 w-100"
+                style={{
+                  background:
+                    "linear-gradient(-45deg, #3615e7 0%, #44a2f6 100%)",
+                  color: "white",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  padding: "8px 16px",
+                  borderRadius: "20px",
+                }}
+                onClick={handleFollow}
+              >
+                Follow
+              </IconButton>
+            )}
           </Col>
         </div>
       </div>

@@ -1,10 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const Project = require("../ProjectModel/Project");
+const Organization = require("../../ForumAndOrganizationManagement/models/organization")
 const multer = require('multer');
 const path = require('path');
 
-// Multer configuration for file upload
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, path.resolve(__dirname, '../../uploads'));
@@ -20,9 +20,7 @@ const upload = multer({ storage: storage });
 // @desc Get all projects
 router.get("/", async (req, res) => {
   try {
-    const projects = await Project.find()
-    .sort({ createdAt: -1 })
-    .exec();;
+    const projects = await Project.find().sort({ createdAt: -1 }).exec();
     res.json(projects);
   } catch (err) {
     console.error(err.message);
@@ -36,7 +34,7 @@ router.post("/addProject", upload.single("file"), async (req, res) => {
     const newProject = new Project({
       ...req.body,
       isDeleted: false,
-      file: req.file ? req.file.path : null
+      file: req.file ? path.basename(req.file.path) : null // Extracting only the file name
     });
     const project = await newProject.save();
     res.status(201).send({
@@ -44,6 +42,22 @@ router.post("/addProject", upload.single("file"), async (req, res) => {
     });
   } catch (err) {
     res.status(400).send({ errors: [{ msg: err.message }] });
+  }
+});
+
+router.get("/download/:fileName", (req, res) => {
+  try {
+    const fileName = req.params.fileName;
+    const filePath = path.join(__dirname, '../../uploads', fileName); // Adjust the path as per your file structure
+    res.download(filePath, fileName, (err) => {
+      if (err) {
+        console.error("Error downloading file:", err);
+        res.status(404).json({ error: "File not found" });
+      }
+    });
+  } catch (error) {
+    console.error("Error downloading file:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
@@ -84,6 +98,20 @@ router.get("/:_id", async (req, res) => {
   }
 });
 
+// Route to get a organization by ID
+router.get("/organization/:_id", async (req, res) => {
+  const { _id } = req.params;
+  try {
+    const organization = await Organization.findById(_id);
+    if (!organization) {
+      return res.status(400).send({ errors: [{ msg: "Organization not found" }] });
+    }
+    res.status(200).send({ success: { msg: "Organization found successfully", organization } });
+  } catch (error) {
+    res.status(400).send({ errors: [{ msg: error.message }] });
+  }
+});
+
 // Function to update the isDeleted field
 const updateIsDeleted = async (_id) => {
   try {
@@ -100,6 +128,55 @@ router.delete("/:id", async (req, res) => {
     const { id } = req.params;
     await updateIsDeleted(id);
     res.status(200).json({ message: "Project deleted" });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Route to follow a project
+router.post("/:projectId/follow", async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { userId } = req.body;
+    
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+    if (project.followers.includes(userId)) {
+      return res.status(400).json({ error: "User is already following the project" });
+    }
+    project.followers.push(userId);
+    project.numberFollowers += 1;
+    await project.save();
+
+    res.status(200).json({ message: "User is now following the project", project });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+// Route to unfollow a project
+router.delete("/:projectId/unfollow", async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const { userId } = req.body;
+
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return res.status(404).json({ error: "Project not found" });
+    }
+
+    if (!project.followers.includes(userId)) {
+      return res.status(400).json({ error: "User is not following the project" });
+    }
+
+    project.followers = project.followers.filter(followerId => followerId !== userId);
+    project.numberFollowers -= 1;
+    await project.save();
+
+    res.status(200).json({ message: "User has unfollowed the project", project });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
