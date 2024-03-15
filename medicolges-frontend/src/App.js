@@ -6,6 +6,8 @@ import HeaderDash from './components/HeaderDash/HeaderDash';
 import UserManagement from './Dashboard/UserManagement/UserList';
 import Login from './auth/login/Login'
 import AjouterForm from './Dashboard/Dashboard/compnents/AjouterForm'
+import AfficheForm from './Dashboard/Dashboard/compnents/AfficheForm'
+
 import Signup from './auth/SignUp/SignUp';
 import Home from "./UserInterface/Pages/Home";
 import Legal from "./UserInterface/Pages/Legal";
@@ -39,6 +41,8 @@ function App() {
         <Route path="/legal" element={<Legal />} />
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/ajouterForm" element={<AjouterForm />} />
+        <Route path="/afficheForm" element={<AfficheForm/>} />
+
 
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -21,7 +21,7 @@ import {
 } from "@material-ui/core";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import InsertInvitationIcon from "@material-ui/icons/InsertInvitation";
 
@@ -33,7 +33,7 @@ import { addForm } from "../api/index";
 import Title from "../../../../components/Title/Title";
 import { Row } from "react-bootstrap";
 import IconButton from "../../../../components/Button/IconButton";
-import { FaPlus, FaSave, FaTrash } from "react-icons/fa";
+import { FaBars, FaPlus, FaSave, FaTrash } from "react-icons/fa";
 import AjouterForm from "../AjouterForm";
 // import { TimePicker } from "@material-ui/lab";
 import TimePickerInput from "../Form/TimePickerInput"; // Importer le composant TimePickerInput
@@ -62,7 +62,7 @@ const Form = () => {
   const [modalQuestion, setModalQuestion] = useState("");
   const [modalResponse, setModalResponse] = useState("");
   const navigate = useNavigate();
-
+  const location = useLocation();
   //email
   // const [email, setEmail] = React.useState('');
   // const [selectedDomain, setSelectedDomain] = React.useState('');
@@ -86,19 +86,19 @@ const Form = () => {
     toggle: "#000000",
   });
   const [questions, setQuestions] = useState({
-      listederoulate: "listederoulate",
-      toggle: "toggle",
-      date: "date",
-      email: "email",
-      paragraph: "paragraph",
-      text: "text",
-      file: "file",
-      multipleChoice: "multipleChoice",
-      gender :"gender",
-      time: "time",
-      combobox:"combobox",
-      telephone: "telephone",
-      number:"number",
+    listederoulate: "listederoulate",
+    toggle: "toggle",
+    date: "date",
+    email: "email",
+    paragraph: "paragraph",
+    text: "text",
+    file: "file",
+    multipleChoice: "multipleChoice",
+    gender: "gender",
+    time: "time",
+    combobox: "combobox",
+    telephone: "telephone",
+    number: "number",
   });
 
   // Effet pour mettre à jour la couleur de la police lorsque la couleur de la question est modifiée
@@ -172,7 +172,7 @@ const Form = () => {
     e.preventDefault();
     createForm();
     console.log("hhhhh", formData);
-    navigate("/ajouterForm", { state: { formData } });
+    navigate("/ajouterForm", { state: { formData, case: "create" } });
   };
   ////ajouter
   // const cards = useSelector((state) => state.cards);
@@ -185,11 +185,18 @@ const Form = () => {
   const clear = () => {
     setFormData({ name: "", questions: [] });
   };
-
+  const affichage = async (e) => {
+    e.preventDefault();
+    navigate("/afficheForm", { state: { formData } });
+  };
   const handleOpenModal = () => {
     setOpenModal(true);
   };
-
+  useEffect(() => {
+    if (location.state && location.state.formData) {
+      setFormData(location.state.formData);
+    }
+  }, [location.state]);
   const handleCloseModal = () => {
     setOpenModal(false);
   };
@@ -240,6 +247,7 @@ const Form = () => {
       if (selectedQuestionType == "multipleChoice") {
         newQuestion = {
           id: idCount,
+          color: inputColor,
           questionType: selectedQuestionType,
           question: modalQuestion,
           responseValue: {
@@ -251,6 +259,7 @@ const Form = () => {
       } else if (selectedQuestionType === "combobox") {
         newQuestion = {
           id: idCount,
+          color: inputColor,
           questionType: selectedQuestionType,
           question: modalQuestion,
           responseValue: {
@@ -262,6 +271,7 @@ const Form = () => {
       } else if (selectedQuestionType === "listederoulate") {
         newQuestion = {
           id: idCount,
+          color: inputColor,
           questionType: selectedQuestionType,
           question: modalQuestion,
           responseValue: {
@@ -273,6 +283,7 @@ const Form = () => {
       } else {
         newQuestion = {
           id: idCount,
+          color: inputColor,
           questionType: selectedQuestionType,
           question: modalQuestion,
           responseValue: null,
@@ -345,7 +356,7 @@ const Form = () => {
   };
 
   const handleResponse = (id, responseValue, responseType, file) => {
-    console.log("gggggggggggggggggggg",id, responseValue, responseType);
+    console.log("gggggggggggggggggggg", id, responseValue, responseType);
     switch (responseType) {
       case "text":
         setFormData((prev) => ({
@@ -652,17 +663,13 @@ const Form = () => {
                       return obj;
                     }),
                   }));
-                  document.getElementById('selectChoicesInput').value = ''
+                  document.getElementById("selectChoicesInput").value = "";
                 }
               }}
               fullWidth
             />
             {question.responseValue ? (
-              <Select
-                label="Select Option"
-               
-                fullWidth
-              >
+              <Select label="Select Option" fullWidth>
                 {question.responseValue &&
                   question.responseValue.options.map((item, index) => (
                     <MenuItem key={index} value={item}>
@@ -982,7 +989,7 @@ const Form = () => {
           flexDirection: "column",
         }}
       >
-        <Typography variant="body1">
+        <Typography color={question.color} variant="body1">
           Question {index + 1}: {question.question} ({question.questionType})
         </Typography>
         <Typography variant="body1">
@@ -1054,7 +1061,10 @@ const Form = () => {
                   marginBottom: "10px",
                 }}
               >
-                <Typography variant="body1" style={{ marginRight: "10px" }}>
+                <Typography
+                  variant="body1"
+                  style={{ color: question.color, marginRight: "10px" }}
+                >
                   Question {index + 1}: {question.question} (
                   {question.questionType})
                 </Typography>
@@ -1123,6 +1133,24 @@ const Form = () => {
                 fullWidth // Add fullWidth prop to make button take full width
               >
                 <Title title={"Submit"} /> {/* Change the button label */}
+              </IconButton>
+            </div>
+            <div className="col-md-3 col-xs-12">
+              <IconButton
+                className="h-100 border-0"
+                style={{
+                  background: "#28a745", // Couleur verte
+                  color: "white",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  padding: "8px 16px",
+                  borderRadius: "20px",
+                }}
+                startIcon={<FaBars />}
+                onClick={affichage}
+                fullWidth // Add fullWidth prop to make button take full width
+              >
+                <Title title={"Affiche"} /> {/* Change the button label */}
               </IconButton>
             </div>
           </div>
@@ -1272,10 +1300,10 @@ const Form = () => {
             </Select>
             <Input
               type="color"
-              value={questionColors[selectedQuestionType]}
-              onChange={(e) =>
-                handleColorChange(selectedQuestionType, e.target.value)
-              }
+              onChange={(e) => {
+                console.log(e);
+                setInputColor(e.target.value);
+              }}
             />
           </FormControl>
 

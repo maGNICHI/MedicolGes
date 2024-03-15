@@ -51,23 +51,8 @@ const AjouterForm = () => {
   const [questions, setQuestions] = useState([]);
 
   const handleUpdate = async (e) => {
-    e.preventDefault();
 
-    const updatedQuestions = []; // Tableau pour stocker les questions mises à jour
-
-    // Parcours de chaque question
-    questions.forEach((question) => {
-      const inputElement = document.querySelector(`[name="${question.name}"]`); // Sélectionner l'élément d'entrée correspondant
-      const inputValue = inputElement ? inputElement.value : ""; // Récupérer la valeur de l'entrée, ou une chaîne vide si l'élément n'est pas trouvé
-
-      // Ajouter la question mise à jour au tableau
-      updatedQuestions.push({ ...question, inputValue });
-    });
-
-    console.log("Updated questions:", updatedQuestions);
-
-    // Redirection vers la page de génération de formulaire avec les données mises à jour
-    navigate("/formGeneration", { state: { formData: updatedQuestions } });
+    navigate("/formGeneration", { state: { formData } });
   };
 
   //togle
@@ -85,9 +70,9 @@ const AjouterForm = () => {
       }),
     }));
   };
-useEffect(() => {
- console.log(formData);
-}, [formData])
+  useEffect(() => {
+    console.log(formData);
+  }, [formData]);
   useEffect(() => {
     if (location.state && location.state.formData) {
       console.log(location.state.formData);
@@ -681,8 +666,8 @@ useEffect(() => {
                 <FormControlLabel
                   control={
                     <Checkbox
-                      checked={question.responseValue.checked.some( x => 
-                       x ==  question.responseValue.checkboxes[index]
+                      checked={question.responseValue.checked.some(
+                        (x) => x == question.responseValue.checkboxes[index]
                       )}
                       onChange={(event) => {
                         handleResponse(
@@ -870,38 +855,41 @@ useEffect(() => {
                   )}
                 </div>
                 <div className="col-md-12 col-xs-12 d-flex justify-content-end">
-                  <IconButton
-                    className="h-100 border-0"
-                    style={{
-                      background: "#047db9",
-                      color: "white",
-                      fontSize: "16px",
-                      fontWeight: 600,
-                      padding: "8px 16px",
-                      borderRadius: "20px",
-                    }}
-                    startIcon={<FaSave />}
-                    onClick={handleSave}
-                    fullWidth // Add fullWidth prop to make button take full width
-                  >
-                    <Title title={"Save"} /> {/* Change the button label */}
-                  </IconButton>
-                  <IconButton
-                    className="h-100 border-0"
-                    style={{
-                      background: "#047db9",
-                      color: "white",
-                      fontSize: "16px",
-                      fontWeight: 600,
-                      padding: "8px 16px",
-                      borderRadius: "20px",
-                    }}
-                    startIcon={<FaSave />}
-                    onClick={handleUpdate}
-                    fullWidth // Add fullWidth prop to make button take full width
-                  >
-                    <Title title={"Update"} /> {/* Change the button label */}
-                  </IconButton>
+                  {location.state && location.state.case == "create" ? (
+                    <IconButton
+                      className="h-100 border-0"
+                      style={{
+                        background: "#047db9",
+                        color: "white",
+                        fontSize: "16px",
+                        fontWeight: 600,
+                        padding: "8px 16px",
+                        borderRadius: "20px",
+                      }}
+                      startIcon={<FaSave />}
+                      onClick={handleSave}
+                      fullWidth // Add fullWidth prop to make button take full width
+                    >
+                      <Title title={"Save"} /> {/* Change the button label */}
+                    </IconButton>
+                  ) : (
+                    <IconButton
+                      className="h-100 border-0"
+                      style={{
+                        background: "#047db9",
+                        color: "white",
+                        fontSize: "16px",
+                        fontWeight: 600,
+                        padding: "8px 16px",
+                        borderRadius: "20px",
+                      }}
+                      startIcon={<FaSave />}
+                      onClick={handleUpdate}
+                      fullWidth // Add fullWidth prop to make button take full width
+                    >
+                      <Title title={"Update"} /> {/* Change the button label */}
+                    </IconButton>
+                  )}
                 </div>
               </Col>
             </Row>

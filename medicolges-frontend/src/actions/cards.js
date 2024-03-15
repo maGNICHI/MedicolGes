@@ -28,4 +28,12 @@ export const getForms = () => async (dispatch) => {
       console.log(error.message);
     }
   };
- 
+  export const deleteForm = (id, form) => async (dispatch) => {
+    try {
+      const { data } = await api.deleteForm(id, form);
+  
+      dispatch({ type: 'DELETE', payload: data });
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
