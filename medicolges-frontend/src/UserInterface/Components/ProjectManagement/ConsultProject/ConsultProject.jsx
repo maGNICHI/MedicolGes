@@ -4,7 +4,7 @@ import Footer from "../../Footer";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { Col, Row } from "react-bootstrap";
-import { FaDatabase } from "react-icons/fa";
+import { FaDatabase, FaShareAlt } from "react-icons/fa";
 import IconButton from "../../../../components/Button/IconButton";
 import Details from "./Details";
 import CreatePost from "../../Post/CreatePost";
@@ -21,6 +21,7 @@ export default function ConsultProject({ onFollow }) {
   const [followersCount, setFollowersCount] = useState(0);
   const [showDetails, setShowDetails] = useState(true);
   const [showFeedback, setShowFeedback] = useState(false); // State for showing Feedback component
+  const [feedbacks, setFeedbacks] = useState([]);
   const { id } = useParams();
   const [goUp, setGoUp] = useState(false);
 
@@ -63,9 +64,21 @@ export default function ConsultProject({ onFollow }) {
       }
     };
 
+    const fetchFeedbacks = async (id) => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/feedback/project/${id}`);
+        setFeedbacks(response.data.success.feedback); // Update to set feedbacks from response
+      } catch (error) {
+        console.error("Error fetching feedback:", error);
+      }
+    };
+
     fetchData();
     fetchPosts();
     fetchOrganization();
+    if (projectData._id) { // Add condition to ensure projectData._id is available
+      fetchFeedbacks(projectData._id);
+    }
     
     const onPageScroll = () => {
         if (window.scrollY > 600) {
@@ -83,6 +96,28 @@ export default function ConsultProject({ onFollow }) {
 
     onPageScroll();
   }, [id, projectData.organization]);
+  
+  // Calculate statistics
+  const calculateStatistics = () => {
+    const statistics = {
+      totalRatings: feedbacks.length,
+      ratings: [0, 0, 0, 0, 0], // Initialize array for star ratings count
+    };
+
+    // Count ratings
+    feedbacks.forEach((feedback) => {
+      statistics.ratings[feedback.rating - 1]++;
+    });
+
+    // Calculate percentages
+    statistics.percentages = statistics.ratings.map(
+      (count) => (count / statistics.totalRatings) * 100
+    );
+
+    return statistics;
+  };
+
+  const statistics = calculateStatistics();
 
   const handleFollow = async () => {
     try {
@@ -153,7 +188,7 @@ export default function ConsultProject({ onFollow }) {
                 </div>
               </Row>
               <Row className="text-center">
-                <Col md={6} className="mt-2">
+                <Col md={4} className="mt-2">
                   <p style={{ fontWeight: "bold", marginBottom: "5px" }}>
                     {followersCount}
                   </p>
@@ -163,7 +198,7 @@ export default function ConsultProject({ onFollow }) {
                     Followers
                   </p>
                 </Col>
-                <Col md={6} className="mt-2">
+                <Col md={4} className="mt-2">
                   <p style={{ fontWeight: "bold", marginBottom: "5px" }}>
                     {posts}
                   </p>
@@ -173,9 +208,64 @@ export default function ConsultProject({ onFollow }) {
                     Posts
                   </p>
                 </Col>
+                <Col md={4} className="mt-2">
+                  <p style={{ fontWeight: "bold", marginBottom: "5px" }}>
+                    {posts}
+                  </p>
+                  <p
+                    style={{ fontSize: "14px", color: "gray", marginTop: "0" }}
+                  >
+                    Reviews
+                  </p>
+                </Col>
               </Row>
               <hr />
               <Row>
+              <div className="mb-6">
+          <h4 className="mb-3">User reviews</h4>
+          <span className="font-14">
+            {Array.from({ length: 5 }).map((_, index) => (
+              <i
+                key={index}
+                className={`fas fa-star ${
+                  index < Math.floor(statistics.percentages[4 - index] / 20)
+                    ? "fas fa-star text-warning"
+                    :
+                     "far fa-star text-warning"
+                }`}
+              ></i>
+            ))}
+          </span>
+          <span className="h5">{statistics.totalRatings} out of 5</span>
+          <p className="font-14">{statistics.totalRatings} user ratings</p>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <div className="row align-items-center mb-1" key={index}>
+              <div className="col-md-2 col-2 pr-0">
+                <div className="font-12 text-dark">{5 - index} Star</div>
+              </div>
+              <div className="col-md-8 col-8 pr-2">
+                <div
+                  className="progress"
+                  style={{ height: "8px" }}
+                >
+                  <div
+                    className="progress-bar bg-warning"
+                    role="progressbar"
+                    style={{ width: `${statistics.percentages[4 - index]}%` }}
+                    aria-valuenow={statistics.percentages[4 - index]}
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+              <div className="col-md-2 col-2">
+                <div className="font-12 text-primary">
+                  {Math.round(statistics.percentages[4 - index])}%
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
               </Row>
             </Col>
             <Col md={9} xs={12}>
@@ -240,7 +330,7 @@ export default function ConsultProject({ onFollow }) {
               {showDetails ? (
                 <Details projectData={projectData} organization={organizationId} />
               ) : showFeedback ? (
-                <Feedback /> // Show Feedback component
+                <Feedback projectId={projectData} /> // Pass feedbacks as props to Feedback component
               ) : (
                 <CreatePost />
               )}

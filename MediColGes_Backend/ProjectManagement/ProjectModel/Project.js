@@ -25,7 +25,8 @@ const ProjectSchema = new mongoose.Schema(
     numberFollowers: {
         type: Number,
         default: 0,
-    }
+    },
+    sharedEmails: [{ type: String }],
   },
   {
     timestamps: true,

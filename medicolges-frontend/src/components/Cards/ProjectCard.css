@@ -122,4 +122,9 @@
     padding: 5px;
     color: rgba(170, 222, 243, 0.721);
   }
+  .inline-content {
+    margin: 0;
+    word-break: break-word;
+    hyphens: auto;
+  }
   

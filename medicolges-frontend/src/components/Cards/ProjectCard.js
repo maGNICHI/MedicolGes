@@ -3,6 +3,8 @@ import './ProjectCard.css';
 import IconButton from '../Button/IconButton';
 import { Col, Modal, Button } from 'react-bootstrap';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
+import { FaArrowRight } from 'react-icons/fa';
 
 export default function ProjectCard({ project }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -19,6 +21,15 @@ export default function ProjectCard({ project }) {
       console.error('Error deleting project:', error);
     }
   };
+
+  const truncateDescription = (text, maxLength) => {
+    if (text.length > maxLength) {
+      return text.substring(0, maxLength) + "...";
+    } else {
+      return text;
+    }
+  };
+
   return (
     <>
       <Col xs={12} className="project-card"> {/* Remove md={4} */}
@@ -33,17 +44,19 @@ export default function ProjectCard({ project }) {
           <div className="project-row row1">
             <div className="project-item">
               <span className="project-big-text">Description</span>
-              <span className="project-regular-text">{project.description}</span>
+              <span className="project-regular-text inline-content">{truncateDescription(project.description, 350)}</span>
             </div>
           </div>
           <div className="project-row row1">
             <div className="project-item">
-              <span className="project-big-text">2626</span>
-              <span className="project-regular-text">UI elements</span>
+              <span className="project-big-text"><NavLink
+                    to={`/consultProject/${project._id}`}
+                    style={{ textDecoration: "none" }}
+                  >Click Here To Consult Project </NavLink></span>
             </div>
             <div className="project-item">
-              <span className="project-big-text">100%</span>
-              <span className="project-regular-text">Free for use</span>
+              <span className="project-big-text">{project.numberFollowers}</span>
+              <span className="project-regular-text">Followers</span>
             </div>
           </div>
           <div className="project-row row2">

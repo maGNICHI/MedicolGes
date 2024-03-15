@@ -54,7 +54,7 @@ export default function AddProject() {
         setShowAlert(true);
         setTimeout(() => {
           setShowAlert(false);
-        }, 30000);
+        }, 5000);
         return;
       }
 
@@ -106,6 +106,16 @@ export default function AddProject() {
             </h3>
           </div>
           <div className="row pb-24 px-10">
+            {showAlert && (
+              <div className="alert alert-danger" role="alert">
+                Please fill in all required fields.
+              </div>
+            )}
+            {showNotification && (
+              <div className="alert alert-success" role="alert">
+                Project added successfully.
+              </div>
+            )}
             <Form>
               <Row className="mb-6">
                 <Col md={4}>
@@ -123,7 +133,7 @@ export default function AddProject() {
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      onBlur={() => handleBlur('name')}
+                      onBlur={() => handleBlur("name")}
                       required
                       isInvalid={touched.name && formData.name === ""}
                     />
@@ -145,9 +155,11 @@ export default function AddProject() {
                       name="description"
                       value={formData.description}
                       onChange={handleChange}
-                      onBlur={() => handleBlur('description')}
+                      onBlur={() => handleBlur("description")}
                       required
-                      isInvalid={touched.description && formData.description === ""}
+                      isInvalid={
+                        touched.description && formData.description === ""
+                      }
                     />
                     <Form.Control.Feedback type="invalid">
                       Description is required.
@@ -165,10 +177,12 @@ export default function AddProject() {
                       name="organization"
                       value={formData.organization}
                       onChange={handleChange}
-                      onBlur={() => handleBlur('organization')}
-                      style={{borderRadius:"50px"}}
+                      onBlur={() => handleBlur("organization")}
+                      style={{ borderRadius: "50px" }}
                       required
-                      isInvalid={touched.organization && formData.organization === ""}
+                      isInvalid={
+                        touched.organization && formData.organization === ""
+                      }
                     >
                       {/* Conditionally render "Select an organization" option */}
                       {formData.organization === "" && (
@@ -243,16 +257,6 @@ export default function AddProject() {
           </div>
         </div>
       </div>
-      {showAlert && (
-        <div className="alert alert-danger" role="alert">
-          Please fill in all required fields.
-        </div>
-      )}
-      {showNotification && (
-        <div className="alert alert-success" role="alert">
-          Project added successfully.
-        </div>
-      )}
       <Footer />
     </div>
   );
