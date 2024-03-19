@@ -43,6 +43,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const fetchMessages = async () => {
     if (!selectedChat) return;
     try {
+      //setLoading(true);
       const config = {
         headers: { Authorization: `Bearer ${user.token}` },
       };

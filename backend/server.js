@@ -6,16 +6,21 @@ const userRoutes = require("./routes/userRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const messageRoutes = require("./routes/messageRoutes");
 const cors = require('cors');
+const bodyParser = require('body-parser');
+
 //configure et initialise le serveur Express, en utilisant le middleware 
 //express.json() pour traiter les requêtes au format JSON
 dotenv.config();
 connectDB(); 
 const app = express();
-const corsOptions = {
-  origin: "http://localhost:3000", // Allow requests from this origin
-};
+// const corsOptions = {
+//   origin: "http://localhost:3000", // Allow requests from this origin
+// };
+
+app.use(cors( {origin: 'http://localhost:3000'}));
 app.use(express.json()); 
-app.use(cors(corsOptions));
+app.use(bodyParser.json({ limit: '500mb' })); // Limite de taille de payload pour les données JSON
+app.use(bodyParser.urlencoded({ limit: '500mb', extended: true })); 
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);

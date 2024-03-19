@@ -4,6 +4,7 @@
     overflow-y: scroll;
     scrollbar-width: none;
 }
+/*
 .cancel-button-container, .start-button-container {
     width: 100%;
     padding: 5px;
@@ -67,3 +68,67 @@
   .recordings-list .send-button:hover {
     background-color: green;
   }
+  */
+  /* Button Styling */
+.button {
+  width: 100%;
+  padding: 5px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.5s ease-in-out;
+}
+
+.cancel-button {
+  border: 1px solid red;
+  color: red;
+}
+
+.start-button {
+  border: 1px solid green;
+  color: green;
+  margin-top: 10px;
+}
+
+.button:hover {
+  color: #000;
+  border-color: #000;
+  background-color: red; /* Common hover background color */
+}
+
+.start-button:hover {
+  background-color: green; /* Specific hover background color for start button */
+}
+
+/* List Styling */
+.recordings-list {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.recordings-list .button {
+  border-radius: 5px;
+  transition: all 0.5s ease-in-out;
+  cursor: pointer;
+  width: 100%;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+.recordings-list .button:hover {
+  color: #000;
+  border-color: #000;
+  background-color: red; /* Common hover background color */
+}
+
+.recordings-list .send-button {
+  border-color: green;
+  color: green;
+}
+
+.recordings-list .send-button:hover {
+  background-color: green; /* Specific hover background color for send button */
+}
