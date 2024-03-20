@@ -90,20 +90,6 @@ router.put('/EditForm/:id', async(req,res)=>{
       res.status(400).json({ message: error.message });
   }
 });
-//update
-router.put('/EditForm2/:id', async(req,res)=>{
-  try {
-      const formData  = await Forms.findByIdAndUpdate(req.params.id,  req.body, { new: true });
-
-      if (formData) {
-          res.status(200).json(formData);
-      } else {
-          res.status(404).json({ message: 'Internship form not found' });
-      }
-  } catch (error) {
-      res.status(400).json({ message: error.message });
-  }
-});
 /////getbyid
 router.get('/affichebyId/:id', async(req,res)=>{
   try {
