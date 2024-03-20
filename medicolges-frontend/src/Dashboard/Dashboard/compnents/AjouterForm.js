@@ -331,6 +331,11 @@ const AjouterForm = () => {
       questions: updatedOptions,
     }));
   };
+  const isValidEmail = (value) => {
+    // Regular expression to validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(value);
+  };
   const renderInputField = (question) => {
     console.log("im here");
     switch (question.questionType) {
@@ -355,6 +360,7 @@ const AjouterForm = () => {
             }}
             label={question.questionType === "date"}
             fullWidth
+             required 
           />
         );
       case "telephone":
@@ -398,6 +404,9 @@ const AjouterForm = () => {
               handleResponse(question.id, e.target.value, "email");
             }}
             fullWidth
+            error={question.responseValue && !isValidEmail(question.responseValue)} // Example validation function
+          helperText={question.responseValue && !isValidEmail(question.responseValue) ? 'Invalid email format' : ''}
+  
           />
         );
       case "number":

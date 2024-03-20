@@ -87,3 +87,23 @@
         font-size: 18px;
     }
 }
+.dark-form {
+    background-color: #333; /* Couleur de fond sombre du formulaire */
+    color: #fff; /* Couleur du texte en mode sombre */
+    /* Autres styles pour le mode sombre */
+}
+
+.dark-form .form-content label {
+    color: #fff; /* Couleur du texte des libellés en mode sombre */
+}
+
+.dark-form .form-content label::before {
+    color: red; /* Couleur de l'astérisque pour les libellés requis en mode sombre */
+}
+
+.dark-form {
+    background-color: #333; /* Couleur de fond sombre du formulaire */
+    /* Autres styles pour le mode sombre */
+}
+
+

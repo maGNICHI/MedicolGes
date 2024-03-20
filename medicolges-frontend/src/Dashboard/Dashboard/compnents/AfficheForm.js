@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import {  Card,Container } from "react-bootstrap";
 
 import Layout from "../../../Dashboard/SuperAdminLayout/Layout";
 import "../../Dashboard/Dashboard.css";
@@ -15,6 +15,7 @@ import TableCell from "@material-ui/core/TableCell";
 import { IconButton, TableHead } from "@mui/material";
 import { FaEye, FaTrash } from "react-icons/fa";
 import { faRandom } from "@fortawesome/free-solid-svg-icons";
+import { Title } from "@material-ui/icons";
 function AfficheForm({ setCurrentId }) {
   const [forms, setForms] = useState([]);
   const [laoding, setlaoding] = useState(false);
@@ -39,8 +40,11 @@ function AfficheForm({ setCurrentId }) {
   
   return (
     <Layout selectedName={"title"}>
-      <Container fluid className="mt-4 h-screen">
-        {laoding ? (
+  <Container fluid className="mt-4" style={{ height: "100vh", backgroundColor: "#a3bee3" }}> {/* Ajouter le style de fond ici */}
+      <Card className="card h-100" style={{ overflowY: "auto", backgroundColor: "#ffffffa9", padding: "20px", borderRadius: "20px" }}>
+        <Title title={"Create Form"} fontWeight={600} fontSize={"24px"} />
+        <hr />
+                {laoding ? (
           <CircularProgress />
         ) : (
           <Table>
@@ -73,6 +77,7 @@ function AfficheForm({ setCurrentId }) {
             </TableBody>
           </Table>
         )}
+        </Card>
       </Container>
     </Layout>
   );
