@@ -67,24 +67,42 @@
 
 import {   Outlet ,Navigate } from 'react-router-dom';
 import './App.css';
- 
 import {   Routes, Route,   } from 'react-router-dom'
 import { useAuthContext } from './userScreens/useAuthContext'
 import { ToastContainer } from 'react-toastify';
-
  
+
 
 function App() {
   
   const { user } = useAuthContext();
-  
+   
   return (
     <>
+
+    
        <Routes>
+
        <Route 
               path="/" 
               element={user ? <Navigate to="/" /> : <Navigate to="/login" />} 
             />
+             <Route 
+              path="/login" 
+              element={!user ? <Navigate to="/login" /> : <Navigate to="/" />} 
+            />
+
+          <Route 
+              path="/Dashboard" 
+              element={user ? <Navigate to="/Dashboard" /> : <Navigate to="/admin" />} 
+            />
+             <Route 
+              path="/login" 
+              element={!user ? <Navigate to="/admin" /> : <Navigate to="/Dashboard" />} 
+            />
+
+
+ 
             
             
             </Routes> 

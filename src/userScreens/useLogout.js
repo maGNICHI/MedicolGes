@@ -8,7 +8,7 @@ export const useLogout = () => {
   const logout = () => {
     // remove user from storage
     localStorage.removeItem('user')
-
+    localStorage.removeItem('admin')
     // dispatch logout action
     dispatch({ type: 'LOGOUT' })
     dispatchUsers({ type: 'SET_USERS', payload: null })

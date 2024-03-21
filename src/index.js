@@ -67,8 +67,8 @@ import LoginScreen from "./userScreens/LoginScreen.js";
 import { AuthContextProvider } from './userScreens/AuthContext'
 
 import SignupScreen from "./userScreens/SignupScreen.js";
-
- 
+import AdminSignup from './adminScreens/SignupScreen.js';  
+ import AdminLoginScreen from './adminScreens/LoginScreen.js';
 
 //const store = createStore(reducers, compose(applyMiddleware(thunk)));
  
@@ -76,12 +76,14 @@ const router = createBrowserRouter(
    
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+       <Route path="/Dashboard" element={<Dashboard />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/signup" element={<SignupScreen />} />
- <Route index={true} path="/home" element={<HomePage />} />
+    <Route index={true} path="/home" element={<HomePage />} />
 
-  
-        <Route path="/Dashboard" element={<Dashboard />} />
+    <Route path="/newadmin" element={<AdminSignup />} />
+    <Route path="/admin" element={<AdminLoginScreen />} />
+       
         <Route path="/userList" element={<UserManagement />} />
         <Route path="/projectList" element={<ProjectList />} />
         <Route path="/formGeneration" element={<Form />} />
@@ -108,6 +110,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
    
   <React.StrictMode>
+    
   <AuthContextProvider>
   <UsersContextProvider>
   
@@ -117,6 +120,7 @@ root.render(
       </RouterProvider>
       
       </UsersContextProvider>
+      
       </AuthContextProvider>
   </React.StrictMode>
    

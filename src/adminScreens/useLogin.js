@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useAuthContext } from './useAuthContext'
+ import { useAuthContext } from '../userScreens/useAuthContext'
 
 export const useLogin = () => {
   const [error, setError] = useState(null)
@@ -10,7 +10,7 @@ export const useLogin = () => {
     setIsLoading(true)
     setError(null)
 
-    const response = await fetch('http://localhost:5000/api/v1/user/auth', {
+    const response = await fetch('http://localhost:5000/api/v1/admin/auth', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({ email, password })
@@ -23,7 +23,7 @@ export const useLogin = () => {
     }
     if (response.ok) {
       // save the user to local storage
-      localStorage.setItem('user', JSON.stringify(json))
+      localStorage.setItem('admin', JSON.stringify(json))
 
       // update the auth context
       dispatch({type: 'LOGIN', payload: json})

@@ -6,19 +6,24 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import "../Styles/Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, Navigate , useNavigate} from "react-router-dom";
 import { toast } from "react-toastify";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { useLogout } from '../../userScreens/useLogout'
+import { useAuthContext } from "../../userScreens/useAuthContext";
 function Navbar() {
   const [nav, setNav] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
 
-  const { logout } = useLogout()
   
+  
+const {user}  = useAuthContext()
 
+const { logout } = useLogout()
+const navigate = useNavigate();
   const handleClick = () => {
+    navigate("/login");
     logout()}
 
   const openNav = () => {
@@ -81,9 +86,12 @@ function Navbar() {
        
         
       </ul>
-<a href="/login" onClick={handleClick} className="navbar-links">
+
+      <span> Welcome  <strong>{user?.name}   </strong>  </span>
+      
+      <a  onClick={handleClick} className="navbar-links">
           
-        <FaSignOutAlt />logout  </a>
+          <FaSignOutAlt />logout  </a>
       <button
         className="navbar-btn"
         type="button"

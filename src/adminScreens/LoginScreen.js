@@ -12,7 +12,7 @@ import { useLogin } from "./useLogin"
 // import Loader from "../../components/Loader";
  
 
-const LoginScreen = () => {
+const AdminLoginScreen = () => {
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -25,7 +25,7 @@ const LoginScreen = () => {
     e.preventDefault()
 
      await login(email, password)
-    navigate("/");
+    navigate("/Dashboard");
   }
 
   const [showPassword, setShowPassword] = useState(false);
@@ -114,7 +114,7 @@ const LoginScreen = () => {
       <Row className="py-3">
         <Col>
           {" "}
-          New ? <Link to={`/signup`}>Register</Link>
+          New ? <Link to={`/newadmin`}>Register</Link>
         </Col>
       </Row>
 
@@ -122,4 +122,4 @@ const LoginScreen = () => {
   );
 };
 
-export default LoginScreen;
+export default AdminLoginScreen;

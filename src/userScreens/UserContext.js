@@ -6,16 +6,22 @@ export const UsersReducer = (state, action) => {
   switch (action.type) {
     case 'SET_USERS': 
       return {
-        users: action.payload
+        users: action.payload,
+        
       }
-    case 'CREATE_USERS':
+      case 'SET_Admins': 
       return {
-        users: [action.payload,...state.users]
+        admins: action.payload,
+        
       }
-    case 'DELETE_USERS':
-      return {
-        users: state.users.filter((w) => w._id !== action.payload._id)
-      }
+    // case 'CREATE_USERS':
+    //   return {
+    //     users: [action.payload,...state.users]
+    //   }
+    // case 'DELETE_USERS':
+    //   return {
+    //     users: state.users.filter((w) => w._id !== action.payload._id)
+    //   }
       /*case 'UPDATE_USERS':
       return {
         users: state.users.map((user) => 
@@ -30,6 +36,7 @@ export const UsersReducer = (state, action) => {
 export const UsersContextProvider = ({ children }) => {
   const [state, dispatch] = useReducer(UsersReducer, {
     users: null
+     
   })
 
   return (

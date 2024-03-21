@@ -2,13 +2,20 @@ import React from 'react';
 import './HeaderDash.css';
 import { FaBell, FaGlobeAmericas, FaSearch } from 'react-icons/fa';
 import Title from '../Title/Title';
-
+import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import { Link, Navigate , useNavigate} from "react-router-dom";
+import { useLogout } from '../../userScreens/useLogout'
 export default function HeaderDash({ toggleProfileSelect, toggleNotifSelect, toggleLanguageSelect,  selectedName}) {
+  const { logout } = useLogout()
+  const navigate = useNavigate();
+    const handleClick = () => {
+      navigate("/admin");
+      logout()}
   return (
     <nav className="topbar">
       <div className="menu-icon">
         <i className='bx bx-menu'></i>
-      </div>
+      </div> 
       <Title title={selectedName} fontSize={"16px"} fontWeight={600} />
       <form action="#" className="search-form">
         <div className="form-input">
@@ -22,10 +29,13 @@ export default function HeaderDash({ toggleProfileSelect, toggleNotifSelect, tog
       <div className="icon-link mr-2" onClick={toggleNotifSelect}>
         <FaBell size={24} />
         <span className="num">0</span>
-      </div>
+      </div> 
       <div className="profile" onClick={toggleProfileSelect}>
         <img src={process.env.PUBLIC_URL + "/images/avatar/useravatar.jpg"} alt="Profile" />
       </div>
+      <a   onClick={handleClick} className="navbar-links">
+          
+          <FaSignOutAlt />logout  </a>
     </nav>
   );
   }

@@ -6,16 +6,17 @@ import { Link ,useNavigate} from "react-router-dom";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import { toast } from "react-toastify";
 import FormContainer from "./FormContainer";
-const SignupScreen = () => {  
+
+const AdminSignup = () => {  
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [role, setRole] = useState("");
+    const [adminRegistrationKey, setadminRegistrationKey] = useState("");
+
     const navigate = useNavigate();
-    const Role ={Patient:'Patient', Participative_Member:'Participative_Member' ,
-  Coordinator_Member:'Coordinator_Member'}
+     
    
   const {signup, error, isLoading} = useSignup()
  
@@ -27,8 +28,8 @@ const SignupScreen = () => {
       toast.error("Passwords do not match.");
     }
     try {
-        await signup(name,email, password,role);
-        navigate("/");
+         await signup(name,email, password,adminRegistrationKey);
+        navigate("/Dashboard");
       } catch (err) {
         toast.error(err?.data?.errors[0]?.message || err?.error);
       }
@@ -36,7 +37,7 @@ const SignupScreen = () => {
    
   return (
     <FormContainer>
-    <h1>Register    </h1>
+    <h1>Register Admin </h1>
 
     <Form onSubmit={handleSubmit}>
       <Form.Group className="my-2" controlId="name">
@@ -79,21 +80,18 @@ const SignupScreen = () => {
         ></Form.Control>
       </Form.Group>
 
-     
+      <Form.Group className="my-2" controlId="adminRegistrationKey">
+        <Form.Label>code </Form.Label>
+        <Form.Control
+          type="password"
+          placeholder="entre code "
+          value={adminRegistrationKey}
+          onChange={(e) => setadminRegistrationKey(e.target.value)}
+        ></Form.Control>
+      </Form.Group>
 
 
-      <Form.Group className="my-2" controlId="role">
-<Form.Label>Role</Form.Label>
-<Form.Control
-  as="select"
-  value={role}
-  onChange={(e) => setRole(e.target.value)}
->
-  <option value={Role.Patient}>Patient</option>
-  <option value={Role.Participative_Member}>Participative Member</option>
-  <option value={Role.Coordinator_Member}>Coordinator Member</option>
-</Form.Control>
-</Form.Group>
+      
 
 
        {/* <Form.Group className="my-2" controlId="role">
@@ -122,11 +120,11 @@ const SignupScreen = () => {
     <Row className="py-3">
       <Col>
         {" "}
-        Already have an account? <Link to={`/login`}>Login</Link>
+        Already have an account? <Link to={`/admin`}>Login</Link>
       </Col>
     </Row>
   </FormContainer>
   )
 }
 
-export default SignupScreen
+export default AdminSignup
