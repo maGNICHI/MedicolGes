@@ -29,10 +29,11 @@ const authAdmin = asyncHandler(async (req, res) => {
   }
 
   if (passwordValid) {
-    generateAuthToken(res, admin._id, admin.email);
+    const token = generateAuthToken(res, admin._id, admin.email);
     const verifiedAdminData = {
       name: admin.name,
       email: admin.email,
+      token: `${token}`,
     };
     res.status(200).json(verifiedAdminData);
   }
@@ -70,10 +71,11 @@ const registerAdmin = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    generateAuthToken(res, user._id, user.email);
+    const token = generateAuthToken(res, user._id, user.email);
     const registeredUserData = {
       name: user.name,
       email: user.email,
+      token: `${token}`,
     };
     res.status(201).json(registeredUserData);
   } else {
