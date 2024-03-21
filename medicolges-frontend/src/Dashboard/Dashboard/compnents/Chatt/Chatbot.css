@@ -116,9 +116,10 @@
   /* CSS */
 
   .app-container {
-    left: 392px; 
+    left: 288px; 
     position: relative;
     min-height: 100vh;
+    padding-top: 39px;
   }
 
 .chat-button-container {
