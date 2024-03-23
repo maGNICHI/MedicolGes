@@ -7,6 +7,7 @@ import UserManagement from './Dashboard/UserManagement/UserList';
 import Login from './auth/login/Login'
 import AjouterForm from './Dashboard/Dashboard/compnents/AjouterForm'
 import AfficheForm from './Dashboard/Dashboard/compnents/AfficheForm'
+import AfficheFormById from './Dashboard/Dashboard/compnents/AfficheFormById'
 
 import Signup from './auth/SignUp/SignUp';
 import Home from "./UserInterface/Pages/Home";
@@ -42,6 +43,8 @@ function App() {
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/ajouterForm" element={<AjouterForm />} />
         <Route path="/afficheForm" element={<AfficheForm/>} />
+        <Route path="/afficheId/:id" element={<AfficheFormById />} />
+
 
 
         <Route path="*" element={<NotFound />} />

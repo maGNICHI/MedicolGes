@@ -172,6 +172,15 @@ const Form = () => {
   };
 
   const handleSubmit = async (e) => {
+    //  if (location.state && location.state.case === "update") {
+    //     // Si vous êtes en train de modifier un formulaire existant, naviguez vers ajouterForm avec les données du formulaire pour la mise à jour
+    //     navigate("/ajouterForm", { state: { formData: formData, case: "update" } });
+    // } else {
+    //     // Si vous créez un nouveau formulaire, naviguez vers ajouterForm sans les données du formulaire
+    //     navigate("/ajouterForm", { state: { case: "create" } });
+    //     // Ne créez un nouveau formulaire que si vous êtes en train de créer un nouveau formulaire
+    //     createForm();
+    // }
     e.preventDefault();
     createForm();
     console.log("hhhhh", formData);
@@ -1219,9 +1228,11 @@ const Form = () => {
             backgroundColor: "white",
             padding: "20px",
             width: "45%", // Ajustez la largeur de la modal
-            height: "40%", // Ajustez la hauteur de la modal
+            // height: "40%", // Ajustez la hauteur de la modal
             maxHeight: "80vh", // Empêchez la modal de dépasser la hauteur de la fenêtre
-            overflowY: "auto", // Ajoutez un défilement vertical si nécessaire
+            // overflowY: "auto", // Ajoutez un défilement vertical si nécessaire
+            borderColor: "rgba(219, 234, 254, 1)", // Définissez la couleur de la bordure
+            borderRadius: "1rem", // Définissez le rayon de la bordure
           }}
         >
           <div className="mb-4 col-12">
@@ -1343,6 +1354,7 @@ const Form = () => {
                 console.log(e);
                 setInputColor(e.target.value);
               }}
+              style={{ marginTop: "8px" }}
             />
           </FormControl>
 
@@ -1393,6 +1405,7 @@ const Form = () => {
               color="primary"
               size="small"
               onClick={handleModalSubmit}
+              
             >
               OK
             </Button>
