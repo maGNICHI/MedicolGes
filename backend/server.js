@@ -16,11 +16,22 @@ const app = express();
 // const corsOptions = {
 //   origin: "http://localhost:3000", // Allow requests from this origin
 // };
+app.use(bodyParser.json({ limit: '50mb' }));
+
+// Increase payload size limit for URL encoded data
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 app.use(cors( {origin: 'http://localhost:3000'}));
 app.use(express.json()); 
-app.use(bodyParser.json({ limit: '500mb' })); // Limite de taille de payload pour les données JSON
-app.use(bodyParser.urlencoded({ limit: '500mb', extended: true })); 
+//app.use(bodyParser.json({ limit: '50mb' })); // Limite de taille de payload pour les données JSON
+//app.use(bodyParser.urlencoded({ limit: '50mb', extended: true })); 
+
+//app.use(bodyParser.json({limit: '20mb'}));
+
+
+//app.use(express.json({limit:'50mb'})); // for incoming Request Object as json
+//app.use(express.urlencoded({limit:'50mb', extended: true }));
+
 app.use("/api/user", userRoutes);
 app.use("/api/chat", chatRoutes);
 app.use("/api/message", messageRoutes);
@@ -42,12 +53,10 @@ const io = require("socket.io")(server, {
 //evenement
 io.on("connection", (socket) => {
   console.log("Connected to socket.io");
-
   socket.on("setup", (userData) => {
     socket.join(userData._id);
     socket.emit("connected");
   });
-
   socket.on("join chat", (room) => {
     socket.join(room);
   });
@@ -56,15 +65,9 @@ io.on("connection", (socket) => {
   socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
   socket.on("new message", (newMessageRecieved) => {
     var chat = newMessageRecieved.chat;
-
     chat.users.forEach((user) => {
       if (user._id == newMessageRecieved.sender._id) return;
-
       socket.in(user._id).emit("message recieved", newMessageRecieved);
-     // if (user._id === newMessageReceived.data.sender._id) return;
-
-      //Send the message back to add it to the messages array:
-     // socket.in(newMessageReceived.room).emit("message received", {newMessageReceived:newMessageReceived.data,chat});
     });
   });
   socket.off("setup", () => {
