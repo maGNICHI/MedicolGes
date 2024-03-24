@@ -9,7 +9,7 @@ const OpenAI = require("openai");
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
 const formRoutes = require('./routes/FormRoutes');
-const formReponse = require('./routes/FormReponse');
+const reponseRoutes = require('./routes/FormReponse');
 
 const cors = require('cors');
 dotenv.config();
@@ -64,6 +64,8 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/form', formRoutes);
+app.use('/reponse', reponseRoutes);
+
 //---------------------- Connecting to MongoDB --------------------------//
 mongoose.connect(dbURI)
 .then(() => {
