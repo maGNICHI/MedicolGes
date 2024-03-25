@@ -463,6 +463,7 @@ function AfficheFormById() {
       {formData ? (
         <div>
           <h1>{formData.name}</h1>
+          {formData.id}
           <ul>
           {formData.questions.map((question, index) => (
               <li key={index}>

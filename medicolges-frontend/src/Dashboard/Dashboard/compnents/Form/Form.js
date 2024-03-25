@@ -55,7 +55,8 @@ import Switch from "@mui/material/Switch";
 const Form = () => {
   const [darkMode, setDarkMode] = useState(false);
 
-  const [formData, setFormData] = useState({ name: "", questions: [] });
+  const [formData, setFormData] = useState({id:"" , name: "", questions: [] });
+  console.log("data from formjs",formData)
   const [idCount, setIdCount] = useState(0);
   const classes = useStyles();
   const dispatch = useDispatch();

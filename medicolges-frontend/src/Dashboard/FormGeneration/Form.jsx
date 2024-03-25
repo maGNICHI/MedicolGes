@@ -29,7 +29,7 @@ function Dashboard() {
 
   return (
     <Layout selectedName={selectedName}>
-    <Container fluid className="mt-4" style={{ height: "100vh", backgroundColor: "#a3bee3" }}> {/* Ajouter le style de fond ici */}
+    <Container fluid className="mt-4" style={{  backgroundColor: "#a3bee3" }}> {/* Ajouter le style de fond ici */}
       <Card className="card h-100" style={{  backgroundColor: "#ffffffa9", padding: "20px", borderRadius: "20px" }}>
         <Title title={"Create Form"} fontWeight={600} fontSize={"24px"} />
         <hr />
