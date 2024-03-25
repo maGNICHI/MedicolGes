@@ -24,7 +24,7 @@ const Sidebar = ({ children }) => {
         <div>
           <div className="top_section">
             <img
-              src={process.env.PUBLIC_URL + "/images/logo/logo.png"}
+              src={process.env.PUBLIC_URL + "/images/logo/logoM.png"}
               alt="logo"
               style={{
                 display: isOpen ? "block" : "none",
@@ -35,7 +35,7 @@ const Sidebar = ({ children }) => {
               width={"160px"}
             />
             <div style={{ marginLeft: isOpen ? "30px" : "0px" }} className="bars">
-              <FaBars color="#0236be" onClick={toggle} />
+              <FaBars color="#1990aa" onClick={toggle} />
             </div>
           </div>
           <div

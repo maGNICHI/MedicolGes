@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./ListProject.css";
 import Navbar from "../Navbar";
-import { FaSearch } from "react-icons/fa";
+import { FaPlus, FaSearch } from "react-icons/fa";
 import ProjectCard from "./ProjectCard";
 import axios from "axios";
 import { Button, Col, Form, Modal, Row } from "react-bootstrap";
@@ -93,19 +93,11 @@ export default function ListProject() {
       <Navbar />
       <div className="contentUser" style={{ height: "100%" }}>
         <div className="container-fluid mb-5">
-          <div className="row pt-20 mb-10">
+          <div className="row pt-10 mb-10">
             <div className="col-md-7 col-xs-12">
               <h3 className="info-title ml-10">
                 <span>Our Projects</span>
               </h3>
-            </div>
-            <div className="col-md-2 col-xs-7 mt-3">
-              <button
-                className="button type1"
-                onClick={handleShowAddModal}
-              >
-                <span className="btn-txt">Add New Project</span>
-              </button>
             </div>
             <div className="col-md-2 col-xs-5 mt-3">
               <div className="input-wrapper">
@@ -123,6 +115,23 @@ export default function ListProject() {
                   style={{ zIndex: 2 }}
                 />
               </div>
+            </div>
+            <div className="col-md-2 col-xs-7 mt-3">
+              <IconButton
+                className="border-0 w-100"
+                style={{
+                  background: `linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)`,
+                  color: "white",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  padding: "8px 16px",
+                  borderRadius: "20px",
+                }}
+                onClick={handleShowAddModal}
+                startIcon={<FaPlus />}
+              >
+                Add New Project
+              </IconButton>
             </div>
           </div>
           <div className="row pb-24">

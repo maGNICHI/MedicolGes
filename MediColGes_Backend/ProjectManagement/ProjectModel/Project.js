@@ -27,6 +27,10 @@ const ProjectSchema = new mongoose.Schema(
         default: 0,
     },
     sharedEmails: [{ type: String }],
+    form: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Forms",
+    }
   },
   {
     timestamps: true,

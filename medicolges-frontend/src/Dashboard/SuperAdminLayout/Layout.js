@@ -27,7 +27,7 @@ const Layout = ({ children, selectedName }) => {
     setShowNotifSelect(false);
   };
   return (
-    <div style={{ display: 'flex', background:"#a3bee3"}}>
+    <div style={{ display: 'flex'}}>
       <Sidebar />
       <main style={{ flex: 1, marginLeft:"30px" }}>
         <HeaderDash selectedName={selectedName} toggleProfileSelect={toggleProfileSelect}

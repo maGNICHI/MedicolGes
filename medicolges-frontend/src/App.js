@@ -27,6 +27,7 @@ import ConsultProject from './Dashboard/ProjectManagement/CosultProject/ConsultP
 import ListProject from './UserInterface/Components/ProjectManagement/ListProject';
 import Add from './UserInterface/Components/ProjectManagement/AddProject/AddProject';
 import Consult from './UserInterface/Components/ProjectManagement/ConsultProject/ConsultProject';
+import AfficheForm from './Dashboard/Dashboard/compnents/AfficheForm';
 
 
 function App() {
@@ -58,6 +59,8 @@ function App() {
         <Route path='/projects' element={<ListProject />} />
         <Route path='/projects/add' element={<Add />} />
         <Route path='/projects/consult/:id' element={<Consult />} />
+        <Route path="/afficheForm" element={<AfficheForm/>} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Provider>

@@ -1,4 +1,4 @@
-.custom-input-div {
+/*.custom-input-div{
   position: relative;
   width: 100px;
   height: 100px;
@@ -88,5 +88,35 @@
     100% {
       opacity: 1;
     }
+  }
+   */
+   .file-upload-form {
+    width: fit-content;
+    height: fit-content;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .file-upload-label input {
+    display: none;
+  }
+  .file-upload-label svg {
+    height: 50px;
+    fill: #1990aa;
+    margin-bottom: 20px;
+  }
+  .file-upload-label {
+    cursor: pointer;
+    background-color: #acdbd6a4;
+    padding: 30px 70px;
+    border-radius: 40px;
+    border: 2px dashed rgb(82, 82, 82);
+  }
+  .file-upload-design {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
   }
   

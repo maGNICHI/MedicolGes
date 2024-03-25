@@ -9,7 +9,7 @@ function Footer() {
       <div className="footer-container">
         <div className="ft-info">
           <div className="ft-info-p1">
-            <p className="ft-title">MediColGes</p>
+            <p className="ft-title">CoMediC</p>
             <p className="ft-description">
               Empowering Healthcare Innovation Through Collaboration,
               Communication, Data Collection and Expertise with Creating

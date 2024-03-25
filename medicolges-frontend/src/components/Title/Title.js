@@ -4,7 +4,7 @@ import classNames from "classnames";
 
 // Create a styled component with the desired styles
 const TitleWrapper = styled('div')({
-  fontFamily: "Work Sans",
+  fontFamily: "Poppins",
   fontStyle: "normal",
 });
 

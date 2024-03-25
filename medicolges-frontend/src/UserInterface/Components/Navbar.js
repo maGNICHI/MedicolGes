@@ -44,13 +44,13 @@ function Navbar() {
       <h1 className="navbar-title">
         <Link to="/">
           <img
-            src={process.env.PUBLIC_URL + "/images/logo/logo.png"}
+            src={process.env.PUBLIC_URL + "/images/logo/logoM.png"}
             alt="logo"
             style={{
               marginTop: "10px",
             }}
-            height={"90px"}
-            width={"110px"}
+            height={"50px"}
+            width={"80px"}
           />
         </Link>
       </h1>

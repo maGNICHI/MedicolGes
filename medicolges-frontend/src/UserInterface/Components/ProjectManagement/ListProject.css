@@ -16,13 +16,16 @@ body {
   width: 100%;
   padding-right: 15px;
   padding-left: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
+
 .our-services {
-  margin-top: 75px;
-  padding-bottom: 30px;
-  padding: 0 60px;
-  height: 390px;
+  flex: 1;
+  margin: 20px;
+  padding: 20px;
   text-align: center;
   border-radius: 40px;
   background-color: #fff;
@@ -38,7 +41,7 @@ body {
 
 .our-services:hover h4,
 .our-services:hover p {
-  color: #fff;
+  color: rgb(29, 29, 29);
 }
 
 .our-services.speedup:hover {
@@ -46,7 +49,7 @@ body {
 }
 
 .our-services.settings:hover {
-  background-image: linear-gradient(-45deg, #34b5bf 0%, #210c59 100%);
+  background-image: linear-gradient(-45deg, #d9e0df 0%, #94c0bb 100%);
 }
 
 .our-services.privacy:hover {
@@ -68,7 +71,7 @@ body {
 .input-wrapper {
   display: flex;
   align-items: center;
-  justify-content: left;
+  justify-content: right;
   gap: 15px;
   position: relative;
 }
@@ -131,11 +134,11 @@ body {
   position: relative;
   background-color: transparent;
   cursor: pointer;
-  border: 2px solid blue;
   overflow: hidden;
-  border-radius: 30px;
-  color: blue;
+  border-radius: 50px;
+  color: white;
   transition: all 0.5s ease-in-out;
+  font-weight: 900;
 }
 
 .btn-txt {
@@ -158,12 +161,11 @@ body {
   z-index: -1;
 }
 
-.button:hover {
-  box-shadow: 1px 1px 200px blue;
+/* .button:hover {
   color: #fff;
   border: none;
   background: linear-gradient(-45deg, #3615e7 0%, #44a2f6 100%);
-}
+} */
 
 .type1:hover::after {
   visibility: visible;
@@ -266,4 +268,55 @@ body {
     transform: scale(1.2);
     fill: #ffc73a;
   }
+}
+
+/*progressbar*/
+#progressbar {
+  margin-bottom: 30px;
+  overflow: hidden;
+  color: lightgrey;
+}
+
+#progressbar .active {
+  color: #000000;
+}
+
+#progressbar li {
+  list-style-type: none;
+  font-size: 12px;
+  width: 25%;
+  float: left;
+  position: relative;
+}
+
+/*Icons in the ProgressBar*/
+#progressbar li:before {
+  width: 70px; /* Increase the width for better spacing */
+  height: 70px; /* Increase the height for larger circles */
+  line-height: 70px; /* Adjust line-height to center icons vertically */
+  display: block;
+  font-size: 24px; /* Increase font size for larger icons */
+  color: #ffffff;
+  background: lightgray;
+  border-radius: 50%;
+  margin: 0 auto 20px auto; /* Increase margin for more spacing between circles */
+  padding: 10px; /* Add padding for better icon placement */
+}
+
+/*ProgressBar connectors*/
+#progressbar li:after {
+  content: '';
+  width: calc(100% - 35px); /* Adjust width to align with larger circles */
+  height: 4px; /* Maintain the height of connectors */
+  background: lightgray;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%); /* Center connectors horizontally */
+  top: 35px; /* Adjust top position to align with larger circles */
+  z-index: -1;
+}
+
+/*Color number of the step and the connector before it*/
+#progressbar li.active:before, #progressbar li.active:after {
+  background: skyblue;
 }

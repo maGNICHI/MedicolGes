@@ -55,7 +55,7 @@ export default function ProjectCard({ project, onFollow }) {
         <div
           className="icon"
           style={{
-            background: `linear-gradient(-45deg, #3615e7 0%, #44a2f6 100%)`,
+            background: `linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)`,
             borderRadius: "50%",
             width: "80px",
             height: "80px",
@@ -69,8 +69,18 @@ export default function ProjectCard({ project, onFollow }) {
           </span>
         </div>
         <h4>{project.name}</h4>
-        <p className="pb-3 inline-content">{truncateDescription(project.description, 100)}</p>
-        <NavLink to={`/projects/consult/${project._id}`}>
+        <p className="py-4 inline-content">
+          {truncateDescription(project.description, 90)}
+        </p>
+        <NavLink
+          className={"text-center"}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+          to={`/projects/consult/${project._id}`}
+        >
           <p style={{ fontWeight: "bold" }}>
             <span style={{ display: "flex", alignItems: "center" }}>
               <FaArrowRight style={{ marginRight: "5px" }} />
@@ -78,11 +88,11 @@ export default function ProjectCard({ project, onFollow }) {
             </span>
           </p>
         </NavLink>
-        <div className="row">
+        <div className="row mt-4">
           <Col md={6} className="mt-2">
             <p style={{ fontWeight: "bold" }}>{followersCount} Followers</p>
           </Col>
-          <Col md={6} className="mb-5">
+          <Col md={6}>
             {isFollowing ? (
               <IconButton
                 className="border-0 w-100"
@@ -104,7 +114,7 @@ export default function ProjectCard({ project, onFollow }) {
                 className="border-0 w-100"
                 style={{
                   background:
-                    "linear-gradient(-45deg, #3615e7 0%, #44a2f6 100%)",
+                    "linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)",
                   color: "white",
                   fontSize: "16px",
                   fontWeight: 600,

@@ -33,6 +33,8 @@ app.use(
   require("./ForumAndOrganizationManagement/routes/organization.routes")
 );
 
+app.use("/api/user", require("./UserManagement/Routes/User"));
+
 //upload images
 // app.post('/upload-images', upload.array('image'), async (req, res) => {
     

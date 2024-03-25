@@ -54,7 +54,7 @@ export default function ProjectList() {
   return (
     <Layout
       selectedName={selectedName}
-      style={{ backgroundColor: `#a3bee3 !important`, height: "100%" }}
+      style={{height: "100%" }}
     >
       <Container fluid className="mt-4" style={{ height: "100%" }}>
         {/* Adjust the height accordingly */}
