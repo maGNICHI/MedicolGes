@@ -6,11 +6,11 @@ const responseSchema = new mongoose.Schema({
         ref: 'Form',
         required: true,
       },
-      user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
-    },
+    //   user: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: 'User',
+    //     required: true
+    // },
     //   userId: {
     //     type: mongoose.Schema.Types.ObjectId,
     //     ref: 'User', // Assurez-vous que 'User' est le nom correct du modèle d'utilisateur

@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Form = require('../models/Forms');
 const Response = require('../models/Response');
-// const User = require('../models/User'); 
 // const Forms = require('../models/Forms');
 
 
@@ -25,31 +24,23 @@ router.get('/Reponse/:id', async (req, res) => {
         res.status(500).json({ error: 'Erreur lors de la récupération des réponses' });
     }
 });
-//creat
-//router.post('/addFormc/:id/:userId', async (req, res) => {
+//creat 
 
 router.post('/addFormc/:id', async (req, res) => {
     try {
         // Extraire les données de réponse du corps de la requête
-        //        const { userId,questionId, responseValue } = req.body;
-        const { questionId, responseValue } = req.body;
+        const { responses  } = req.body;
 
         // Vérifier si le formulaire avec l'ID spécifié existe
         const form = await Form.findById(req.params.id);
         if (!form) {
             return res.status(404).json({ error: 'Formulaire non trouvé' });
         }
- // Vérifier si l'utilisateur avec l'ID spécifié existe
-//  const user = await User.findById(userId);
-//  if (!user) {
-//      return res.status(404).json({ error: 'Utilisateur non trouvé' });
-//  }
+
         // Créer une nouvelle réponse de formulaire
         const newResponse = await Response.create({
-            user: userId,
-
             form: req.params.id,
-            responses: [{ questionId, responseValue }],
+            responses: responses,
         });
 
         // Répondre avec un statut 201 et les données de la réponse et du formulaire
@@ -58,7 +49,6 @@ router.post('/addFormc/:id', async (req, res) => {
             data: {
                 response: newResponse,
                 formData: form, // Use the form variable directly
-                // userData: user 
             },
         });
     } catch (error) {
