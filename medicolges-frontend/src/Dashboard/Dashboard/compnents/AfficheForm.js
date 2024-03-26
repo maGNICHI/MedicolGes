@@ -6,7 +6,7 @@ import "../../Dashboard/Dashboard.css";
 import { useNavigate } from "react-router-dom";
 import {} from "@material-ui/core/";
 import { Grid, CircularProgress } from "@material-ui/core";
-import { fetchForm } from "./api";
+import { fetchForm ,deleteForm} from "./api";
 import FormCard from "./FormCard";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -33,6 +33,20 @@ const [selectedFormId, setSelectedFormId] = useState(null); // État pour stocke
 
   // Utilisez baseUrl pour construire votre lien
   const [loading, setLoading] = useState(false);
+  ///delete
+  
+  const handleDeleteForm = (id) => {
+    deleteForm(id)
+      .then(response => {
+        console.log(response.data); // Afficher le message de suppression
+        // Mettre à jour l'état local en supprimant le formulaire avec l'ID donné
+        setForms(forms.filter(form => form._id !== id));
+      })
+      .catch(error => {
+        console.error(error);
+        // Gérer les erreurs si nécessaire
+      });
+  };
 
   const openFormInBrowser = async (formId) => {
     try {
@@ -135,7 +149,7 @@ const [selectedFormId, setSelectedFormId] = useState(null); // État pour stocke
                     <TableCell>{form.name}</TableCell>
                     <TableCell>
                       <div style={{ display: "flex", alignItems: "center" }}>
-                        <FaEye
+                        <FaEdit
                           onClick={() => {
                             displayForm(form);
                           }}
@@ -145,7 +159,7 @@ const [selectedFormId, setSelectedFormId] = useState(null); // État pour stocke
                             marginRight: "10px",
                           }}
                         />
-                        <FaEdit // Icône pour la mise à jour (remplacez 'FaEdit' par l'icône appropriée)
+                        < FaEye // Icône pour la mise à jour (remplacez 'FaEdit' par l'icône appropriée)
                           onClick={() => {
                             save(form);
                           }}
@@ -157,9 +171,22 @@ const [selectedFormId, setSelectedFormId] = useState(null); // État pour stocke
                           }}
                           style={{ fontSize: "23px", cursor: "pointer" }}
                         />
+                         <div>
+      {/* Boucle sur vos formulaires et affichez les icônes de corbeille */}
+      
+        <div key={form._id}>
+          {/* Afficher les détails du formulaire */}
+          {/* Icône de la corbeille avec gestionnaire de clic */}
+          <FaTrash
+            onClick={() => handleDeleteForm(form._id)}
+            style={{ fontSize: "23px", cursor: "pointer" }}
+          />
+        </div>
+        
+          </div>
                         {/* <FaTrash
                       onClick={() => {
-                        deleteForm(form);
+                        deleteForm(form._id);
                       }}
                       style={{ fontSize: "23px", cursor: "pointer" }}
                     /> */}

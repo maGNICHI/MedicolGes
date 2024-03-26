@@ -52,6 +52,8 @@ import PhoneField from "./PhoneField"; // Assuming PhoneField is defined in a se
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
 import Switch from "@mui/material/Switch";
 
+import {putForm} from "../api/index";
+
 const Form = () => {
   const [darkMode, setDarkMode] = useState(false);
 
@@ -182,10 +184,28 @@ const Form = () => {
     //     // Ne créez un nouveau formulaire que si vous êtes en train de créer un nouveau formulaire
     //     createForm();
     // }
+    console.log("cccccccccccccc:",formData._id); 
+
     e.preventDefault();
-    createForm();
-    console.log("hhhhh", formData);
-    navigate("/ajouterForm", { state: { formData, case: "create" } });
+        //ajouter
+        try {
+          console.log("Case:", location.state); 
+          if (formData._id  !== "") {
+            // If updating an existing form
+            await updateForm();
+            navigate("/afficheForm");  // Navigate back to afficheForm
+          } else {
+              // If you are creating a new form
+              await createForm(); // Create a new form
+              navigate("/ajouterForm", { state: { formData, case: "create" } }); // Navigate to ajouterForm
+          }
+      } catch (error) {
+          console.error("Error handling form submission:", error);
+          // Handle error, display message, etc.
+      }
+    // createForm();
+    // console.log("hhhhh", formData);
+    // navigate("/ajouterForm", { state: { formData, case: "create" } });
   };
   ////ajouter
   // const cards = useSelector((state) => state.cards);
@@ -344,7 +364,19 @@ const Form = () => {
         console.log(err);
       });
   };
-
+  const updateForm = () => {
+    putForm(
+      formData._id, {
+        name: formData.name,
+        questions: JSON.stringify(formData.questions)
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const handleChangetextArea = (event) => {
     console.log(event);
     setModalResponse(event.target.value);

@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import Dashboard from "../Dashboard"; // Import the Dashboard component
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { putForm } from "../compnents/api/index"
 
 import {
   CardActions,
@@ -90,6 +91,8 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
     console.log("Form data before saving:", formData); // Vérifiez les données du formulaire avant la sauvegarde
 
     createForm(formData);
+    navigate("/affucheyourReponse", { state: { formData } });
+
   };
   const createForm = async (formData) => {
     console.log("Form data to save:", formData);
