@@ -13,6 +13,7 @@ export const useSignup = () => {
     const response = await fetch('http://localhost:5000/api/v1/user/', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
+      
       body: JSON.stringify({name , email, password,role})
     })
     const json = await response.json()

@@ -57,7 +57,8 @@ import Organization from  './UserInterface/Components/Organization/OrganizationC
 import AddProject from './Dashboard/ProjectManagement/AddProject/AddProject';
 import ConsultProject from './Dashboard/ProjectManagement/CosultProject/ConsultProject';
 // import { Provider } from 'react-redux';
- 
+import { GoogleOAuthProvider } from '@react-oauth/google';
+
 // import { applyMiddleware, createStore, compose } from 'redux';
 
 import { reducers } from './reducers';
@@ -69,21 +70,24 @@ import { AuthContextProvider } from './userScreens/AuthContext'
 import SignupScreen from "./userScreens/SignupScreen.js";
 import AdminSignup from './adminScreens/SignupScreen.js';  
  import AdminLoginScreen from './adminScreens/LoginScreen.js';
-
+import ProfileScreen from  './userScreens/profile/profile.js';
 //const store = createStore(reducers, compose(applyMiddleware(thunk)));
- 
+import AdminProfileScreen from  './adminScreens/profile/profile.js';
 const router = createBrowserRouter(
    
   createRoutesFromElements(
+ 
     <Route path="/" element={<App />}>
+      
        <Route path="/Dashboard" element={<Dashboard />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/signup" element={<SignupScreen />} />
+      <Route path="/Profile" element={<ProfileScreen />} />
     <Route index={true} path="/home" element={<HomePage />} />
-
+   
     <Route path="/newadmin" element={<AdminSignup />} />
     <Route path="/admin" element={<AdminLoginScreen />} />
-       
+    <Route path="/AdminProfile" element={<AdminProfileScreen />} />
         <Route path="/userList" element={<UserManagement />} />
         <Route path="/projectList" element={<ProjectList />} />
         <Route path="/formGeneration" element={<Form />} />
@@ -113,15 +117,13 @@ root.render(
     
   <AuthContextProvider>
   <UsersContextProvider>
-  
-     <RouterProvider router={router}  >
-     
-   
-      </RouterProvider>
-      
+
+     <RouterProvider router={router}  />
+    
+       
       </UsersContextProvider>
-      
       </AuthContextProvider>
+     
   </React.StrictMode>
    
 );

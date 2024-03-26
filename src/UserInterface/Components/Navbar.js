@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect  } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCommentDots,
@@ -18,7 +18,11 @@ function Navbar() {
 
   
   
-const {user}  = useAuthContext()
+  // const {user}  = useAuthContext()
+ 
+ 
+ 
+
 
 const { logout } = useLogout()
 const navigate = useNavigate();
@@ -78,6 +82,10 @@ const navigate = useNavigate();
             Post
           </a>
         </li>
+
+        <li>
+          
+        </li> 
         {/* <li>
           <a href="#doctors" className="navbar-links">
             Doctors
@@ -87,8 +95,10 @@ const navigate = useNavigate();
         
       </ul>
 
-      <span> Welcome  <strong>{user?.name}   </strong>  </span>
       
+      <a href="/Profile" className="navbar-links">
+          Profile
+          </a>
       <a  onClick={handleClick} className="navbar-links">
           
           <FaSignOutAlt />logout  </a>
@@ -140,7 +150,7 @@ const navigate = useNavigate();
           </li>
         </ul>
       </div>
-
+      
       {/* Hamburger Icon */}
       <div className="mobile-nav">
         <FontAwesomeIcon

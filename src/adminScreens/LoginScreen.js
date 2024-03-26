@@ -57,9 +57,9 @@ const AdminLoginScreen = () => {
 
   return (
     <FormContainer  >
-       <h3 style={{ color: 'blue' }}>Welcome To MediColGes Application Web</h3>
+       <h2 style={{ color: 'blue' }}>Welcome To MediColGes </h2>
 
-      <h2>Sign In</h2>
+      <h2>Sign In Admin</h2>
   
       <Form onSubmit={submitHandler}>
      

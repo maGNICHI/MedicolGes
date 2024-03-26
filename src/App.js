@@ -92,14 +92,16 @@ function App() {
               element={!user ? <Navigate to="/login" /> : <Navigate to="/" />} 
             />
 
-          <Route 
+          {/* <Route 
               path="/Dashboard" 
               element={user ? <Navigate to="/Dashboard" /> : <Navigate to="/admin" />} 
             />
+  
+            
              <Route 
               path="/login" 
               element={!user ? <Navigate to="/admin" /> : <Navigate to="/Dashboard" />} 
-            />
+            /> */}
 
 
  

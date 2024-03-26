@@ -25,19 +25,24 @@ const AdminSignup = () => {
     e.preventDefault()
     
     if (password !== confirmPassword) {
-      toast.error("Passwords do not match.");
-    }
-    try {
-         await signup(name,email, password,adminRegistrationKey);
+      toast.error("Passwords do not match :( ");
+    } else {
+      try {
+        await signup(name, email, password, adminRegistrationKey);
         navigate("/Dashboard");
       } catch (err) {
-        toast.error(err?.data?.errors[0]?.message || err?.error);
+        // Assuming the error handling structure is correct, but make sure
+        // the path to the error message aligns with the actual error object's structure
+        toast.error(err?.response?.data?.errors[0]?.message || err.message || "An error occurred.");
       }
-  }
+    }
+    }
+  
    
   return (
     <FormContainer>
-    <h1>Register Admin </h1>
+       <h2 style={{ color: 'blue' }}>Welcome To MediColGes </h2>
+    <h2>Register Admin </h2>
 
     <Form onSubmit={handleSubmit}>
       <Form.Group className="my-2" controlId="name">

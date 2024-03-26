@@ -1,0 +1,42 @@
+.update-profile-container {
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 2rem;
+    max-width: 500px;
+    margin: 2rem auto;
+    background: linear-gradient(to right, #568df4, #ffffff);
+  }
+  
+  .update-profile-container h2 {
+    color: #372e93;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  
+  .form-label {
+    font-weight: 600;
+  }
+  
+  .form-control {
+    border-radius: 5px;
+    border: 1px solid #3b4f64;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .form-control:focus {
+    box-shadow: 0 0 0 0.2rem rgba(79, 112, 148, 0.25);
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    margin-top: 1rem;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+ 

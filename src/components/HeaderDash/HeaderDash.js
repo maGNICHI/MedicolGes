@@ -8,9 +8,14 @@ import { useLogout } from '../../userScreens/useLogout'
 export default function HeaderDash({ toggleProfileSelect, toggleNotifSelect, toggleLanguageSelect,  selectedName}) {
   const { logout } = useLogout()
   const navigate = useNavigate();
+  
     const handleClick = () => {
       navigate("/admin");
       logout()}
+      const handleClickk = () => {
+        navigate("/adminProfile");
+          }
+
   return (
     <nav className="topbar">
       <div className="menu-icon">
@@ -19,8 +24,8 @@ export default function HeaderDash({ toggleProfileSelect, toggleNotifSelect, tog
       <Title title={selectedName} fontSize={"16px"} fontWeight={600} />
       <form action="#" className="search-form">
         <div className="form-input">
-          <input type="search" placeholder="Search..." />
-          <button type="submit" className="search-btn"><FaSearch /></button>
+          
+          
         </div>
       </form>
       <div className="icon-link mx-3" onClick={toggleLanguageSelect}>
@@ -32,7 +37,11 @@ export default function HeaderDash({ toggleProfileSelect, toggleNotifSelect, tog
       </div> 
       <div className="profile" onClick={toggleProfileSelect}>
         <img src={process.env.PUBLIC_URL + "/images/avatar/useravatar.jpg"} alt="Profile" />
+        <button   onClick={handleClickk}  >
+          Profile
+             </button>
       </div>
+  
       <a   onClick={handleClick} className="navbar-links">
           
           <FaSignOutAlt />logout  </a>
