@@ -12,7 +12,6 @@ const ChatProvider = (props) => {
 
   useEffect(() => {
     const userInformation = JSON.parse(localStorage.getItem("userInfo"));
-    //const userInformation = JSON.parse(localStorage.getItem('userInfo', JSON.stringify(data)));
     setUser(userInformation);
 
     if (!userInformation) navigate("/login");
