@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import './App.css';
 import Dashboard from '../src/Dashboard/Dashboard/Dashboard';
@@ -14,8 +15,8 @@ import OrganizationList from './Dashboard/OrganizationManagement/OrganizationLis
 import FeedbackList from './Dashboard/FeedBackManagement/FeedbackList';
 import { applyMiddleware, createStore, compose } from 'redux';
 import { reducers } from './reducers';
-import {thunk }from 'redux-thunk';
-import { Provider } from 'react-redux';
+//import {thunk }from 'redux-thunk';
+
 import Form from './Dashboard/FormGeneration/Form';
 import CreateOrganization from './Dashboard/OrganizationManagement/OrganizationCreate';
 import CreatePost from './UserInterface/Components/Post/CreatePost'
@@ -28,14 +29,14 @@ import ListProject from './UserInterface/Components/ProjectManagement/ListProjec
 import Add from './UserInterface/Components/ProjectManagement/AddProject/AddProject';
 import Consult from './UserInterface/Components/ProjectManagement/ConsultProject/ConsultProject';
 import AfficheForm from './Dashboard/Dashboard/compnents/AfficheForm';
-
+import ChatPage from "./UserInterface/Pages/ChatPage";
 
 function App() {
-  const store = createStore(reducers, compose(applyMiddleware(thunk)));
+ // const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
   return (
-    <BrowserRouter>
-      <Provider store={store}>
+   
+     
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path='/signup' element={<Signup />} />
@@ -60,11 +61,11 @@ function App() {
         <Route path='/projects/add' element={<Add />} />
         <Route path='/projects/consult/:id' element={<Consult />} />
         <Route path="/afficheForm" element={<AfficheForm/>} />
-
+        <Route path="/chats" element={<ChatPage />} /> 
         <Route path="*" element={<NotFound />} />
       </Routes>
-      </Provider>
-    </BrowserRouter>
+      
+   
 
   );
 }

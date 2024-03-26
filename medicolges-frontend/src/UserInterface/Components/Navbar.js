@@ -151,6 +151,11 @@ function Navbar() {
             </a>
           </li>
           <li>
+            <a onClick={openNav} href="/chats">
+              chats
+            </a>
+          </li>
+          <li>
             <a onClick={openNav} href="/login">
               Login
             </a>
@@ -164,6 +169,7 @@ function Navbar() {
           icon={faBars}
           onClick={openNav}
           className="hamb-icon"
+          href="/chats"
         />
       </div>
     </div>
