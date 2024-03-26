@@ -9,6 +9,7 @@ const userSignUpDataValidation = [
     .trim()
     .notEmpty()
     .withMessage("A password must be provided."),
+    body("role").trim().notEmpty().withMessage("A valid role must be provided."),
 ];
 
 const userSignInDataValidation = [

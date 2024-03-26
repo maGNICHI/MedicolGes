@@ -24,18 +24,18 @@ const {
   adminUserUpdateDataValidation,
 } = require("./backendDataValidationConfig.js");
 
-router.post("/", adminSignUpDataValidation, validateRequest, registerAdmin);
-router.post("/auth", adminSignInDataValidation, validateRequest, authAdmin);
+router.post("/", adminSignUpDataValidation,  registerAdmin);
+router.post("/auth", adminSignInDataValidation , authAdmin);
 router.post("/logout", logoutAdmin);
 
 router
-  .route("/profile")
-  .get(requireAuth, verifyAdmin, getAdminProfile)
-  .put(requireAuth, verifyAdmin, updateAdminProfile);
+  .route("/profile/:id")
+  .get(   getAdminProfile)
+  .put(    updateAdminProfile);
 
-router.post("/get-users", requireAuth, verifyAdmin, getAllUsers);
-router.patch("/block-user", requireAuth, verifyAdmin, adminUserBlockingDataValidation, validateRequest, blockUser);
-router.patch("/unblock-user", requireAuth, verifyAdmin, adminUserBlockingDataValidation, validateRequest, unBlockUser);
-router.put("/update-user", requireAuth, verifyAdmin, adminUserUpdateDataValidation, validateRequest, updateUserData);
+router.post("/get-users",    getAllUsers);
+router.patch("/block-user",      blockUser);
+router.patch("/unblock-user",    adminUserBlockingDataValidation,   unBlockUser);
+router.put("/update-user",    adminUserUpdateDataValidation,   updateUserData);
 
 module.exports = router;

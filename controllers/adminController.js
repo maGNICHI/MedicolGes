@@ -29,11 +29,13 @@ const authAdmin = asyncHandler(async (req, res) => {
   }
 
   if (passwordValid) {
-    const token = generateAuthToken(res, admin._id, admin.email);
+    const token = generateAuthToken(  admin._id, admin.email);
     const verifiedAdminData = {
+      _id: admin._id,
       name: admin.name,
       email: admin.email,
       token: `${token}`,
+     
     };
     res.status(200).json(verifiedAdminData);
   }
@@ -71,8 +73,9 @@ const registerAdmin = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    const token = generateAuthToken(res, user._id, user.email);
+    const token = generateAuthToken( user._id, user.email);
     const registeredUserData = {
+      _id: user._id,
       name: user.name,
       email: user.email,
       token: `${token}`,
@@ -88,34 +91,91 @@ const logoutAdmin = asyncHandler(async (req, res) => {
   res.status(200).json({ message: "Admin Logged Out" });
 });
 
-const getAdminProfile = asyncHandler(async (req, res) => {
-  const user = {
-    name: req.user.name,
-    email: req.user.email,
-  };
-  res.status(200).json({ user });
-});
+// const getAdminProfile = asyncHandler(async (req, res) => {
+  
+//   const user = {
+//     name: req.user.name,
+//     email: req.user.email,
+//   };
+//   res.status(200).json({ user });
+// });
 
-const updateAdminProfile = asyncHandler(async (req, res) => {
-  const admin = await AdminModel.findById(req.user._id);
+
+const getAdminProfile = asyncHandler(async (req, res) => {
+  const adminId = req.params.id; // Extracting ID from request params
+  const admin = await AdminModel.findById(adminId).select('-password'); // Exclude password from the result
 
   if (admin) {
-    admin.name = req.body.name || admin.name;
-    admin.email = req.body.email || admin.email;
-
-    if (req.body.password) {
-      admin.password = req.body.password;
-    }
-
-    const updatedAdminData = await admin.save();
-    res.status(200).json({
-      name: updatedAdminData.name,
-      email: updatedAdminData.email,
-    });
+    res.status(200).json(admin);
   } else {
-    throw new NotFoundError();
+    res.status(404);
+    throw new Error('admin not found');
   }
 });
+
+
+
+
+//const updateAdminProfile = asyncHandler(async (req, res) => {
+  
+//   const admin = await AdminModel.findById(req.user._id);
+
+//   if (admin) {
+//     admin.name = req.body.name || admin.name;
+//     admin.email = req.body.email || admin.email;
+
+//     if (req.body.password) {
+//       admin.password = req.body.password;
+//     }
+
+//     const updatedAdminData = await admin.save();
+//     res.status(200).json({
+//       name: updatedAdminData.name,
+//       email: updatedAdminData.email,
+//     });
+//   } else {
+//     throw new NotFoundError();
+//   }
+// });
+
+const updateAdminProfile = asyncHandler(async (req, res) => {
+  const adminId = req.params.id; // Extracting ID from request params
+
+  const admin = await AdminModel.findById(adminId);
+
+  if (!admin) {
+    res.status(404);
+    throw new Error('admin not found');
+  }
+
+  // Only allow profile updates for the admin making the request or an admin
+   
+
+  // Update the admin with new data or keep the old data
+  admin.name = req.body.name || admin.name;
+  admin.email = req.body.email || admin.email;
+   
+
+  if (req.body.password) {
+    admin.password = req.body.password;
+  }
+
+  if (req.file) {
+    admin.profileImageName = req.file.filename || user.profileImageName;
+  }
+
+  const updatedUserData = await admin.save();
+
+  res.status(200).json({
+    id: updatedUserData._id,
+    name: updatedUserData.name,
+    email: updatedUserData.email,
+    
+    profileImageName: updatedUserData.profileImageName,
+  });
+});
+
+
 
 const getAllUsers = asyncHandler(async (req, res) => {
   const usersData = await fetchAllUsers();

@@ -24,4 +24,4 @@ const getServerHealth = (req, res) => {
   });
 
 }
-export { getServerHealth };
+module.exports  = { getServerHealth };

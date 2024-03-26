@@ -96,7 +96,7 @@ const authUser = asyncHandler(async (req, res) => {
     }
 
     // Generate JWT token
-    const token = generateAuthToken(user._id, user.email,user.name);
+    const token = generateAuthToken(   user._id, user.email );
     
     let registeredUserData = {
       _id: user._id,
@@ -106,9 +106,7 @@ const authUser = asyncHandler(async (req, res) => {
       token: `${token}`, // Include the token in the response
     };
 
-    if (user.profileImageName) {
-      registeredUserData.profileImageName = user.profileImageName;
-    }
+     
     res.status(201).json(registeredUserData);
      
   } else {
@@ -160,43 +158,57 @@ const authUser = asyncHandler(async (req, res) => {
 //     throw new BadRequestError("Invalid User data - User registration failed.");
 //   }
 // });
-
 const registerUser = asyncHandler(async (req, res) => {
-  const { name, email, password,role } = req.body;
+  /*
+     # Desc: Register new user
+     # Route: POST /api/v1/user/auth
+     # Access: PUBLIC
+    */
 
-  // Basic validation
-  if (!name || !email || !password) {
+  const { name, email, password ,role} = req.body;
+
+  if (!name || !email || !password||!role) {
     throw new BadRequestError("Please add all fields");
   }
-
-  // Check if user already exists
+  // Check if user already exist
   const userExists = await User.findOne({ email });
+
+  // If the user already exists, throw an error
   if (userExists) {
-    throw new BadRequestError("User already exists");
+
+    throw new BadRequestError("User already registered - Sign-Up Failed.");
   }
 
-  // Create user
+  // Store the user data to DB if the user dosen't exist already.
   const user = await User.create({
-    name,
-    email,
-    password,
-    role  
+   
+    name: name,
+    email: email,
+    password: password,
+    role:role
   });
 
   if (user) {
-    const token = generateAuthToken(user._id, user.email,user.name);
-    
-    res.status(201).json({
+    // If user is created, send response back with jwt token
+
+    const token = generateAuthToken(  user._id, user.email); // Middleware to Generate token and send it back in response object
+
+    const registeredUserData = {
       _id: user._id,
       name: user.name,
       email: user.email,
-      role: user.role,
+      role:user.role,
       token: `${token}`,
-    });
+    };
+
+    res.status(201).json(registeredUserData );
   } else {
-    throw new BadRequestError("Invalid user data");
+    // If user was NOT Created, send error back
+
+    throw new BadRequestError("Invalid User data - User registration failed.");
   }
 });
+
 // Logout user controller
 const logoutUser = asyncHandler(async (req, res) => {
   /*
@@ -211,64 +223,57 @@ const logoutUser = asyncHandler(async (req, res) => {
 });
 
 // Get user profile controller
+// Get user profile controller
 const getUserProfile = asyncHandler(async (req, res) => {
-  /*
-     # Desc: Get user profile
-     # Route: GET /api/v1/user/profile
-     # Access: PRIVATE
-    */
+  const userId = req.params.id; // Extracting ID from request params
+  const user = await User.findById(userId).select('-password'); // Exclude password from the result
 
-  const user = {
-    name: req.user.name,
-    email: req.user.email,
-    role: req.user.role,
-    profileImageName: req.user.profileImageName,
-  };
-
-  res.status(200).json({ user });
+  if (user) {
+    res.status(200).json(user);
+  } else {
+    res.status(404);
+    throw new Error('User not found');
+  }
 });
 
 // Update user profile controller
-
-
 const updateUserProfile = asyncHandler(async (req, res) => {
-  /*
-     # Desc: Update user profile
-     # Route: PUT /api/v1/user/profile
-     # Access: PRIVATE
-    */
+  const userId = req.params.id; // Extracting ID from request params
 
-  // Find the user data with the user id in the request object
-  const user = await User.findById(req.user._id);
+  const user = await User.findById(userId);
 
-  if (user) {
-    // Update the user with new data if found or keep the old data itself.
-    user.name = req.body.name || user.name;
-    user.email = req.body.email || user.email;
-    user.role = req.body.role || user.role;
-
-    // If request has a new password, update the user with the new password
-    if (req.body.password) {
-      user.password = req.body.password;
-    }
-
-    if (req.file) {
-      user.profileImageName = req.file.filename || user.profileImageName;
-    }
-
-    const updatedUserData = await user.save();
-
-    // Send the response with updated user data
-    res.status(200).json({
-      name: updatedUserData.name,
-      email: updatedUserData.email,
-      role: updatedUserData.role,
-      profileImageName: updatedUserData.profileImageName,
-    });
-  } else {
-    throw new BadRequestError("User not found.");
+  if (!user) {
+    res.status(404);
+    throw new Error('User not found');
   }
+
+  // Only allow profile updates for the user making the request or an admin
+   
+
+  // Update the user with new data or keep the old data
+  user.name = req.body.name || user.name;
+  user.email = req.body.email || user.email;
+  user.role = req.body.role || user.role;
+
+  if (req.body.password) {
+    user.password = req.body.password;
+  }
+
+  if (req.file) {
+    user.profileImageName = req.file.filename || user.profileImageName;
+  }
+
+  const updatedUserData = await user.save();
+
+  res.status(200).json({
+    id: updatedUserData._id,
+    name: updatedUserData.name,
+    email: updatedUserData.email,
+    role: updatedUserData.role,
+    profileImageName: updatedUserData.profileImageName,
+  });
 });
+
 
 module.exports = {
   authUser,

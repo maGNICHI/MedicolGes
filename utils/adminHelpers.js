@@ -2,7 +2,7 @@ const User = require("../models/userModel");
 
 const fetchAllUsers = async () => {
   try {
-    const users = await User.find({}, { name: 1, email: 1, role: 1 });
+    const users = await User.find({}, { name: 1, email: 1, role: 1 ,blocked:1 });
 
     return users;
   } catch (error) {
