@@ -37,7 +37,7 @@ const ProfileModal = ({ user, children }) => {
             fontWeight="bold"
             color="yellow.400"
           >
-            {user.name}
+            {user.username}
           </ModalHeader>
           <ModalCloseButton />
           <ModalBody
@@ -46,7 +46,7 @@ const ProfileModal = ({ user, children }) => {
             alignItems="center"
             justifyContent="space-between"
           >
-            <Avatar size="2xl" name={user.name} borderColor="black" borderWidth="2px" bg="yellow.400" color="black"/>
+            <Avatar size="2xl" name={user.username} borderColor="black" borderWidth="2px" bg="yellow.400" color="black"/>
             <Text
               fontSize={{ base: "28px", md: "30px" }} fontWeight="bold" color="yellow.400"
               fontFamily="Work sans"

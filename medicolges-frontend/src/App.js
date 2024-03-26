@@ -29,8 +29,8 @@ import ListProject from './UserInterface/Components/ProjectManagement/ListProjec
 import Add from './UserInterface/Components/ProjectManagement/AddProject/AddProject';
 import Consult from './UserInterface/Components/ProjectManagement/ConsultProject/ConsultProject';
 import AfficheForm from './Dashboard/Dashboard/compnents/AfficheForm';
-import ChatPage from "./UserInterface/Pages/ChatPage";
-
+//import ChatPage from "./UserInterface/Pages/ChatPage";
+const ChatPage = React.lazy(() => import("./UserInterface/Pages/ChatPage"));
 function App() {
  // const store = createStore(reducers, compose(applyMiddleware(thunk)));
 

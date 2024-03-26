@@ -97,6 +97,11 @@ function Navbar() {
           </a>
         </li>
         <li>
+          <a href="/chats" className="navbar-links">
+            Chat
+          </a>
+        </li>
+        <li>
           <a href="/login" className="navbar-links">
             Login
           </a>

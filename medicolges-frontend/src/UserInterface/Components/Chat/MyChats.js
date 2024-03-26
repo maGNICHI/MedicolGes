@@ -18,7 +18,7 @@ const MyChats = ({ fetchAgain }) => {
       const config = {
         headers: { Authorization: `Bearer ${user.token}`}
       };
-      const { data } = await axios.get("/api/chat", config);
+      const { data } = await axios.get("http://localhost:5000/api/chat", config);
       setChats(data);
     } catch (error) {
       console.log(error.message);
@@ -35,7 +35,7 @@ const MyChats = ({ fetchAgain }) => {
 
 
   useEffect(() => {
-    setLoggedUser(JSON.parse(localStorage.getItem("userInformation")));
+    setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
     fetchChats();
   }, [fetchAgain]);
 

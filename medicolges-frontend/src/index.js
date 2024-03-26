@@ -12,12 +12,14 @@ import { Provider } from 'react-redux';
 //const store = createStore(reducers, compose(applyMiddleware(thunk)));
 import store from './Redux/Store';
 //const store = createStore(reducers, compose(applyMiddleware(thunk)));
+
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
   <React.StrictMode>
     <ChakraProvider>
-    <BrowserRouter>
+    <BrowserRouter forceRefresh={true}>
       <ChatProvider>
         <App />
       </ChatProvider>

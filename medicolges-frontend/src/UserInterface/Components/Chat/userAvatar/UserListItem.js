@@ -22,9 +22,9 @@ const UserListItem = ({user, handleFunction }) => { //user !notLoggedIn //select
       mb={2}
       borderRadius="lg"
     >
-      <Avatar mr={2} size="sm" cursor="pointer" name={user.name}/>
+      <Avatar mr={2} size="sm" cursor="pointer" name={user.username}/>
       <Box>
-        <Text>{user.name}</Text>
+        <Text>{user.username}</Text>
         <Text fontSize="xs"> <b>Email : </b> {user.email} </Text>
       </Box>
     </Box>
