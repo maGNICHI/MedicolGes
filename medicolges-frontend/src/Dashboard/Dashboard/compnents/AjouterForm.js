@@ -91,7 +91,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
     console.log("Form data before saving:", formData); // Vérifiez les données du formulaire avant la sauvegarde
 
     createForm(formData);
-    navigate("/affucheyourReponse", { state: { formData } });
+    // navigate("/affucheyourReponse", { state: { formData } });
 
   };
   const createForm = async (formData) => {

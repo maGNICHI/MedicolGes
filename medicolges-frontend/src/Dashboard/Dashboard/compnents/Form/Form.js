@@ -175,15 +175,6 @@ const Form = () => {
   };
 
   const handleSubmit = async (e) => {
-    //  if (location.state && location.state.case === "update") {
-    //     // Si vous êtes en train de modifier un formulaire existant, naviguez vers ajouterForm avec les données du formulaire pour la mise à jour
-    //     navigate("/ajouterForm", { state: { formData: formData, case: "update" } });
-    // } else {
-    //     // Si vous créez un nouveau formulaire, naviguez vers ajouterForm sans les données du formulaire
-    //     navigate("/ajouterForm", { state: { case: "create" } });
-    //     // Ne créez un nouveau formulaire que si vous êtes en train de créer un nouveau formulaire
-    //     createForm();
-    // }
     console.log("cccccccccccccc:",formData._id); 
 
     e.preventDefault();

@@ -32,4 +32,14 @@ export const fetchFormById = async (formId) => {
         throw error; // Facultatif : propager l'erreur vers le code appelant
     }
 };
+//getAllReponse 
 
+export const fetchResponsesByFormId = async (formId) => {
+  try {
+      const response = await axios.get(`${url1}/responses/${formId}`);
+      return response.data;
+  } catch (error) {
+      console.error('Erreur lors de la récupération des réponses pour le formulaire:', error);
+      throw error;
+  }
+};

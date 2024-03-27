@@ -23,6 +23,8 @@ import {thunk }from 'redux-thunk';
 import { Provider } from 'react-redux';
 import Form from './Dashboard/FormGeneration/Form';
 import AfficheYourReponse from './Dashboard/Dashboard/compnents/AfficheYourReponse';
+import AfficheReponse from './Dashboard/Dashboard/compnents/AfficherReponse';
+import ReponseByForm from './Dashboard/Dashboard/compnents/ReponseByForm';
 
 function App() {
   const store = createStore(reducers, compose(applyMiddleware(thunk)));
@@ -46,8 +48,10 @@ function App() {
         <Route path="/afficheForm" element={<AfficheForm/>} />
         <Route path="/afficheId/:id" element={<AfficheFormById />} />
         <Route path="/affucheyourReponse" element={<AfficheYourReponse />} />
+        <Route path="/AfficheReponse" element={<AfficheReponse />} />
+        
+        <Route path="/reponseAll/:formId" element={<ReponseByForm />} />
 
-        AfficheYourReponse
 
         <Route path="*" element={<NotFound />} />
       </Routes>
