@@ -12,10 +12,10 @@ export default function HeaderDash({ toggleProfileSelect, toggleNotifSelect, tog
   const navigate = useNavigate();
   
     const handleClick = () => {
-      navigate("/admin");
+      navigate("/login");
       logout()}
       const handleClickk = () => {
-        navigate("/adminProfile");
+        navigate("/profile");
           }
   return (
     <nav className="topbar">

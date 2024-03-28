@@ -16,9 +16,25 @@ const LoginScreen = () => {
 
     const submitHandler = async (e) => {
         e.preventDefault();
-        await login(email, password);
-        navigate("/");
+        if (isLoading) return; // Prevent double submit
+    
+        const a = await login(email, password);
+    
+        // After login, you expect the user info to be in localStorage.
+        // So, you retrieve it and parse it to get the user object.
+        const user = JSON.parse(localStorage.getItem('userInfo'));
+    
+        if (a) {
+            if (                user.role === "super admin") {
+                navigate('/Dashboard');
+            } else {
+                navigate('/');
+            }
+        } else {
+            console.log('error');
+        }
     };
+    
 
     const togglePasswordVisibility = () => {
         setShowPassword(!showPassword);

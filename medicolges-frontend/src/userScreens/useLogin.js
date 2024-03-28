@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { useAuthContext } from './useAuthContext';
 import { toast } from 'react-toastify'; // Import toast
-
+import { Link, useNavigate, NavLink } from "react-router-dom";
 export const useLogin = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false); // Change to false initially
   const { dispatch } = useAuthContext();
-  
+  const navigate = useNavigate();
   const login = async (email, password) => {
     setIsLoading(true);
     setError(null);
@@ -28,13 +28,18 @@ export const useLogin = () => {
         } else {
           // Display other errors as toast as well
           toast.error(json.message || json.error);
-        }
-      } else {
+        } 
+      } else if(json.role=='super admin'){
+        localStorage.setItem('userInfo', JSON.stringify(json));
+        dispatch({type: 'LOGIN', payload: json});
+        setIsLoading(false);
+        navigate('/Dashboard');
+      } else { 
         // Proceed with login if not blocked
         localStorage.setItem('userInfo', JSON.stringify(json));
         dispatch({type: 'LOGIN', payload: json});
         setIsLoading(false);
-      }
+      } 
     } catch (error) {
       setIsLoading(false);
       setError("This account is blocked. Please contact support to verify it  ");
