@@ -13,6 +13,11 @@ const messageSchema = mongoose.Schema(
       type:Buffer,
       default:null
    }
+   //,
+  //  photo: {
+  //    type: "String",
+  //    default : ''
+  //    },
     /* readBy: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }], */
   },
   { timestamps: true }

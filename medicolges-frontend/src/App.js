@@ -52,7 +52,7 @@ function App() {
         <Route path="/organizationFront" element={<Organization />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/feedbackList" element={<FeedbackList />} />
-        <Route path="/" element={<Home />} />
+        <Route path="/home2" element={<Home />} />
         <Route path="/legal" element={<Legal />} />
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/ajouterForm" element={<AjouterForm />} />

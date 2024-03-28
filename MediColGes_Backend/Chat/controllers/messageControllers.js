@@ -3,6 +3,7 @@ const Message = require("../models/messageModel");
 const User = require("../../UserManagement/Model/User");
 const Chat = require("../models/chatModel");
 const {Buffer}=require('buffer');
+//const { uploads } = require('../../cloudinary');
 const allMessages = asyncHandler(async (req, res) => {
   try {
     //:chatId in routes //request params
@@ -28,13 +29,19 @@ const sendMessage = asyncHandler(async (req, res) => {
     console.log("Invalid data passed into request");
     return res.sendStatus(400);
   }
+  // let photoUrl = "";
+  // if (req.files['photo']) {
+  //   const photoPath = await uploads(req.files['photo'][0].path);
+  //   photoUrl = photoPath.url;
+  // }
   //schema 
   var newMessage = {
     sender: req.user._id,
     content: content,
     chat: chatId,
     isMedia,
-    buffer:b?b:null
+    buffer:b?b:null,
+    //photo:photoUrl
   };
 
   try {

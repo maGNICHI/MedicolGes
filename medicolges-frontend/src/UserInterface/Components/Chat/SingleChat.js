@@ -18,6 +18,7 @@ import { BsMicFill } from 'react-icons/bs';
 import SendAudioModal from "./miscellaneous/SendAudioModal";
 import io from "socket.io-client";
 import Robo from '../../Assets/robot.gif';
+
 const ENDPOINT = "http://localhost:5000"; //development
 var socket, selectedChatCompare;
 
@@ -28,7 +29,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [socketConnected, setSocketConnected] = useState(false);
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
+  //const [file, setFile] = useState(null);
   const toast = useToast();
+  
   const { selectedChat, setSelectedChat, user, notification, setNotification } = useContext(ChatContext);
 
   const defaultOptions = {
@@ -39,7 +42,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       preserveAspectRatio: "xMidYMid slice",
     },
   };
-
+  // const handleFileChange = (e) => {
+  //   setFile(e.target.files[0]);
+  // };
   const fetchMessages = async () => {
     if (!selectedChat) return;
     try {
@@ -55,6 +60,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       setLoading(false);
       console.log(data, "fetched messsages of the selected chat data");
       socket.emit("join chat", selectedChat._id);
+      console.log(data);
     } catch (error) {
       console.log(error.message);
       toast({
@@ -248,6 +254,20 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                     Send
                   </Button>
                 </SendAudioModal>
+                {/* <div className="custom-file">
+                        <input
+                          type="file"
+                          className="custom-file-input"
+                          id="customFile"
+                          onChange={handleFileChange}
+                        />
+                        <label
+                          className="custom-file-label"
+                          htmlFor="customFile"
+                        >
+                          Upload image
+                        </label>
+                      </div> */}
               </div>
             </FormControl>
           </Box>

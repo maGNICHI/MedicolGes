@@ -9,9 +9,10 @@ import {
   isSameUser,
 } from "../../config/ChatLogics";
 import ChatContext from "../../Context/chat-context";
+import { formatDate } from "../Chat/util/DateUtil";
 
 const ScrollableChat = ({ messages }) => {
-
+  
   const { user } =  useContext(ChatContext);
   const [blobUrls, setBlobUrls] = useState([]);
   useEffect(() => {
@@ -64,14 +65,22 @@ const ScrollableChat = ({ messages }) => {
             >
              {
                 !message.isMedia ?
-                  (<span>{message.content}</span>) :
+                  ( <>
+                  <span>{message.content}</span>
+                  
+                </>) :
                   (
                     <audio controls>
                       <source src={blobUrls[i]} type="audio/wav" />
                     </audio>
                   )
               }
+              {/* <span className="message-item-time-text">{formatDate(message.updatedAt)}</span> */}
+              <span style={{ marginLeft: "10px", fontSize: "12px", color: "gray" }}>
+                {formatDate(message.createdAt)}
+              </span>
             </span>
+            
           </div>
         ))}
         <div id='only-audio'></div>

@@ -14,7 +14,7 @@ const ChatProvider = (props) => {
     const userInformation = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInformation);
 
-    if (!userInformation) navigate("/login");
+    if (userInformation) navigate("/chats");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
