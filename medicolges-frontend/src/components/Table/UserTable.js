@@ -112,13 +112,17 @@ const CheckTable = () => {
             <TableRow>
           
               <TableCell>username</TableCell>
+              <TableCell>gender</TableCell>
               <TableCell>first Name</TableCell>
               <TableCell>last Name</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Role</TableCell>
+              
+              <TableCell>pic</TableCell>
+              
               <TableCell>Account status</TableCell>
               <TableCell>Actions</TableCell>
-              
+              <TableCell>certification</TableCell>
             </TableRow>
           </TableHead>
           
@@ -130,12 +134,15 @@ const CheckTable = () => {
       return (
         <TableRow hover key={user._id}>
           <TableCell>{`${userNumber}. ${user.username}`}</TableCell>
+          <TableCell>{user.gender}</TableCell>
           <TableCell>{user.firstName}</TableCell>
           <TableCell>{user.lastName}</TableCell>
           
           <TableCell>{user.email}</TableCell>
           <TableCell>{user.role}</TableCell>
-          <TableCell>{user.role}</TableCell>
+          <TableCell>{user.pic}</TableCell>
+          
+        
           <TableCell>{user.blocked ? "Blocked" : "Active"}</TableCell>
           <TableCell>
             <Button
@@ -156,6 +163,7 @@ const CheckTable = () => {
               Unblock
             </Button>
           </TableCell>
+          <TableCell>{user.certification}</TableCell>
         </TableRow>
       );
     })}
