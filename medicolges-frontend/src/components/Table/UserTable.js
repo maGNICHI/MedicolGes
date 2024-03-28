@@ -80,6 +80,21 @@ const CheckTable = () => {
     }
   };
   
+
+  const handleDelete = async (_id) => {
+    try {
+        // Use the DELETE method and include the _id in the URL
+        await axios.post(`http://localhost:5000/api/user/delete-user/${_id}`);
+        fetchUsers(); // Refetch users to update the UI after deletion
+        toast.warning('The user is deleted :('); // Display success toast
+    } catch (error) {
+        console.error('Error deleting user:', error);
+        toast.error('Failed to delete user'); // Display error toast
+    }
+};
+
+
+
   const handleUnblockUser = async (_id) => {
     try {
       await axios.patch('http://localhost:5000/api/user/unblock-user', { _id });
@@ -119,7 +134,7 @@ const CheckTable = () => {
               <TableCell>Role</TableCell>
               
               <TableCell>pic</TableCell>
-              
+              <TableCell>deleted</TableCell>
               <TableCell>Account status</TableCell>
               <TableCell>Actions</TableCell>
               <TableCell>certification</TableCell>
@@ -141,9 +156,17 @@ const CheckTable = () => {
           <TableCell>{user.email}</TableCell>
           <TableCell>{user.role}</TableCell>
           <TableCell>{user.pic}</TableCell>
-          
-        
+          <TableCell>{user.isDeleted ? "Yes" : "No"}</TableCell>
+          <Button
+              onClick={() => handleDelete(user._id)}
+              variant="outlined"
+              color="error"
+               
+            >
+            Delete
+            </Button>
           <TableCell>{user.blocked ? "Blocked" : "Active"}</TableCell>
+          
           <TableCell>
             <Button
               onClick={() => handleBlockUser(user._id)}
