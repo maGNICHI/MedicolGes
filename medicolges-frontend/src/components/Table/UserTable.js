@@ -126,18 +126,19 @@ const CheckTable = () => {
           <TableHead>
             <TableRow>
           
-              <TableCell>username</TableCell>
-              <TableCell>gender</TableCell>
+              <TableCell>UserName</TableCell>
+              <TableCell>Gender</TableCell>
               <TableCell>first Name</TableCell>
               <TableCell>last Name</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Role</TableCell>
               
-              <TableCell>pic</TableCell>
-              <TableCell>deleted</TableCell>
+              <TableCell>Pic</TableCell>
+              <TableCell>Deleted</TableCell>
+              <TableCell> delete Action</TableCell>
               <TableCell>Account status</TableCell>
-              <TableCell>Actions</TableCell>
-              <TableCell>certification</TableCell>
+              <TableCell>Block Actions</TableCell>
+              <TableCell>Certification</TableCell>
             </TableRow>
           </TableHead>
           
