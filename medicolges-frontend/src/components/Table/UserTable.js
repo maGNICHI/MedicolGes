@@ -32,7 +32,7 @@ const CheckTable = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.post('http://localhost:5000/api/v1/admin/get-users');
+        const response = await axios.post('http://localhost:5000/api/user/get-users');
         setUsersData(response.data.usersData);
         setFilteredUsers(response.data.usersData);
       } catch (error) {
@@ -53,7 +53,7 @@ const CheckTable = () => {
   }, [searchQuery, usersData]);
   const fetchUsers = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/v1/admin/get-users');
+      const response = await axios.post('http://localhost:5000/api/user/get-users');
       setUsersData(response.data.usersData); // Update based on your actual API response
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -69,9 +69,9 @@ const CheckTable = () => {
     setPage(0);
   };
 
-  const handleBlockUser = async (userId) => {
+  const handleBlockUser = async (_id) => {
     try {
-      await axios.patch('http://localhost:5000/api/v1/admin/block-user', { userId });
+      await axios.patch('http://localhost:5000/api/user/block-user', { _id });
       fetchUsers(); // Refetch users to update the UI after blocking
       toast.warning('The user is blocked :('); // Display success toast
     } catch (error) {
@@ -80,9 +80,9 @@ const CheckTable = () => {
     }
   };
   
-  const handleUnblockUser = async (userId) => {
+  const handleUnblockUser = async (_id) => {
     try {
-      await axios.patch('http://localhost:5000/api/v1/admin/unblock-user', { userId });
+      await axios.patch('http://localhost:5000/api/user/unblock-user', { _id });
       fetchUsers(); // Refetch users to update the UI after unblocking
       toast.success('The user is unblocked :)'); // Display success toast
     } catch (error) {
@@ -111,7 +111,9 @@ const CheckTable = () => {
           <TableHead>
             <TableRow>
           
-              <TableCell>Name</TableCell>
+              <TableCell>username</TableCell>
+              <TableCell>first Name</TableCell>
+              <TableCell>last Name</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Role</TableCell>
               <TableCell>Account status</TableCell>
@@ -127,8 +129,12 @@ const CheckTable = () => {
       const userNumber = page * rowsPerPage + index + 1; // Calculate the user number
       return (
         <TableRow hover key={user._id}>
-          <TableCell>{`${userNumber}. ${user.name}`}</TableCell>
+          <TableCell>{`${userNumber}. ${user.username}`}</TableCell>
+          <TableCell>{user.firstName}</TableCell>
+          <TableCell>{user.lastName}</TableCell>
+          
           <TableCell>{user.email}</TableCell>
+          <TableCell>{user.role}</TableCell>
           <TableCell>{user.role}</TableCell>
           <TableCell>{user.blocked ? "Blocked" : "Active"}</TableCell>
           <TableCell>

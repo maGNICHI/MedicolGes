@@ -28,7 +28,7 @@ const AdminProfileScreen = () => {
     const fetchAdminDetails = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:5000/api/v1/admin/profile/${adminId}`);
+        const response = await axios.get(`http://localhost:5000/api/user/profile/${adminId}`);
         setAdminDetails({ ...response.data, password: '' }); // Assuming response contains admin data
       } catch (error) {
         toast.error("Failed to fetch profile: " + error.toString());
@@ -56,7 +56,7 @@ const AdminProfileScreen = () => {
 
     try {
       const { _id, ...updateData } = adminDetails;
-      await axios.put(`http://localhost:5000/api/v1/admin/profile/${adminId}`, updateData, {
+      await axios.put(`http://localhost:5000/api/user/profile/${adminId}`, updateData, {
         headers: { 'Content-Type': 'application/json' },
       });
 
