@@ -1,0 +1,106 @@
+.topbar {
+    display: flex;
+    align-items: center;
+    background-color: #ffffffa9;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 50px;
+  }
+  
+  .menu-icon {
+    margin-right: 20px;
+  }
+  
+  .nav-link {
+    margin-right: 20px;
+    margin-top: 20px;
+    text-decoration: none;
+    color: #333333;
+    font-size: 20px;
+    font-family: 'Work Sans', sans-serif;
+    font-weight: 900;
+  }
+  
+  .search-form {
+    margin-right: auto;
+  }
+  
+  .form-input {
+    position: relative;
+  }
+  
+  input[type="search"] {
+    padding: 8px 30px;
+    border: none;
+    border-radius: 20px;
+    outline: none;
+  }
+  
+  .search-btn {
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+  }
+  
+  .notification {
+    margin-left: 20px;
+    position: relative;
+  }
+  
+  .icon-link {
+    display: flex;
+    align-items: center;
+  }
+  
+  .num {
+    position: relative;
+    top: 0;
+    right: 0;
+    margin-left: -10px; /* Adjust this to control the space between the icon and the number */
+    background-color: #ff0000;
+    color: #ffffff;
+    font-size: 14px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .profile {
+    margin-left: 20px;
+    position: relative;
+  }
+  
+  .profile img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }
+  
+  /* Media Query for smaller screens */
+  @media (max-width: 768px) {
+    .topbar {
+      padding: 10px;
+    }
+  
+    .nav-link {
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  
+    .search-form {
+      display: none;
+    }
+  
+    .profile img {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  
