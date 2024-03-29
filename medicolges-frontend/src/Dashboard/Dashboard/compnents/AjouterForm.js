@@ -39,7 +39,10 @@ import { FaAd, FaAngleDown, FaArchive, FaSave } from "react-icons/fa";
 import { addForm ,sendResponse} from "../compnents/api/index";
 import Switch from "@mui/material/Switch";
 import { useNavigate } from "react-router-dom";
-
+import axios from 'axios';
+  //image
+  const preset_key="cw1paxgz";
+  const cloud_name="dwkto7nzl";
 const AjouterForm = () => {
   const [formData, setFormData] = useState({id:"",name: "", questions: [] });
   console.log("formdata from ajouter form",formData._id)
@@ -50,6 +53,10 @@ const AjouterForm = () => {
   const location = useLocation();
   const [canEditQuestions, setcanEditQuestions] = useState(true);
   const navigate = useNavigate();
+
+  //ajouter
+  const[image, setImage]=useState();
+
   //forUdpate
   const [questions, setQuestions] = useState([]);
 //ajouter visibilite 
@@ -237,17 +244,26 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
         }));
         break;
       case "file":
-        const fileName = responseValue.name; // Récupérer le nom du fichier
-        setFormData((prev) => ({
-          ...prev,
-          questions: prev.questions.map((obj) => {
-            if (obj.id === id) {
-              return { ...obj, responseValue: fileName };
-            }
-            return obj;
-          }),
-        }));
-        break;
+        const formData = new FormData();
+  formData.append('file', responseValue);
+  formData.append('upload_preset', preset_key);
+  axios.post(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, formData)
+    .then(res => {
+      const imageUrl = res.data.secure_url;
+      setFormData(prev => ({
+        ...prev,
+        questions: prev.questions.map(obj => {
+          if (obj.id === id) {
+            return { ...obj, responseValue: imageUrl };
+          }
+          return obj;
+        }),
+      }));
+      setImage(imageUrl);
+    })
+    .catch(err => console.log(err));
+  break;
+        // break;
       case "number":
         // Mise à jour de la réponse pour le type 'number'
         setFormData((prev) => ({
@@ -339,6 +355,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
       [questionId]: option,
     }));
   };
+ 
   const handleOptionInputChange = (questionId, optionIndex, value) => {
     const updatedOptions = formData.questions.map((question) => {
       if (question.id === questionId) {
@@ -515,11 +532,14 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
           <div style={{ marginLeft: "-436px" }}>
             <input
               type="file"
-              accept=".pdf, .mp4, .avi, .mov, .wmv, .flv, .mkv"
+              accept=".pdf, .mp4, .avi, .mov, .wmv, .flv, .mkv .jpg "
               onChange={(event) =>
                 handleResponse(question.id, event.target.files[0], "file")
               }
+
             />
+      {image && <img src={image}  className="w-40 h-40" style={{ marginLeft: '557px', marginTop: '19px' }} alt="Uploaded" />}
+
           </div>
         );
       case "time":

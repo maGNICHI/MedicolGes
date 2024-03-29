@@ -182,13 +182,17 @@ const Form = () => {
         try {
           console.log("Case:", location.state); 
           if (formData._id  !== "") {
-            // If updating an existing form
-            await updateForm();
-            navigate("/afficheForm");  // Navigate back to afficheForm
-          } else {
+            await createForm(); // Create a new form
+            navigate("/ajouterForm", { state: { formData, case: "create" } });
+            // // If updating an existing form
+            // await updateForm();
+            // navigate("/afficheForm");  // Navigate back to afficheForm
+          } else if(formData._id  != "null") {
+                 await updateForm();
+            navigate("/afficheForm");
               // If you are creating a new form
-              await createForm(); // Create a new form
-              navigate("/ajouterForm", { state: { formData, case: "create" } }); // Navigate to ajouterForm
+              // await createForm(); // Create a new form
+              // navigate("/ajouterForm", { state: { formData, case: "create" } }); // Navigate to ajouterForm
           }
       } catch (error) {
           console.error("Error handling form submission:", error);

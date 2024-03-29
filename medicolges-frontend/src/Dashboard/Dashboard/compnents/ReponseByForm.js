@@ -241,7 +241,23 @@ function ReponseByForm() {
                         {response.responses[qIndex] && (
                           <>
                             <strong>Response:</strong>{' '}
-                            {response.responses[qIndex].responseValue}
+                            {/* //ajouter */}
+                        {question.questionType === "file" && response.responses[qIndex].responseValue ? (
+                              // Check if responseValue is a valid image URL
+                              Array.isArray(response.responses[qIndex].responseValue) ? (
+                                response.responses[qIndex].responseValue.map((imageUrl, idx) => (
+                                  <div key={idx}>
+                                    <img src={imageUrl} alt={`Response Image ${idx}`} style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                                    <br />
+                                  </div>
+                                ))
+                              ) : (
+                                <img src={response.responses[qIndex].responseValue} alt="Response Image" style={{ maxWidth: '100%', maxHeight: '200px' }} />
+                              )
+                            ) :(
+                              response.responses[qIndex].responseValue
+                            )}
+                            {/* {response.responses[qIndex].responseValue} */}
                             <br />
                           </>
                         )}
