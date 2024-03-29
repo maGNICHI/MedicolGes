@@ -10,25 +10,14 @@ import { Flex } from '@chakra-ui/react';
 const ChatPage = () => {
   const [fetchAgain, setFetchAgain] = useState(false);
   const { user } = useContext(ChatContext);
-  //************** */
-  const navigate = useNavigate(); // Use useNavigate() here
 
-  // Redirect if user is not logged in
-  if (!user) {
-    navigate("/login");
-    return null; // or render a loading indicator
-  }
-  /**** */
+  // const navigate = useNavigate(); // Use useNavigate() here
+
+  // if (!user) {
+  //   navigate("/");
+  //   return null; // or render a loading indicator
+  // }
   return (
-    // <div style={{ width: "100%" }}>
-     
-    //       {user && <SideDrawer />}
-    //       <Box d="flex" justifyContent="space-between" width="100%" h="90.5vh" p="12px">
-    //         {user && <MyChats fetchAgain={fetchAgain} />}
-    //         {user && ( <ChatBox fetchAgain={fetchAgain} setFetchAgain={setFetchAgain} />)}
-    //       </Box>
-      
-    // </div>
     <div style={{ width: "100%" }}>
       {user && <SideDrawer />}
       <Flex
