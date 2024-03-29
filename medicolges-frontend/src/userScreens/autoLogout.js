@@ -2,7 +2,8 @@ import React, { useEffect, useContext } from 'react';
 import { useNavigate ,useLocation } from 'react-router-dom';
 import { AuthContext } from './AuthContext'; // Adjust the import path as necessary
 
-const TIMEOUT = 180000; // 3 minutes
+// const TIMEOUT = 180000; // 3 minutes
+const TIMEOUT = 1000 * 60 * 60 * 2; // 2 hours
 
 
 const AutoLogout = () => {

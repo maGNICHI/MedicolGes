@@ -27,7 +27,7 @@ const CheckTable = () => {
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -106,99 +106,73 @@ const CheckTable = () => {
     }
   };
   return (
-    
-     <Paper sx={{
+    <Paper sx={{
       width: '100%',
       overflow: 'hidden',
-      backgroundColor: '#f5f5f5' // Custom background color
+      backgroundColor: '#f5f5f5', // Custom background color
+      marginBottom: 2, // Adjust spacing as needed
     }}>
-       <TextField
+      {/* Search Field */}
+      <TextField
         fullWidth
-        label="Search by name , email or role"
+        label="Search by name, email, or role"
         variant="outlined"
         margin="normal"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
         sx={{ mb: 2, mx: 2 }}
       />
+
+      {/* Users Table */}
       <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
             <TableRow>
-          
-              <TableCell>UserName</TableCell>
               <TableCell>Gender</TableCell>
-              <TableCell>first Name</TableCell>
-              <TableCell>last Name</TableCell>
+              <TableCell>UserName</TableCell>
+              <TableCell>First Name</TableCell>
+              <TableCell>Last Name</TableCell>
               <TableCell>Email</TableCell>
               <TableCell>Role</TableCell>
-              
-              <TableCell>Pic</TableCell>
+              {/* <TableCell>Pic</TableCell> */}
               <TableCell>Deleted</TableCell>
-              <TableCell> delete Action</TableCell>
-              <TableCell>Account status</TableCell>
-              <TableCell>Block Actions</TableCell>
-              <TableCell>Certification</TableCell>
+              <TableCell>Account Status</TableCell>
+              {/* <TableCell>Certification</TableCell> */}
             </TableRow>
           </TableHead>
-          
           <TableBody>
-  {filteredUsers
-    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    .map((user, index) => {
-      const userNumber = page * rowsPerPage + index + 1; // Calculate the user number
-      return (
-        <TableRow hover key={user._id}>
-          <TableCell>{`${userNumber}. ${user.username}`}</TableCell>
-          <TableCell>{user.gender}</TableCell>
-          <TableCell>{user.firstName}</TableCell>
-          <TableCell>{user.lastName}</TableCell>
-          
-          <TableCell>{user.email}</TableCell>
-          <TableCell>{user.role}</TableCell>
-          <TableCell>{user.pic}</TableCell>
-          <TableCell>{user.isDeleted ? "Yes" : "No"}</TableCell>
-          <Button
-              onClick={() => handleDelete(user._id)}
-              variant="outlined"
-              color="error"
-               
-            >
-            Delete
-            </Button>
-          <TableCell>{user.blocked ? "Blocked" : "Active"}</TableCell>
-          
-          <TableCell>
-            <Button
-              onClick={() => handleBlockUser(user._id)}
-              variant="outlined"
-              color="error"
-              startIcon={<FaBan />}
-            >
-              Block
-            </Button>
-            <Button
-              onClick={() => handleUnblockUser(user._id)}
-              variant="outlined"
-              color="success"
-              startIcon={<FaCheck />}
-              sx={{ ml: 2 }}
-            >
-              Unblock
-            </Button>
-          </TableCell>
-          <TableCell>{user.certification}</TableCell>
-        </TableRow>
-      );
-    })}
-</TableBody>
-
+            {filteredUsers
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((user, index) => (
+                <TableRow hover key={user._id}>
+                  <TableCell>{index + 1 + page * rowsPerPage}. {user.gender}</TableCell>
+                  <TableCell>{user.username}</TableCell>
+                  <TableCell>{user.firstName}</TableCell>
+                  <TableCell>{user.lastName}</TableCell>
+                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.role}</TableCell>
+                  {/* <TableCell>{user.pic}</TableCell> */}
+                  <TableCell>
+                    {user.isDeleted ? "Yes" : "No"}
+                    <Button onClick={() => handleDelete(user._id)} variant="outlined" color="error">Delete</Button>
+                  </TableCell>
+                  <TableCell>
+                    {user.blocked ? "Blocked" : "Active"}
+                    <Button onClick={() => handleBlockUser(user._id)} variant="outlined" color="error" sx={{ ml: 1 }}>Block</Button>
+                    <Button onClick={() => handleUnblockUser(user._id)} variant="outlined" color="success" sx={{ ml: 2 }}>Unblock</Button>
+                  </TableCell>
+                  <TableCell>{/* Certification info could go here */}</TableCell>
+                </TableRow>
+              ))}
+          </TableBody>
         </Table>
       </TableContainer>
+
+      {/* Pagination */}
       <TablePagination
-        rowsPerPageOptions={[5, 10, 20, 50, 100, 200]}
+        rowsPerPageOptions={[ 10, 20, 50, 100, 200,1000]}
         component="div"
-        count={usersData.length}
+        count={filteredUsers.length} // Ensure you're counting the filtered users, not the total dataset if filtering is applied
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}

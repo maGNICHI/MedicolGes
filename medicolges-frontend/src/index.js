@@ -72,6 +72,7 @@ import SignupScreen from "./userScreens/SignupScreen.js";
 import AdminSignup from './adminScreens/SignupScreen.js';  
  import AdminLoginScreen from './adminScreens/LoginScreen.js';
 import ProfileScreen from  './userScreens/profile/profile.js';
+
 //const store = createStore(reducers, compose(applyMiddleware(thunk)));
 import AdminProfileScreen from  './adminScreens/profile/profile.js';
 const router = createBrowserRouter(
@@ -84,6 +85,7 @@ const router = createBrowserRouter(
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/signup" element={<SignupScreen />} />
       <Route path="/Profile" element={<ProfileScreen />} />
+      <Route path="/superAdminprofile" element={<AdminProfileScreen />} />
     <Route index={true} path="/home" element={<HomePage />} />
    
     <Route path="/newadmin" element={<AdminSignup />} />

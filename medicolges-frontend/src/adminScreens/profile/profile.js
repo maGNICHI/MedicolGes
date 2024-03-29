@@ -10,7 +10,10 @@ const AdminProfileScreen = () => {
   const [loading, setLoading] = useState(false);
   const [adminDetails, setAdminDetails] = useState({
     _id: '',
-    name: '',
+
+    username: '',
+    firstName:'',
+    lastName:'',
     email: '',
     password: '',
      
@@ -18,7 +21,7 @@ const AdminProfileScreen = () => {
 
   useEffect(() => {
     // Assuming you have a similar setup for admin authentication
-    const admin = JSON.parse(localStorage.getItem('user'));
+    const admin = JSON.parse(localStorage.getItem('userInfo'));
     const adminId = admin?._id;
     if (!adminId) {
       toast.error("Admin ID is missing. Please log in again.");
@@ -81,7 +84,7 @@ const AdminProfileScreen = () => {
             <Card.Img variant="top" src={adminDetails.picture || '/avatar.jpg'} />
             <Card.Body>
             <Card.Text>Welcome !</Card.Text>
-              <Card.Title>{adminDetails.name}</Card.Title>
+              <Card.Title>{adminDetails.username}</Card.Title>
               
               {/* Implement functionality to change picture if necessary */}
             </Card.Body>
@@ -91,15 +94,41 @@ const AdminProfileScreen = () => {
           <Card className="mb-3">
             <Card.Body>
               <Card.Title>Personal Information</Card.Title>
-              <Form.Group controlId="name">
-                <Form.Label>Name</Form.Label>
+              <Form.Group controlId="username">
+                <Form.Label>user name</Form.Label>
                 <InputGroup>
                   <InputGroup.Text><FaUser /></InputGroup.Text>
                   <Form.Control
                     type="text"
-                    name="name"
-                    placeholder="Name"
-                    value={adminDetails.name}
+                    name="username"
+                    placeholder="username"
+                    value={adminDetails.username}
+                    onChange={handleInputChange}
+                  />
+                </InputGroup>
+              </Form.Group>
+              <Form.Group controlId="firstName">
+                <Form.Label>first Name</Form.Label>
+                <InputGroup>
+                  <InputGroup.Text><FaUser /></InputGroup.Text>
+                  <Form.Control
+                    type="text"
+                    name="firstName"
+                    placeholder="firstName"
+                    value={adminDetails.firstName}
+                    onChange={handleInputChange}
+                  />
+                </InputGroup>
+              </Form.Group>
+              <Form.Group controlId="lastName">
+                <Form.Label>last Name</Form.Label>
+                <InputGroup>
+                  <InputGroup.Text><FaUser /></InputGroup.Text>
+                  <Form.Control
+                    type="text"
+                    name="lastName"
+                    placeholder="lastName"
+                    value={adminDetails.lastName}
                     onChange={handleInputChange}
                   />
                 </InputGroup>

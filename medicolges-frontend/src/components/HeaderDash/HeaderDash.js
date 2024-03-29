@@ -15,7 +15,7 @@ export default function HeaderDash({ toggleProfileSelect, toggleNotifSelect, tog
       navigate("/login");
       logout()}
       const handleClickk = () => {
-        navigate("/profile");
+        navigate("/superAdminprofile");
           }
   return (
     <nav className="topbar">
