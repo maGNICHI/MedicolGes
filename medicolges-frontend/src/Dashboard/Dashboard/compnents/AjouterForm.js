@@ -96,7 +96,6 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
   };
   const createForm = async (formData) => {
     console.log("Form data to save:", formData);
-
     console.log("ggggggggggggggggggggg", formData.responseValue);
     // try {
     //   console.log("Form data to save:", formData); // Vérifier les données du formulaire avant de les envoyer
@@ -121,7 +120,8 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
         // Map form data to an array of response objects
         const responses = formData.questions.map(question => ({
           questionId: question.id,
-          responseValue: question.responseValue
+          responseValue: question.responseValue,
+          // userId: '66033c44e4bf89819130ebce'
       }));
       await sendResponse(formData._id, responses);
 
@@ -130,14 +130,6 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
       console.log("Erreur lors de l'envoi des réponses: ", err);
       throw err; // Facultatif : propager l'erreur vers le code appelant
   }
-
-
-
-
-
-
-
-
     // addForm({
     //   name: formData.name,
     //   questions: JSON.stringify(formData.questions),
@@ -520,7 +512,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
         );
       case "file":
         return (
-          <div style={{ marginLeft: "-1208px" }}>
+          <div style={{ marginLeft: "-436px" }}>
             <input
               type="file"
               accept=".pdf, .mp4, .avi, .mov, .wmv, .flv, .mkv"
