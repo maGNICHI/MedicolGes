@@ -16,14 +16,12 @@ const SignupScreen = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState("");
   const navigate = useNavigate();
-  const [certification, setCertification] = useState("");
+  
   const [showCertification, setShowCertification] = useState(false);
-  const [certificate, setCertificate] = useState(null);
+  const [certification, setCertification] = useState("");
+  //const [certificate, setCertificate] = useState(null);
   const [avatar, setAvatar] = useState(null);
-  const handleCertificationChange = (e) => {
-    const file = e.target.files[0];
-    setCertification(file);
-  };
+ 
   const handleGenderChange = (e) => {
     setGender(e.target.value);
     
@@ -37,11 +35,11 @@ const SignupScreen = () => {
   };
   const Role = {
     
-    Patient: 'Patient',
-    Participative_Member: 'participative_member',
-    Coordinator_Member: 'Coordinator_Member',
-    Profesionnal: 'Professionnal',
-    initiator:"initiator"
+    "Patient": 'Patient',
+    "Participative_Member": 'participative_member',
+    "Coordinator_Member": 'Coordinator_Member',
+    "Professionnal (account must be veryfied after signup)": 'Professionnal',
+    "initiator (account must be veryfied after signup)" :"initiator"
   };
    
   const { signup, error, isLoading } = useSignup();
@@ -95,8 +93,12 @@ const SignupScreen = () => {
     }
   };
    
+  // const handleCertificateChange = (e) => {
+  //   setCertificate(e.target.files[0]); // Set the selected file
+  // };
   const handleCertificateChange = (e) => {
-    setCertificate(e.target.files[0]); // Set the selected file
+    const file = e.target.files[0];
+    setCertification(file);
   };
   return (
     <Container
@@ -304,12 +306,12 @@ const SignupScreen = () => {
 </Form.Select>
                 </Form.Group>
 
-                {role === "Professionnal" && (
+                { (role === "Professionnal"   || role === "initiator")&& (
 
    
               <Form.Group className="mb-3" controlId="certification"> 
-                <Form.Label>Upload Certification</Form.Label>
-                value={certification}
+                <Form.Label>Please upload Your Certification to be verified</Form.Label>
+                 
                 <Form.Control type="file" onChange={handleCertificateChange} />
               </Form.Group>
             )}

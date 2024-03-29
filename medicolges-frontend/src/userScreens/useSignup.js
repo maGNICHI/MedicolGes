@@ -8,8 +8,8 @@ export const useSignup = () => {
   
   const signup = async ( gender,username,firstName,lastName, email, password, role,certification) => {
     setIsLoading(true)
-    setError(null)
-    console.log(JSON.stringify({ gender, username, firstName, lastName, email, password, role ,certification}));
+    setError(null)  
+    console.log(JSON.stringify({ gender, username, firstName, lastName, email , role ,certification}));
   
     const response = await fetch('http://localhost:5000/api/user', {
       method: 'POST',

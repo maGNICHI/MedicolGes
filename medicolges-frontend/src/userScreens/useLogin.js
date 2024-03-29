@@ -24,7 +24,7 @@ export const useLogin = () => {
         setError(json.message || json.error);
         if (json.blocked) {
           // If the user is blocked, display a specific message
-          toast.error("This account has been blocked. Please contact support.");
+          toast.error("This account is blocked. Please contact support.");
         } else {
           // Display other errors as toast as well
           toast.error(json.message || json.error);

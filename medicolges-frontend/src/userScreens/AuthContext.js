@@ -10,7 +10,7 @@ export const authReducer = (state, action) => {
         return { user: action.payload };
       } else {
         // Optionally, handle the case for 'Professional' users differently
-        console.log('Login attempt by Professional user blocked please contact admin to verify it.');
+        console.log('Login attempts by user with the role of Professional  or Initiator that are unverified will be put on hold until an administrator verifies them..');
         return state; // Return the current state without changes
       }
     case 'LOGOUT':

@@ -25,11 +25,9 @@ const LoginScreen = () => {
         const user = JSON.parse(localStorage.getItem('userInfo'));
     
         if (a) {
-            if (                user.role === "super admin") {
+            if ( user.role === "super admin") {
                 navigate('/Dashboard');
-            } else {
-                navigate('/');
-            }
+            }  
         } else {
             console.log('error');
         }

@@ -70,19 +70,19 @@ import './App.css';
 import {   Routes, Route,   } from 'react-router-dom'
 import { useAuthContext } from './userScreens/useAuthContext'
 import { ToastContainer } from 'react-toastify';
- 
+  import AutoLogout  from './userScreens/autoLogout'
 
 
 function App() {
   
   const { user } = useAuthContext();
-   
+  
   return (
     <>
 
-    
+<AutoLogout />
        <Routes>
-
+      
        <Route 
               path="/" 
               element={user ? <Navigate to="/" /> : <Navigate to="/login" />} 
