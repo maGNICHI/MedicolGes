@@ -69,19 +69,24 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
 
   //togle
   const handleToggleChange = (questionId, checked) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      questions: prevFormData.questions.map((question) => {
-        if (question.id === questionId) {
+    setFormData((prevFormData) => {
+      const updatedQuestions = prevFormData.questions.map((question) => {
+        if (question.id === questionId && question.questionType === 'toggle') {
           return {
             ...question,
-            responseValue: checked, // Met à jour la valeur de responseValue avec l'état du commutateur
+            responseValue: checked,
           };
         }
         return question;
-      }),
-    }));
+      });
+  
+      return {
+        ...prevFormData,
+        questions: updatedQuestions,
+      };
+    });
   };
+  
   useEffect(() => {
     console.log(formData);
   }, [formData]);
@@ -149,7 +154,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
     //   });
   };
   const handleResponse = (id, responseValue, responseType) => {
-    console.log("kkkkkk", id, responseValue, responseType);
+    console.log("kkkkkk", id, responseValue, responseType);//
     switch (responseType) {
       case "toggle":
         setFormData((prev) => ({
@@ -430,9 +435,15 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
             <FormControlLabel
               control={
                 <Switch
-                  checked={question.responseValue} // Utilisez responseValue pour indiquer si le toggle est activé ou désactivé
-                  onChange={(e) => {
-                    handleToggleChange(question.id, e.target.checked); // Mettez à jour la valeur de la réponse avec l'état du toggle
+                  checked={question.responseValue === "true"} // Utilisez responseValue pour indiquer si le toggle est activé ou désactivé
+                  onChange={(e,value) => {
+                    const checked = e.target.checked ? "true" : "false"; // Convertit le booléen en chaîne
+                    console.log("aaaaaaaaaaaaaaaa",handleToggleChange)
+                    console.log("bbb",handleResponse)
+                    console.log("ccc",question.id)
+                    handleToggleChange(question.id, checked); // Mettez à jour la valeur de la réponse avec l'état du toggle
+                    handleResponse(question.id, checked ,value, "toggle"); // Met à jour la valeur de réponse dans le state
+
                   }}
                 />
               }
