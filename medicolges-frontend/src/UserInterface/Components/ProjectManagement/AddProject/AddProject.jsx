@@ -1,33 +1,59 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { BsCheckCircleFill, BsCircle } from "react-icons/bs";
+import { BsCheckCircleFill } from "react-icons/bs";
 import Navbar from "../../Navbar";
 import Footer from "../../Footer";
 import Step1 from "./Step1";
-// import Step2 from "./Step2";
+import Step2 from "./Step2";
 import Step3 from "./Step3";
+import '../ListProject.css';
 
 export default function AddProject() {
-  const [step, setStep] = useState(1);
-  const [formData, setFormData] = useState({
-    name: "",
-    description: "",
-    organization: "",
-    file: null,
-    formId: null,
+  const [currentStep, setCurrentStep] = useState(1);
+  const [isComplete, setIsComplete] = useState(false);
+  const [margins, setMargins] = useState({
+    marginLeft: 0,
+    marginRight: 0,
   });
+  const stepRef = useRef([]);
+
+  useEffect(() => {
+    setMargins({
+      marginLeft: stepRef.current[0]?.offsetWidth / 2,
+      marginRight: stepRef.current[stepRef.current.length - 1]?.offsetWidth / 2,
+    });
+  }, [stepRef]);
+
+  const stepsConfig = [
+    { name: "Step 1", Component: Step1 },
+    { name: "Step 2", Component: Step2 },
+    { name: "Step 3", Component: Step3 }
+  ];
 
   const handleNext = () => {
-    setStep((prevStep) => prevStep + 1);
+    setCurrentStep((prevStep) => {
+      if (prevStep === stepsConfig.length) {
+        setIsComplete(true);
+        return prevStep;
+      } else {
+        return prevStep + 1;
+      }
+    });
   };
 
-  const handlePrev = () => {
-    setStep((prevStep) => prevStep - 1);
+  const calculateProgressBarWidth = () => {
+    return ((currentStep - 1) / (stepsConfig.length - 1)) * 100;
   };
 
-  const handleSubmit = () => {
-    // Handle form submission
-    console.log(formData);
+  const ActiveComponent = stepsConfig[currentStep - 1]?.Component;
+
+  // Define formDataProject state and setformDataProject function
+  const [formDataProject, setformDataProject] = useState({});
+  const [projectId, setprojectId] = useState("");
+
+  // Define onNext function to handle moving to the next step
+  const onNext = () => {
+    handleNext(); // Call handleNext to move to the next step
   };
 
   return (
@@ -43,56 +69,41 @@ export default function AddProject() {
           <div className="row pb-24 px-10">
             <Row className="justify-content-center mb-4">
               <Col xs={10}>
-                <div className="d-flex justify-content-center">
-                  <ul id="progressbar">
-                    <li className={`step ${step === 1 && "active"}`}>
-                      {step > 1 ? (
-                        <BsCheckCircleFill size={24} />
+                <div className="d-flex justify-content-center stepper">
+                  {stepsConfig.map((step, index) => (
+                    <div
+                      key={step.name}
+                      ref={(el) => (stepRef.current[index] = el)}
+                      className={`step ${
+                        currentStep > index + 1 || isComplete ? "complete" : ""
+                      } ${currentStep === index + 1 ? "activated" : ""} `}
+                      style={{ margin: "0 20px" }} // Add margin between circles
+                    >
+                      {currentStep > index + 1 || isComplete ? (
+                        <BsCheckCircleFill className="step-number" size={40} /> // Increase size of circle
                       ) : (
-                        <BsCircle size={24} />
+                        <div style={{ height:"50px", width: "50px" }} className="step-number">{index + 1}</div>
                       )}
-                      <strong>Step 1</strong>
-                    </li>
-                    <li className={`step ${step === 2 && "active"}`}>
-                      {step > 2 ? (
-                        <BsCheckCircleFill size={24} />
-                      ) : (
-                        <BsCircle size={24} />
-                      )}
-                      <strong>Step 2</strong>
-                    </li>
-                    <li className={`step ${step === 3 && "active"}`}>
-                      {step > 3 ? (
-                        <BsCheckCircleFill size={24} />
-                      ) : (
-                        <BsCircle size={24} />
-                      )}
-                      <strong>Step 3</strong>
-                    </li>
-                  </ul>
-                  <div>
-                    <div></div>
+                      <div className="step-name">{step.name}</div>
+                    </div>
+                  ))}
+                  <div className="progresses-bar"
+                    style={{
+                      width: `calc(100% - ${margins.marginLeft + margins.marginRight}px)`,
+                      marginLeft: margins.marginLeft,
+                      marginRight: margins.marginRight,
+                    }}
+                  >
+                    <div className="progress"
+                      style={{width: `${calculateProgressBarWidth()}%`, background:"#007bff"}}
+                    ></div>
                   </div>
                 </div>
               </Col>
             </Row>
-            {step === 1 && (
-              <Step1
-                formData={formData}
-                setFormData={setFormData}
-                onNext={handleNext}
-              />
-            )}
-            {/* {step === 2 && (
-          <Step2 formData={formData} setFormData={setFormData} onNext={handleNext} onPrev={handlePrev} />
-        )}*/}
-            {step === 3 && (
-              <Step3
-                formData={formData}
-                onSubmit={handleSubmit}
-                onPrev={handlePrev}
-              />
-            )}
+            {/* Render the active component with required props */}
+            <ActiveComponent formDataProject={formDataProject} setformDataProject={setformDataProject} projectId={projectId} setprojectId={setprojectId} onNext={onNext} />
+            {console.log("fooooooooooooorm data",formDataProject)}
           </div>
         </div>
       </div>

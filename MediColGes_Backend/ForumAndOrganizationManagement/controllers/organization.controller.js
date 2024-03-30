@@ -1,5 +1,7 @@
 const Organization = require("../models/organization");
-
+const upload = require("../../multer");
+const cloudinary = require("../../cloudinary");
+const fs = require("fs");
 exports.readOrganization = async (req, res) => {
   try {
     const organizations = await Organization.find()
@@ -13,7 +15,7 @@ exports.readOrganization = async (req, res) => {
 };
 
 exports.createOrganization = async (req, res) => {
-  const { name, address, phoneNumber, category, type } = req.body;
+  const { name, address, phoneNumber, category, type , lien } = req.body;
 
   const newOrganization = new Organization({
     name,
@@ -21,24 +23,32 @@ exports.createOrganization = async (req, res) => {
     phoneNumber,
     category,
     type,
+    lien,
   });
 
-  try {
-    const organization = await newOrganization.save();
-    return res.status(201).json(organization);
-  } catch (error) {
-    return res.status(400).send(error);
-  }
-};
+  const uploader = async (path) => await cloudinary.uploads(path, "Images");
+  const uploadedImages = [];
 
+  if (req.files && req.files.length > 0) {
+    for (const file of req.files) {
+      const { path } = file;
+      const newPath = await uploader(path);
+      uploadedImages.push(newPath.url); // Ajoutez seulement l'URL de l'image
+      fs.unlinkSync(path);
+    }
+    newOrganization.image = uploadedImages;
+  }
+
+  const organization = await newOrganization.save();
+};
 exports.updateOrganization = async (req, res) => {
   const organizationId = req.params.id;
-  const { name, address, phoneNumber, category, type } = req.body;
+  const { name, address, phoneNumber, category, type ,lien} = req.body;
 
   try {
     const updatedOrganization = await Organization.findByIdAndUpdate(
       organizationId,
-      { name, address, phoneNumber, category, type },
+      { name, address, phoneNumber, category, type ,lien},
       { new: true }
     );
     if (!updatedOrganization) {

@@ -1,10 +1,11 @@
 const postModel = require("../models/post.model");
 const PostModel = require("../models/post.model");
 const ObjectID = require("mongoose").Types.ObjectId;
-const { promisify } = require("util");
+//const { promisify } = require("util");
 const upload = require("../../multer");
 const cloudinary = require("../../cloudinary");
 const fs = require("fs");
+
 
 module.exports.readPost = async (req, res) => {
   try {
@@ -16,84 +17,43 @@ module.exports.readPost = async (req, res) => {
   }
 };
 
+
 module.exports.createPost = async (req, res) => {
-  // let fileName;
-
-  // if (req.file !== null) {
-  //   try {
-  //     if (
-  //       req.file.detectedMimeType != "image/jpg" &&
-  //       req.file.detectedMimeType != "image/png" &&
-  //       req.file.detectedMimeType != "image/jpeg"
-  //     )
-  //       throw Error("invalid file");
-
-  //     if (req.file.size > 500000) throw Error("max size");
-  //   } catch (err) {
-  //     const errors = uploadErrors(err);
-  //     return res.status(201).json({ errors });
-  //   }
-  //   fileName = req.body.posterId + Date.now() + ".jpg";
-
-  //   await pipeline(
-  //     req.file.stream,
-  //     fs.createWriteStream(
-  //       `${__dirname}/../client/public/uploads/posts/${fileName}`
-  //     )
-  //   );
-  // }
+  const { posterId, message, picture, video, tags, project } = req.body;
+  const formattedTags = Array.isArray(tags) ? tags.join(",") : tags;
 
   const newPost = new postModel({
-    posterId: req.body.posterId,
-    message: req.body.message,
-    picture: req.body.picture, //file !== null ? "./uploads/posts/" + fileName : "",
-    video: req.body.video,
+    posterId,
+    message,
+    tags: formattedTags
+      ? formattedTags.split(",").map((tag) => tag.trim())
+      : [],
+    video,
     likers: [],
     comments: [],
+    project,
   });
 
+  const uploader = async (path) => await cloudinary.uploads(path, "Images");
+  const uploadedImages = [];
+
   try {
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const { path } = file;
+        const newPath = await uploader(path);
+        uploadedImages.push(newPath.url);
+        fs.unlinkSync(path);
+      }
+      newPost.image = uploadedImages;
+    }
+
     const post = await newPost.save();
     return res.status(201).json(post);
   } catch (err) {
     return res.status(400).send(err);
   }
 };
-// module.exports.createPost = async (req, res) => {
-//   try {
-//     // Check if file is uploaded
-//     if (!req.file) {
-//       return res.status(400).json({ message: "No file uploaded" });
-//     }
-
-//     // Log the req.file object to inspect its contents
-//     console.log("Uploaded file:", req.file);
-
-//     // Upload image to Cloudinary
-//     const uploader = async (path) => await cloudinary.uploads(path, "Images");
-//     const newPath = await uploader(req.file.path);
-//     fs.unlinkSync(req.file.path); // Remove the temporary file
-
-//     // Create new post with Cloudinary URL
-//     const newPost = new PostModel({
-//       posterId: req.body.posterId,
-//       message: req.body.message,
-//       picture: newPath.url, // Store the Cloudinary URL
-//       video: req.body.video,
-//       likers: [],
-//       comments: [],
-//     });
-
-//     // Save post to database
-//     const post = await newPost.save();
-//     res
-//       .status(201)
-//       .json({ success: { msg: "Post created successfully", post } });
-//   } catch (err) {
-//     console.error("Error creating post:", err);
-//     res.status(400).json({ errors: [{ msg: err.message }] });
-//   }
-// };
 
 module.exports.updatePost = async (req, res) => {
   const postId = req.params.id;
@@ -246,3 +206,17 @@ module.exports.getAllComments = async (req, res) => {
     return res.status(400).send(err);
   }
 };
+
+// Fonction pour traiter la requête de l'utilisateur
+module.exports.processUserRequest = async (req, res) => {
+    const userInput = req.body.message; // Obtenez le texte de la requête de l'utilisateur
+
+    try {
+        const botResponse = await sendQueryToWit(userInput); // Envoyez la requête à Wit.ai
+        res.json({ botResponse }); // Retourner la réponse de Wit.ai à l'utilisateur
+    } catch (error) {
+        console.error('Error processing user request:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
+};
+

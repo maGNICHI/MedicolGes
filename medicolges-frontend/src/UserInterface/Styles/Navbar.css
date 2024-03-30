@@ -32,6 +32,8 @@ body {
     font-size: 24px; /* Increase font size for better visibility */
 }
 
+
+
 .navbar-items {
     list-style-type: none;
     display: flex;
@@ -47,6 +49,7 @@ body {
 }
 
 .navbar-links {
+    font-family: 'Poppins', sans-serif;
     text-decoration: none;
     color: black;
     font-size: 18px;
@@ -63,9 +66,9 @@ body {
     border: 1px solid transparent;
     border-radius: 28px;
     outline: transparent;
-    background-color: #1A8EFD;
+    background-color: #1990aa;
     font-size: 18px;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     letter-spacing: .8px;
     cursor: pointer;
     transition: all .4s ease;

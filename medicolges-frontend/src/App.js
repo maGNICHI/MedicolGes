@@ -22,12 +22,14 @@ import CreatePost from './UserInterface/Components/Post/CreatePost'
 import PostList from './UserInterface/Components/Post/PostList'
 import HomePage  from './UserInterface/Components/Post/HomePage'
 import Organization from  './UserInterface/Components/Organization/OrganizationCreate'
+import OrganizationShow from  './UserInterface/Components/Organization/OrganizationList'
 import AddProject from './Dashboard/ProjectManagement/AddProject/AddProject';
 import ConsultProject from './Dashboard/ProjectManagement/CosultProject/ConsultProject';
 import ListProject from './UserInterface/Components/ProjectManagement/ListProject';
 import Add from './UserInterface/Components/ProjectManagement/AddProject/AddProject';
 import Consult from './UserInterface/Components/ProjectManagement/ConsultProject/ConsultProject';
 import AfficheForm from './Dashboard/Dashboard/compnents/AfficheForm';
+import HomePost1 from './UserInterface/Components/PostNew/home/homePost1'
 
 
 function App() {
@@ -50,6 +52,7 @@ function App() {
         <Route path="/organizationList" element={<OrganizationList />} />
         <Route path="/organizationCreate" element={<CreateOrganization />} />
         <Route path="/organizationFront" element={<Organization />} />
+        <Route path="/organizationShow" element={<OrganizationShow />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/feedbackList" element={<FeedbackList />} />
         <Route path="/" element={<Home />} />
@@ -60,6 +63,7 @@ function App() {
         <Route path='/projects/add' element={<Add />} />
         <Route path='/projects/consult/:id' element={<Consult />} />
         <Route path="/afficheForm" element={<AfficheForm/>} />
+        <Route path="/homeNew" element={<HomePost1 />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { Row, Col, Form, Button } from "react-bootstrap";
+import { Form, Row, Col, Button, Badge } from "react-bootstrap";
 import Title from "../../../../components/Title/Title";
 import FileInput from "../../../../components/Input/FileInput";
 import { useNavigate } from "react-router-dom";
-import ProjectCard from '../ProjectCard'
+import ProjectCard from "../ProjectCard";
 import axios from "axios";
+import { FaTimes } from "react-icons/fa";
 
-export default function Step1({ formData, setFormData, onNext }) {
-  const [showAlert, setShowAlert] = useState(false);
-  const [showNotification, setShowNotification] = useState(false);
+export default function Step1({ formDataProject, setformDataProject, onNext }) {
   const [touched, setTouched] = useState({
     name: false,
     description: false,
     organization: false,
   });
   const [organizations, setOrganizations] = useState([]);
+  const [collaborativeInput, setCollaborativeInput] = useState("");
+  const [selectedCollaborators, setSelectedCollaborators] = useState([]);
+  const [selectedCollaboratorsId, setSelectedCollaboratorsId] = useState([]);
+  const [collaboratives, setCollaboratives] = useState([]);
+  const navigate = useNavigate();
 
   const handleBlur = (field) => {
     setTouched({
@@ -25,17 +29,35 @@ export default function Step1({ formData, setFormData, onNext }) {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
+    setformDataProject((prevData) => ({
+      ...prevData,
       [name]: value,
-    });
+      collaboratives: selectedCollaboratorsId,
+    }));
   };
 
   const handleFileChange = (e) => {
-    setFormData({
-      ...formData,
+    setformDataProject({
+      ...formDataProject,
       file: e.target.files[0],
     });
+  };
+
+  const handleAddCollaborator = (collaborator, collaboratorId) => {
+    if (!selectedCollaborators.includes(collaborator)) {
+      setSelectedCollaborators([...selectedCollaborators, collaborator]);
+      setSelectedCollaboratorsId([...selectedCollaboratorsId, collaboratorId]);
+      setCollaborativeInput("");
+    }
+  };
+
+  const handleRemoveCollaborator = (collaborator, collaboratorId) => {
+    const updatedCollaborators = selectedCollaborators.filter(
+      (item) => item !== collaborator
+    );
+    const updatedCollaboratorsId = selectedCollaboratorsId.filter((item => item !== collaboratorId));
+    setSelectedCollaborators(updatedCollaborators);
+    setSelectedCollaboratorsId(updatedCollaboratorsId);
   };
 
   useEffect(() => {
@@ -50,119 +72,195 @@ export default function Step1({ formData, setFormData, onNext }) {
       }
     };
 
+    const fetchCollaboratives = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:5000/api/user/getCollaborative"
+        );
+        setCollaboratives(response.data);
+      } catch (error) {
+        console.error("Error fetching collaborators:", error);
+      }
+    };
+
     fetchOrganizations();
+    fetchCollaboratives();
   }, []);
 
-  return (
-    <Form>
-              <Row className="mb-6">
-                <Col md={4}>
-                  <div className="mb-4">
-                    <Title
-                      secondTitle={"Name"}
-                      fontSize={"18px"}
-                      fontWeight={600}
-                      className={"mb-2"}
-                    />
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter Project Name"
-                      className="rounded-pill"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      onBlur={() => handleBlur("name")}
-                      required
-                      isInvalid={touched.name && formData.name === ""}
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      Project name is required.
-                    </Form.Control.Feedback>
-                  </div>
-                  <div className="mb-4">
-                    <Title
-                      secondTitle={"Description"}
-                      fontSize={"18px"}
-                      fontWeight={600}
-                      className={"mb-2"}
-                    />
-                    <Form.Control
-                      as="textarea"
-                      placeholder="Enter a Description"
-                      className="rounded-pill"
-                      name="description"
-                      value={formData.description}
-                      onChange={handleChange}
-                      onBlur={() => handleBlur("description")}
-                      required
-                      isInvalid={
-                        touched.description && formData.description === ""
-                      }
-                    />
-                    <Form.Control.Feedback type="invalid">
-                      Description is required.
-                    </Form.Control.Feedback>
-                  </div>
-                  <div className="mb-4">
-                    <Title
-                      secondTitle={"Organization"}
-                      fontSize={"18px"}
-                      fontWeight={600}
-                      className={"mb-2"}
-                    />
-                    <Form.Select
-                      placeholder="Select an Organization"
-                      name="organization"
-                      value={formData.organization}
-                      onChange={handleChange}
-                      onBlur={() => handleBlur("organization")}
-                      style={{ borderRadius: "50px" }}
-                      required
-                      isInvalid={
-                        touched.organization && formData.organization === ""
-                      }
-                    >
-                      {/* Conditionally render "Select an organization" option */}
-                      {formData.organization === "" && (
-                        <option value="" disabled hidden>
-                          Select an organization
-                        </option>
-                      )}
-                      {/* Render organization options */}
-                      {organizations.map((organization) => (
-                        <option key={organization._id} value={organization._id}>
-                          {organization.name}
-                        </option>
-                      ))}
-                    </Form.Select>
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent default form submission
+    onNext(); // Call the onNext function passed from the parent component
+  };
 
-                    <Form.Control.Feedback type="invalid">
-                      Please select an organization.
-                    </Form.Control.Feedback>
-                  </div>
-                </Col>
-                <Col md={4}>
-                  <div className="mb-4">
-                    <Title
-                      secondTitle={"Upload Excel File"}
-                      fontSize={"18px"}
-                      fontWeight={600}
-                      className={"mb-2"}
+  return (
+    <div>
+      <Form onSubmit={handleSubmit}>
+        <Row className="mb-6">
+          <Col md={4}>
+            <div className="mb-4">
+              <Title
+                secondTitle={"Name"}
+                fontSize={"18px"}
+                fontWeight={600}
+                className={"mb-2"}
+              />
+              <Form.Control
+                type="text"
+                placeholder="Enter Project Name"
+                className="rounded-pill"
+                name="name"
+                value={formDataProject.name}
+                onChange={handleChange}
+                onBlur={() => handleBlur("name")}
+                required
+                isInvalid={touched.name && formDataProject.name === ""}
+              />
+              <Form.Control.Feedback type="invalid">
+                Project name is required.
+              </Form.Control.Feedback>
+            </div>
+            <div className="mb-4">
+              <Title
+                secondTitle={"Description"}
+                fontSize={"18px"}
+                fontWeight={600}
+                className={"mb-2"}
+              />
+              <Form.Control
+                as="textarea"
+                placeholder="Enter a Description"
+                className="rounded-pill"
+                name="description"
+                value={formDataProject.description}
+                onChange={handleChange}
+                onBlur={() => handleBlur("description")}
+                required
+                isInvalid={
+                  touched.description && formDataProject.description === ""
+                }
+              />
+              <Form.Control.Feedback type="invalid">
+                Description is required.
+              </Form.Control.Feedback>
+            </div>
+            <div className="mb-4">
+              <Title
+                secondTitle={"Collaborators"}
+                fontSize={"18px"}
+                fontWeight={600}
+                className={"mb-2"}
+              />
+              <div className="mb-2">
+                {selectedCollaborators.map((collaborator, index) => (
+                  <Badge
+                    key={index}
+                    bg="secondary"
+                    text="white"
+                    style={{
+                      cursor: "pointer",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      marginRight: "5px",
+                    }}
+                  >
+                    <span>{collaborator}</span>
+                    <FaTimes
+                      className="ms-1"
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleRemoveCollaborator(collaborator)}
                     />
-                    <FileInput onChange={handleFileChange} />
-                  </div>
-                </Col>
-                <Col md={4}>
-                  <ProjectCard project={formData} />
-                </Col>
-              </Row>
-      <Row className="justify-content-center">
-        <Col xs={6} md={4}>
-          <Button type="submit" className="border-0 w-100">
-            Next
-          </Button>
-        </Col>
-      </Row>
-    </Form>
+                  </Badge>
+                ))}
+              </div>
+
+              <Form.Control
+                type="text"
+                placeholder="Add Collaborators"
+                className="rounded-pill mb-2"
+                value={collaborativeInput}
+                onChange={(e) => setCollaborativeInput(e.target.value)}
+              />
+
+              {collaborativeInput != "" && (
+                <div className="mt-2">
+                  {collaboratives
+                    .filter((collaborative) =>
+                      collaborative.username
+                        .toLowerCase()
+                        .includes(collaborativeInput.toLowerCase())
+                    )
+                    .map(
+                      (collaborative) =>
+                        collaborative.isDeleted == false && (
+                          <Badge
+                            key={collaborative._id}
+                            bg="primary"
+                            text="white"
+                            className="me-2 mb-2"
+                            onClick={() =>
+                              handleAddCollaborator(collaborative.username, collaborative._id)
+                            }
+                            style={{ cursor: "pointer" }}
+                          >
+                            {collaborative.username}
+                          </Badge>
+                        )
+                    )}
+                </div>
+              )}
+            </div>
+          </Col>
+          <Col md={4}>
+            <div className="mb-4">
+              <Title
+                secondTitle={"Organization"}
+                fontSize={"18px"}
+                fontWeight={600}
+                className={"mb-2"}
+              />
+              <Form.Select
+                placeholder="Select an Organization"
+                name="organization"
+                value={formDataProject.organization}
+                onChange={handleChange}
+                onBlur={() => handleBlur("organization")}
+                style={{ borderRadius: "50px" }}
+                required
+                isInvalid={
+                  touched.organization && formDataProject.organization === ""
+                }
+              >
+                <option value="" hidden>
+                  Select an organization
+                </option>
+                {organizations.map((organization) => (
+                  <option key={organization._id} value={organization._id}>
+                    {organization.name}
+                  </option>
+                ))}
+              </Form.Select>
+              <Form.Control.Feedback type="invalid">
+                Please select an organization.
+              </Form.Control.Feedback>
+            </div>
+            <div className="mb-4">
+              <Title
+                secondTitle={"Upload Excel File"}
+                fontSize={"18px"}
+                fontWeight={600}
+                className={"mb-2"}
+              />
+              <FileInput onChange={handleFileChange} />
+            </div>
+          </Col>
+          <Col md={4} className="d-flex justify-content-center justify-items-center justify-elements-center">
+            <ProjectCard project={formDataProject} />
+          </Col>
+        </Row>
+        <Button variant="primary" className="my-3" onClick={onNext}>
+          Next
+        </Button>
+      </Form>
+    </div>
   );
 }

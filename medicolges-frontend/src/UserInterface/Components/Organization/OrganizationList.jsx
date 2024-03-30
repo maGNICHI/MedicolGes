@@ -1,18 +1,69 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Layout from "../SuperAdminLayout/Layout";
-import { Card, Col, Container, Row, Table } from "react-bootstrap";
-import Title from "../../components/Title/Title";
-import IconButton from "../../components/Button/IconButton";
-import { FaPlus, FaEdit, FaTrash } from "react-icons/fa";
-import "../Dashboard/Dashboard.css";
+import { Card, Container, Row, Col, Pagination, Form } from "react-bootstrap";
+import { FaFacebook, FaTwitter, FaInstagram } from "react-icons/fa";
+import "./style.css";
+import Navbar from "../Navbar";
 
-export default function OrganizationList() {
-  const [selectedName, setSelectedName] = useState("Organization Management");
+function OrganizationCard({ organization }) {
+  return (
+    <Card className="organization-card">
+      {organization.image && (
+        <div className="card-image-container">
+          <Card.Img
+            style={{ objectFit: "cover" }}
+            variant="top"
+            src={organization.image[0]}
+            className="card-image"
+          />
+        </div>
+      )}
+      <Card.Body>
+        <div className="content">
+          <Card.Title
+            style={{
+              fontWeight: "bold ",
+              fontStyle: "italic",
+            }}
+            className="title"
+          >
+            {organization.name}
+          </Card.Title>
+          <div className="organization-details">
+            <Card.Text>
+             
+              <strong>Address:</strong> {organization.address} <br />
+              <strong>Phone Number:</strong> {organization.phoneNumber} <br />
+              <strong>Category:</strong> {organization.category} <br />
+              <strong>Type:</strong> {organization.type} <br />
+            </Card.Text>
+            <ul className="social-icons">
+              <li>
+                <a href="#" className="social-link">
+                  <FaFacebook />
+                </a>
+              </li>
+              <li>
+                <a href="#" className="social-link">
+                  <FaTwitter />
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </Card.Body>
+    </Card>
+  );
+}
+
+function OrganizationList() {
   const [organizations, setOrganizations] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const organizationsPerPage = 3;
 
   useEffect(() => {
-    const fetchOrganizations = async () => {
+    async function fetchOrganizations() {
       try {
         const response = await axios.get(
           "http://localhost:5000/api/organization/"
@@ -21,119 +72,70 @@ export default function OrganizationList() {
       } catch (error) {
         console.error("Error fetching organizations:", error);
       }
-    };
+    }
 
     fetchOrganizations();
   }, []);
 
-  const handleEdit = (id) => {
-    // Redirect to edit page with the organization ID
-    // Example: history.push(`/organizations/edit/${id}`);
-  };
+  const indexOfLastOrganization = currentPage * organizationsPerPage;
+  const indexOfFirstOrganization =
+    indexOfLastOrganization - organizationsPerPage;
+  const filteredOrganizations = organizations.filter((organization) =>
+    organization.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const currentOrganizations = filteredOrganizations.slice(
+    indexOfFirstOrganization,
+    indexOfLastOrganization
+  );
 
-  const handleDelete = async (id) => {
-    try {
-      await axios.delete(`http://localhost:5000/api/organization/${id}`);
-      // If delete is successful, update organizations state to remove the deleted organization
-      setOrganizations(organizations.filter((org) => org._id !== id));
-    } catch (error) {
-      console.error("Error deleting organization:", error);
-    }
-  };
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
-    <Layout selectedName={selectedName}>
-      <Container
-        fluid
-        className="mt-4 h-screen"
-        style={{ overflowY: "auto", maxHeight: "100%", zIndex: 0 }}
-      >
-        <Row>
-          <Card className="card">
-            {" "}
-            {/* Add a different class */}
-            <Card.Header style={{ padding: "20px" }}>
-              <Row className="align-items-center">
-                <Col xs={12} md={10}>
-                  <Title
-                    title={"Project List"}
-                    fontWeight={600}
-                    fontSize={"24px"}
-                  />{" "}
-                  {/* Change the title */}
-                </Col>
-                <Col xs={12} md={2} className="text-md-end mt-3 mt-md-0">
-                  <IconButton
-                    className="h-100 border-0"
-                    style={{
-                      background: "#0ea9f991",
-                      color: "white",
-                      fontSize: "16px",
-                      fontWeight: 600,
-                      padding: "8px 16px",
-                      borderRadius: "20px",
-                    }}
-                    startIcon={<FaPlus />}
-                  >
-                    <Title title={"Add Organization"} />{" "}
-                    {/* Change the button label */}
-                  </IconButton>
-                </Col>
-              </Row>
-            </Card.Header>
-          </Card>
+    <>
+      <Navbar />
+      <Container fluid className="mt-24">
+        <Form className="mb-3" style={{ textAlign: "right" }}>
+          <Form.Control
+            type="text"
+            placeholder="Search by organization name"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{
+              borderRadius: "20px",
+              border: "2px solid #ced4da",
+              padding: "5px 10px",
+              fontSize: "14px",
+              width: "250px",
+              marginLeft: "1200px",
+            }}
+          />
+        </Form>
+
+        <Row xs={1} md={2} lg={3} className="g-4">
+          {currentOrganizations.map((organization, index) => (
+            <Col key={index}>
+              <OrganizationCard organization={organization} />
+            </Col>
+          ))}
         </Row>
-        <Row>
-          <Card className="card">
-            <Card.Header style={{ padding: "20px" }}>
-              <Row className="align-items-center">
-                <Col xs={12} md={9}>
-                  <Title
-                    title={"Organization List"}
-                    fontWeight={600}
-                    fontSize={"24px"}
-                  />
-                </Col>
-              </Row>
-            </Card.Header>
-            <Card.Body className="p-0">
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Phone Number</th>
-                    <th>Category</th>
-                    <th>Type</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {organizations.map((organization) => (
-                    <tr key={organization._id}>
-                      <td>{organization.name}</td>
-                      <td>{organization.address}</td>
-                      <td>{organization.phoneNumber}</td>
-                      <td>{organization.category}</td>
-                      <td>{organization.type}</td>
-                      <td>
-                        <FaEdit
-                          style={{ cursor: "pointer", marginRight: "10px" }}
-                          onClick={() => handleEdit(organization._id)}
-                        />
-                        <FaTrash
-                          style={{ cursor: "pointer" }}
-                          onClick={() => handleDelete(organization._id)}
-                        />
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </Card.Body>
-          </Card>
-        </Row>
+        <Pagination className="mt-4" style={{ color: "#9dcbc1" }}>
+          {Array.from({
+            length: Math.ceil(
+              filteredOrganizations.length / organizationsPerPage
+            ),
+          }).map((_, index) => (
+            <Pagination.Item
+              key={index + 1}
+              onClick={() => paginate(index + 1)}
+              active={index + 1 === currentPage}
+            >
+              {index + 1}
+            </Pagination.Item>
+          ))}
+        </Pagination>
       </Container>
-    </Layout>
+    </>
   );
 }
+
+export default OrganizationList;

@@ -10,12 +10,13 @@ export default function ProjectCard({ project, onFollow }) {
   const [followersCount, setFollowersCount] = useState(project.numberFollowers);
 
   const truncateDescription = (text, maxLength) => {
-    if (text.length > maxLength) {
+    if (text && text.length > maxLength) {
       return text.substring(0, maxLength) + "...";
     } else {
       return text;
     }
   };
+  
 
   const handleFollow = async () => {
     try {
@@ -78,6 +79,7 @@ export default function ProjectCard({ project, onFollow }) {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
+            textDecoration: "none",
           }}
           to={`/projects/consult/${project._id}`}
         >

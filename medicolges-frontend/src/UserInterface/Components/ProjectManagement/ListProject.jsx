@@ -99,7 +99,7 @@ export default function ListProject() {
                 <span>Our Projects</span>
               </h3>
             </div>
-            <div className="col-md-2 col-xs-5 mt-3">
+            <div className="col-md-2 col-xs-5 my-3 mr-4">
               <div className="input-wrapper">
                 <input
                   type="text"
@@ -136,9 +136,11 @@ export default function ListProject() {
           </div>
           <div className="row pb-24">
             {currentProjects.map((item) => (
-              <Col key={item._id} xs={12} md={4} className="mb-3">
+              item.isDeleted ===false &&(
+                <Col key={item._id} xs={12} md={4} className="mb-3">
                 <ProjectCard project={item} />
               </Col>
+              )
             ))}
           </div>
           <div className="pagination-container">

@@ -11,8 +11,13 @@ const PostSchema = new mongoose.Schema(
       trim: true,
       maxlength: 500,
     },
-    picture: {
-      type: String,
+    image: {
+      type: [String], // Modifier pour un tableau de chaînes de caractères
+      required: false,
+    },
+    
+    tags: {
+      type: [String],
     },
     video: {
       type: String,
@@ -31,6 +36,10 @@ const PostSchema = new mongoose.Schema(
         },
       ],
       required: true,
+    },
+    project: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Project",
     },
   },
   {

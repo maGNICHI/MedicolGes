@@ -10,20 +10,26 @@ const OrganizationSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    image: {
+      type: [String], // Modifier pour un tableau de chaînes de caractères
+      required: false,
+    },
     phoneNumber: {
       type: Number,
       required: true,
     },
     category: {
       type: String,
-      enum: ["Organization", "Industry", "Establishment"],
       required: true,
     },
     type: {
       type: String,
       required: true,
     },
-    // You can add other attributes specific to your organization schema here
+    lien: {
+      type: String,
+      required: false,
+    },
   },
   {
     timestamps: true,

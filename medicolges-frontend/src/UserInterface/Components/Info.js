@@ -9,7 +9,7 @@ import "../Styles/Info.css";
 
 function Info() {
   return (
-    <div className="info-section -mt-16" id="info">
+    <div className="info-section -mt-16 pb-5" id="info">
       <div className="info-title-content ">
         <h3 className="info-title pt-24">
           <span>What We Do</span>

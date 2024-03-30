@@ -22,7 +22,7 @@ body {
     position: absolute;
     width: 75%;
     height: 4px;
-    background-color: #9D2553;
+    background-color: #1990aa;
     border-radius: 8px;
     left: 0;
     bottom: -12px;
@@ -31,7 +31,7 @@ body {
     margin: 64px;
     text-align: center;
     color: rgb(77, 75, 75);
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 18px;
     letter-spacing: .8px;
     line-height: 1.8rem;
@@ -61,7 +61,7 @@ body {
 .info-card-description {
     margin: 24px;
     color: rgb(77, 75, 75);
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 18px;
     letter-spacing: .8px;
     line-height: 1.5rem;

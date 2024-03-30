@@ -79,20 +79,20 @@ function Navbar() {
         <li>
           <div className="dropdown" onClick={toggleDropdown}>
             <p className="navbar-links">Organization</p>
-            {dropdownOpen && (
+            {dropdownOpen &&(
               <ul className="dropdown-content">
                 <li>
                   <a href="/organizationFront">Create Organization</a>
                 </li>
                 <li>
-                  <a href="/organization/show">Show Organization</a>
+                  <a href="/organizationShow">Show Organization</a>
                 </li>
               </ul>
             )}
           </div>
         </li>
         <li>
-          <a href="/post" className="navbar-links">
+          <a href="/homeNew" className="navbar-links">
             Post
           </a>
         </li>
@@ -143,10 +143,10 @@ function Navbar() {
             <a href="/organizationFront">Create Organization</a>
           </li>
           <li>
-            <a href="/organization/show">Show Organization</a>
+            <a href="/organizationShow">Show Organization</a>
           </li>
           <li>
-            <a onClick={openNav} href="/post">
+            <a onClick={openNav} href="/homeNew">
               Posts
             </a>
           </li>

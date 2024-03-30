@@ -30,6 +30,16 @@ const ProjectSchema = new mongoose.Schema(
     form: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Forms",
+    },
+    collaboratives: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",  
+      }
+    ],
+    creator: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     }
   },
   {

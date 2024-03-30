@@ -11,6 +11,7 @@ import CreatePost from "../../Post/CreatePost";
 import Feedback from "./Feedback";
 import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Feed from "../../PostNew/feed/feed";
 
 export default function ConsultProject({ onFollow }) {
   const [selectedName, setSelectedName] = useState("Consult Project");
@@ -332,7 +333,7 @@ export default function ConsultProject({ onFollow }) {
               ) : showFeedback ? (
                 <Feedback projectId={projectData} /> // Pass feedbacks as props to Feedback component
               ) : (
-                <CreatePost />
+                <Feed inproject={true} projectId={id}/>
               )}
             </Col>
           </div>

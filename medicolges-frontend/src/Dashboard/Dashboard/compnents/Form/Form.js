@@ -33,7 +33,7 @@ import { addForm } from "../api/index";
 import Title from "../../../../components/Title/Title";
 import { Row } from "react-bootstrap";
 import IconButton from "../../../../components/Button/IconButton";
-import { FaBars, FaPlus, FaSave, FaTrash } from "react-icons/fa";
+import { FaBars, FaPlus, FaSave, FaTrash, FaEdit  } from "react-icons/fa";
 import AjouterForm from "../AjouterForm";
 // import { TimePicker } from "@material-ui/lab";
 import TimePickerInput from "../Form/TimePickerInput"; // Importer le composant TimePickerInput
@@ -52,8 +52,13 @@ import PhoneField from "./PhoneField"; // Assuming PhoneField is defined in a se
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
 import Switch from "@mui/material/Switch";
 
+import {putForm} from "../api/index";
+
 const Form = () => {
-  const [formData, setFormData] = useState({ name: "", questions: [] });
+  const [darkMode, setDarkMode] = useState(false);
+
+  const [formData, setFormData] = useState({id:"" , name: "", questions: [] });
+  console.log("data from formjs",formData)
   const [idCount, setIdCount] = useState(0);
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -111,7 +116,7 @@ const Form = () => {
     console.log("Question type:", questionType);
     console.log("Color:", color);
     console.log("Question colors:", questionColors);
-
+//
     setQuestionColors((prevColors) => ({
       ...prevColors,
       [questionType]: color,
@@ -131,6 +136,7 @@ const Form = () => {
   const handleToggleChange = (questionId, checked) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
+      //faire le mis a jours lil question de lobjet prevFormData en utilisant map pour parcourir chaque question et appliquer une transformation
       questions: prevFormData.questions.map((question) => {
         if (question.id === questionId) {
           return {
@@ -169,10 +175,28 @@ const Form = () => {
   };
 
   const handleSubmit = async (e) => {
+    console.log("cccccccccccccc:",formData._id); 
+
     e.preventDefault();
-    createForm();
-    console.log("hhhhh", formData);
-    navigate("/ajouterForm", { state: { formData, case: "create" } });
+        //ajouter
+        try {
+          console.log("Case:", location.state); 
+          if (formData._id  !== "") {
+            // If updating an existing form
+            await updateForm();
+            navigate("/afficheForm");  // Navigate back to afficheForm
+          } else {
+              // If you are creating a new form
+              await createForm(); // Create a new form
+              navigate("/ajouterForm", { state: { formData, case: "create" } }); // Navigate to ajouterForm
+          }
+      } catch (error) {
+          console.error("Error handling form submission:", error);
+          // Handle error, display message, etc.
+      }
+    // createForm();
+    // console.log("hhhhh", formData);
+    // navigate("/ajouterForm", { state: { formData, case: "create" } });
   };
   ////ajouter
   // const cards = useSelector((state) => state.cards);
@@ -193,9 +217,10 @@ const Form = () => {
     setOpenModal(true);
   };
   useEffect(() => {
+    //assurer que les données de formulaire existent dans l'objet location.sta
     if (location.state && location.state.formData) {
       setFormData(location.state.formData);
-    }
+    }//execute lorsque location.state change
   }, [location.state]);
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -289,6 +314,7 @@ const Form = () => {
           responseValue: null,
         };
       }
+      ///de mise à jour fournie dans useState
       setFormData((prevFormData) => ({
         ...prevFormData,
         questions: [...prevFormData.questions, newQuestion],
@@ -329,7 +355,19 @@ const Form = () => {
         console.log(err);
       });
   };
-
+  const updateForm = () => {
+    putForm(
+      formData._id, {
+        name: formData.name,
+        questions: JSON.stringify(formData.questions)
+    })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const handleChangetextArea = (event) => {
     console.log(event);
     setModalResponse(event.target.value);
@@ -361,6 +399,8 @@ const Form = () => {
       case "text":
         setFormData((prev) => ({
           ...prev,
+          //a ligne met à jour la propriété questions de l'objet prev. Elle utilise la méthode map() pour parcourir
+          // chaque objet dans le tableau prev.questions et appliquer une transformation.
           ["questions"]: prev.questions.map((obj) => {
             if (obj.id === id) {
               // Update the properties for the object with id 2
@@ -978,6 +1018,29 @@ const Form = () => {
       questions: updatedQuestions,
     }));
   };
+  const handleUpdateQuestion = (index) => {
+   // Récupérer la question à partir de l'index
+  const questionToUpdate = sortedQuestions[index];
+
+  // Demander à l'utilisateur de saisir la nouvelle version de la question
+  const updatedQuestion = prompt("Enter the updated question:", questionToUpdate.question);
+
+  // Vérifier si l'utilisateur a saisi une nouvelle question
+  if (updatedQuestion !== null) {
+    // Copier le tableau des questions
+    const updatedQuestions = [...formData.questions];
+
+    // Mettre à jour la question dans le tableau
+    updatedQuestions[index] = { ...questionToUpdate, question: updatedQuestion };
+
+    // Mettre à jour le state avec les questions mises à jour
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      questions: updatedQuestions,
+    }));
+  }
+  };
+  
   const renderQuestions = () => {
     return formData.questions.map((question, index) => (
       <div
@@ -1017,15 +1080,17 @@ const Form = () => {
   const sortedQuestions = formData.questions;
   return (
     <Paper className={classes.paper}>
-      <form
+      <form 
         autoComplete="off"
         noValidate
+              //className={darkMode ? 'dark-form' : 'light-form'}
         className={`${classes.root} ${classes.form}`}
         onSubmit={handleSubmit}
       >
         <Container>
           <Row>
-            <div className="mb-4 col-12">
+            
+            {/* <div className="mb-4 col-12"> */}
               <Title
                 secondTitle={"Name of the questionnaire"}
                 fontSize={"18px"}
@@ -1043,7 +1108,7 @@ const Form = () => {
                 }
                 fullWidth // Ensures the input field takes the full width of its container
               />
-            </div>
+           
           </Row>
           {sortedQuestions.map((question, index) => (
             <div
@@ -1073,31 +1138,19 @@ const Form = () => {
                   onClick={() => handleDeleteQuestion(index)}
                   style={{ cursor: "pointer", marginLeft: "10px" }}
                 />
+                   <FaEdit // Utilisez EditIcon ici
+        color="info"
+        onClick={() => handleUpdateQuestion(index)} // Assurez-vous de définir cette fonction
+        style={{ cursor: "pointer", marginLeft: "10px" }}
+      />
               </div>
               {renderInputField(question)}
             </div>
           ))}
-          <div className="row mb-4">
-            <div className="col-md-2"></div>
+          
+          <div className="row text-center" style={{ marginRight: "-97px" }}>
+           
             <div className="col-md-3 col-xs-12">
-              <IconButton
-                className="h-100 border-0"
-                style={{
-                  background: "#bd6262",
-                  color: "white",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  padding: "8px 16px",
-                  borderRadius: "20px",
-                }}
-                startIcon={<FaTrash />}
-                onClick={clear}
-                fullWidth // Add fullWidth prop to make button take full width
-              >
-                <Title title={"Clear"} /> {/* Change the button label */}
-              </IconButton>
-            </div>
-            <div className="col-md-4 col-xs-12">
               <IconButton
                 className="h-100 border-0"
                 style={{
@@ -1116,7 +1169,24 @@ const Form = () => {
                 {/* Change the button label */}
               </IconButton>
             </div>
-
+            <div className="col-md-3 col-xs-12">
+              <IconButton
+                className="h-100 border-0"
+                style={{
+                  background: "#328CBD", // Couleur verte
+                  color: "white",
+                  fontSize: "16px",
+                  fontWeight: 600,
+                  padding: "8px 16px",
+                  borderRadius: "20px",
+                }}
+                startIcon={<FaBars />}
+                onClick={affichage}
+                fullWidth // Add fullWidth prop to make button take full width
+              >
+                <Title title={"Affiche"} /> {/* Change the button label */}
+              </IconButton>
+            </div>
             <div className="col-md-3 col-xs-12">
               <IconButton
                 className="h-100 border-0"
@@ -1135,22 +1205,24 @@ const Form = () => {
                 <Title title={"Submit"} /> {/* Change the button label */}
               </IconButton>
             </div>
-            <div className="col-md-3 col-xs-12">
+            
+            <div className="col-md-3 col-xs-12 ">
               <IconButton
                 className="h-100 border-0"
                 style={{
-                  background: "#28a745", // Couleur verte
+                  background: "#bd6262",
                   color: "white",
                   fontSize: "16px",
                   fontWeight: 600,
                   padding: "8px 16px",
                   borderRadius: "20px",
+                  marginleft:"56px",
                 }}
-                startIcon={<FaBars />}
-                onClick={affichage}
+                startIcon={<FaTrash />}
+                onClick={clear}
                 fullWidth // Add fullWidth prop to make button take full width
               >
-                <Title title={"Affiche"} /> {/* Change the button label */}
+                <Title title={"Clear"} /> {/* Change the button label */}
               </IconButton>
             </div>
           </div>
@@ -1180,9 +1252,11 @@ const Form = () => {
             backgroundColor: "white",
             padding: "20px",
             width: "45%", // Ajustez la largeur de la modal
-            height: "40%", // Ajustez la hauteur de la modal
+            // height: "40%", // Ajustez la hauteur de la modal
             maxHeight: "80vh", // Empêchez la modal de dépasser la hauteur de la fenêtre
-            overflowY: "auto", // Ajoutez un défilement vertical si nécessaire
+            // overflowY: "auto", // Ajoutez un défilement vertical si nécessaire
+            borderColor: "rgba(219, 234, 254, 1)", // Définissez la couleur de la bordure
+            borderRadius: "1rem", // Définissez le rayon de la bordure
           }}
         >
           <div className="mb-4 col-12">
@@ -1304,6 +1378,7 @@ const Form = () => {
                 console.log(e);
                 setInputColor(e.target.value);
               }}
+              style={{ marginTop: "8px" }}
             />
           </FormControl>
 
@@ -1354,6 +1429,7 @@ const Form = () => {
               color="primary"
               size="small"
               onClick={handleModalSubmit}
+              
             >
               OK
             </Button>

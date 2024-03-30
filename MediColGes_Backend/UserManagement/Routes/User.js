@@ -6,6 +6,7 @@ const {
 } = require("../Controllers/AuthController");
 const {
   allUsers,
+  UsersByRole
 } = require("../Controllers/UserController");
 
 const { protect } = require("../Middleware/AuthMiddleware");
@@ -25,6 +26,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.route("/").get(protect, allUsers);
+router.get("/getCollaborative",UsersByRole);
 router.route("/").post(upload.fields([{ name: 'pfp', maxCount: 1 }, { name: 'certification', maxCount: 1 }]), registerUser);
 router.post("/login", authUser);
 

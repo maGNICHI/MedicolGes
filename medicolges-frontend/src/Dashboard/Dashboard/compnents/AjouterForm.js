@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import Dashboard from "../Dashboard"; // Import the Dashboard component
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
+import { putForm } from "../compnents/api/index"
 
 import {
   CardActions,
@@ -35,12 +36,14 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import IconButton from "../../../components/Button/IconButton";
 import { FaAd, FaAngleDown, FaArchive, FaSave } from "react-icons/fa";
-import { addForm } from "../compnents/api/index";
+import { addForm ,sendResponse} from "../compnents/api/index";
 import Switch from "@mui/material/Switch";
 import { useNavigate } from "react-router-dom";
 
 const AjouterForm = () => {
-  const [formData, setFormData] = useState({ nam: "", questions: [] });
+  const [formData, setFormData] = useState({id:"",name: "", questions: [] });
+  console.log("formdata from ajouter form",formData._id)
+  const [formId, setFormId] = useState(""); // Initialiser formId à null ou une valeur par défaut appropriée
   const [selectedName, setSelectedName] = useState("Dashboard");
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -49,6 +52,8 @@ const AjouterForm = () => {
   const navigate = useNavigate();
   //forUdpate
   const [questions, setQuestions] = useState([]);
+//ajouter visibilite 
+const [isUpdating, setIsUpdating] = useState(false); // State to control update mode
 
   const handleUpdate = async (e) => {
 
@@ -86,19 +91,53 @@ const AjouterForm = () => {
     console.log("Form data before saving:", formData); // Vérifiez les données du formulaire avant la sauvegarde
 
     createForm(formData);
+    // navigate("/affucheyourReponse", { state: { formData } });
+
   };
   const createForm = async (formData) => {
+    console.log("Form data to save:", formData);
+
     console.log("ggggggggggggggggggggg", formData.responseValue);
+    // try {
+    //   console.log("Form data to save:", formData); // Vérifier les données du formulaire avant de les envoyer
+    //   await addForm({
+    //     name: formData.name,
+    //     questions: JSON.stringify(formData.questions),
+    //   });
+    //   console.log("Form saved successfully!");
+    // } catch (err) {
+    //   console.log("Error saving form: ", err);
+    // }
+
     try {
-      console.log("Form data to save:", formData); // Vérifier les données du formulaire avant de les envoyer
-      await addForm({
-        name: formData.name,
-        questions: JSON.stringify(formData.questions),
-      });
-      console.log("Form saved successfully!");
-    } catch (err) {
-      console.log("Error saving form: ", err);
-    }
+      console.log("Données du formulaire à sauvegarder:", formData); // Vérifiez les données du formulaire avant de les envoyer
+      // // Envoyer une réponse à l'API pour chaque question du formulaire
+      // for (const question of formData.questions) {
+      //   console.log("Form ID before sending response:", formId);
+         
+      //     await sendResponse(formData._id, question.id, question.responseValue);
+      // }
+      
+        // Map form data to an array of response objects
+        const responses = formData.questions.map(question => ({
+          questionId: question.id,
+          responseValue: question.responseValue
+      }));
+      await sendResponse(formData._id, responses);
+
+      console.log("Toutes les réponses ont été envoyées avec succès!");
+  } catch (err) {
+      console.log("Erreur lors de l'envoi des réponses: ", err);
+      throw err; // Facultatif : propager l'erreur vers le code appelant
+  }
+
+
+
+
+
+
+
+
     // addForm({
     //   name: formData.name,
     //   questions: JSON.stringify(formData.questions),
@@ -331,6 +370,11 @@ const AjouterForm = () => {
       questions: updatedOptions,
     }));
   };
+  const isValidEmail = (value) => {
+    // Regular expression to validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(value);
+  };
   const renderInputField = (question) => {
     console.log("im here");
     switch (question.questionType) {
@@ -355,6 +399,7 @@ const AjouterForm = () => {
             }}
             label={question.questionType === "date"}
             fullWidth
+             required 
           />
         );
       case "telephone":
@@ -398,6 +443,9 @@ const AjouterForm = () => {
               handleResponse(question.id, e.target.value, "email");
             }}
             fullWidth
+            error={question.responseValue && !isValidEmail(question.responseValue)} // Example validation function
+          helperText={question.responseValue && !isValidEmail(question.responseValue) ? 'Invalid email format' : ''}
+  
           />
         );
       case "number":
@@ -465,6 +513,9 @@ const AjouterForm = () => {
             }}
             label={question.questionType === "text" ? "Your Text Answer" : ""}
             fullWidth
+            required  // Rendre le champ obligatoire
+          error={question.responseValue === ""}  // Afficher une erreur si le champ est vide
+          helperText={question.responseValue === "" ? "Ce champ est obligatoire" : ""}  // Message d'erreur
           />
         );
       case "file":
@@ -815,6 +866,7 @@ const AjouterForm = () => {
                               }} // Taille de police et police de caractères identiques
                             >
                               {formData.name}
+                              {formData.id}
                             </Typography>
                           )}
                         </div>
