@@ -24,14 +24,15 @@ export default function Feed({inproject, projectId}) {
     <div className="feed mt-20">
       <div className="feedWrapper">
         <Share project={projectId}/>
-        {projectId ?posts.map(
-          (post) => (
-          <Post key={post._id} post={post} />
-        )): posts.map(
-          (post) => (
-          post.projet === projectId &&
-          <Post key={post._id} post={post} />
-        ))}
+        {projectId ? (
+          posts
+            .filter((post) => post.project === projectId)
+            .map((post) => <Post key={post._id} post={post} />)
+        ) : (
+          posts
+          .filter((post) => !post.project )
+          .map((post) => <Post key={post._id} post={post} />)
+        )}
       </div>
     </div>
   );
