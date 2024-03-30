@@ -21,7 +21,7 @@ export default function Feed({inproject, projectId}) {
   }, []);
 
   return (
-    <div className="feed mt-20">
+    <div className="feed mt-3">
       <div className="feedWrapper">
         <Share project={projectId}/>
         {projectId ? (
