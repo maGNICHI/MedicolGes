@@ -57,7 +57,7 @@ import {putForm} from "../api/index";
 const Form = () => {
   const [darkMode, setDarkMode] = useState(false);
 
-  const [formData, setFormData] = useState({id:"" , name: "", questions: [] });
+  const [formData, setFormData] = useState({ name: "", questions: [] });
   console.log("data from formjs",formData)
   const [idCount, setIdCount] = useState(0);
   const classes = useStyles();
@@ -175,24 +175,28 @@ const Form = () => {
   };
 
   const handleSubmit = async (e) => {
-    console.log("cccccccccccccc:",formData._id); 
 
     e.preventDefault();
         //ajouter
         try {
           console.log("Case:", location.state); 
-          if (formData._id  !== "") {
-            await createForm(); // Create a new form
-            navigate("/ajouterForm", { state: { formData, case: "create" } });
-            // // If updating an existing form
-            // await updateForm();
-            // navigate("/afficheForm");  // Navigate back to afficheForm
-          } else if(formData._id  != "null") {
-                 await updateForm();
-            navigate("/afficheForm");
+          console.log(formData._id,'data')
+          if (formData._id  !== ""  ) {
+          
+            // If updating an existing form
+            await updateForm();
+            setTimeout(() => {
+              navigate("/afficheForm");  // Navigate back to afficheForm
+
+            }, 5000);
+          } 
+          if (formData._id  == undefined  ) {
               // If you are creating a new form
-              // await createForm(); // Create a new form
-              // navigate("/ajouterForm", { state: { formData, case: "create" } }); // Navigate to ajouterForm
+              await createForm(); // Create a new form
+              setTimeout(() => {
+                navigate("/ajouterForm", { state: { formData, case: "create" } }); // Navigate to ajouterForm
+
+              }, 5000);
           }
       } catch (error) {
           console.error("Error handling form submission:", error);
@@ -348,7 +352,10 @@ const Form = () => {
   };
 
   const createForm = () => {
-    addForm({
+    addForm(
+   
+      {
+      _id:  formData._id,
       name: formData.name,
       questions: JSON.stringify(formData.questions),
     })
