@@ -15,6 +15,7 @@ const ChatProvider = (props) => {
     setUser(userInformation);
 
     if (userInformation) navigate("/chats");
+    //if (!userInformation) navigate("/");
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 

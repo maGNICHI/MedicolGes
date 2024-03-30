@@ -18,13 +18,15 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Provider store={store}>
   <React.StrictMode>
-    <ChakraProvider>
+   
     <BrowserRouter forceRefresh={true}>
       <ChatProvider>
+      <ChakraProvider>
         <App />
+        </ChakraProvider>
       </ChatProvider>
     </BrowserRouter>
-  </ChakraProvider>
+ 
   </React.StrictMode>
   </Provider>
 );
