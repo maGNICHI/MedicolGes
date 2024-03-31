@@ -306,7 +306,7 @@ body {
 }
 
 .activated .step-number {
-  background-color: #007bff;
+  background-color: #1990aa;
   color: #fff;
 }
 
@@ -324,10 +324,16 @@ body {
 }
 
 .progress {
-  background: #007bff;
+  background: #1990aa;
   transition: width 0.2s ease; /* Added transition effect for smooth width change */
 }
 .ppp{
-  background: #007bff;
+  background: #1990aa;
+}
+
+.step{
+  font-family: 'Poppins', sans-serif;
+  font-weight: bolder;
+  font-size: 18px;
 }
 

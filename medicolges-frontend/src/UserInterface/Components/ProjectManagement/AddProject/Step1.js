@@ -5,7 +5,8 @@ import FileInput from "../../../../components/Input/FileInput";
 import { useNavigate } from "react-router-dom";
 import ProjectCard from "../ProjectCard";
 import axios from "axios";
-import { FaTimes } from "react-icons/fa";
+import { FaArrowRight, FaTimes } from "react-icons/fa";
+import IconButton from "../../../../components/Button/IconButton";
 
 export default function Step1({ formDataProject, setformDataProject, onNext }) {
   const [touched, setTouched] = useState({
@@ -32,7 +33,6 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
     setformDataProject((prevData) => ({
       ...prevData,
       [name]: value,
-      collaboratives: selectedCollaboratorsId,
     }));
   };
 
@@ -47,6 +47,12 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
     if (!selectedCollaborators.includes(collaborator)) {
       setSelectedCollaborators([...selectedCollaborators, collaborator]);
       setSelectedCollaboratorsId([...selectedCollaboratorsId, collaboratorId]);
+      setformDataProject((prevData) => ({
+        ...prevData,
+        collaboratives: Array.isArray(prevData.collaboratives)
+          ? [...prevData.collaboratives, collaboratorId]
+          : [collaboratorId],
+      }));
       setCollaborativeInput("");
     }
   };
@@ -55,9 +61,17 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
     const updatedCollaborators = selectedCollaborators.filter(
       (item) => item !== collaborator
     );
-    const updatedCollaboratorsId = selectedCollaboratorsId.filter((item => item !== collaboratorId));
+    const updatedCollaboratorsId = selectedCollaboratorsId.filter(
+      (item) => item !== collaboratorId
+    );
     setSelectedCollaborators(updatedCollaborators);
     setSelectedCollaboratorsId(updatedCollaboratorsId);
+
+    // Update formDataProject to remove the collaborator's ID
+    setformDataProject((prevData) => ({
+      ...prevData,
+      collaboratives: updatedCollaboratorsId,
+    }));
   };
 
   useEffect(() => {
@@ -167,7 +181,12 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
                     <FaTimes
                       className="ms-1"
                       style={{ cursor: "pointer" }}
-                      onClick={() => handleRemoveCollaborator(collaborator)}
+                      onClick={() =>
+                        handleRemoveCollaborator(
+                          collaborator,
+                          selectedCollaboratorsId[index]
+                        )
+                      }
                     />
                   </Badge>
                 ))}
@@ -181,7 +200,7 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
                 onChange={(e) => setCollaborativeInput(e.target.value)}
               />
 
-              {collaborativeInput != "" && (
+              {collaborativeInput !== "" && (
                 <div className="mt-2">
                   {collaboratives
                     .filter((collaborative) =>
@@ -191,14 +210,17 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
                     )
                     .map(
                       (collaborative) =>
-                        collaborative.isDeleted == false && (
+                        collaborative.isDeleted === false && (
                           <Badge
                             key={collaborative._id}
                             bg="primary"
                             text="white"
                             className="me-2 mb-2"
                             onClick={() =>
-                              handleAddCollaborator(collaborative.username, collaborative._id)
+                              handleAddCollaborator(
+                                collaborative.username,
+                                collaborative._id
+                              )
                             }
                             style={{ cursor: "pointer" }}
                           >
@@ -253,13 +275,37 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
               <FileInput onChange={handleFileChange} />
             </div>
           </Col>
-          <Col md={4} className="d-flex justify-content-center justify-items-center justify-elements-center">
+          <Col
+            md={4}
+            className="d-flex justify-content-center justify-items-center justify-elements-center align-items-center"
+          >
             <ProjectCard project={formDataProject} />
           </Col>
         </Row>
-        <Button variant="primary" className="my-3" onClick={onNext}>
-          Next
-        </Button>
+        <Row>
+          <div
+            class="flex"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <IconButton
+              className="border-0 w-100"
+              style={{
+                background: `linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)`,
+                color: "white",
+                fontSize: "16px",
+                fontWeight: 600,
+                padding: "8px 16px",
+                borderRadius: "20px",
+              }}
+              onClick={onNext}
+            >
+              Next
+            </IconButton>
+          </div>
+        </Row>
       </Form>
     </div>
   );

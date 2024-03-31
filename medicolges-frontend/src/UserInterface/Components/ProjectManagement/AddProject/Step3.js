@@ -8,30 +8,21 @@ export default function Step3({ formDataProject, onNext }) {
   const [forms, setForms] = useState([]);
   const navigate = useNavigate();
 
-  const addProject = async () => {
+  const addProject = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+  
     try {
-      const formData = new FormData();
-      formData.append("name", formDataProject.name);
-      formData.append("description", formDataProject.description);
-      formData.append("organization", formDataProject.organization);
-      formData.append("file", formDataProject.file); // Append the file to FormData
-      formData.append("form", formDataProject.form);
-
       const response = await axios.post(
         "http://localhost:5000/api/project/addProject",
-        formData, // Send FormData instead of formDataProject directly
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // Set content type to multipart/form-data
-          },
-        }
+        formDataProject
       );
       console.log(response.data);
-      onNext();
+      onNext(); // Call the onNext function passed from the parent component
     } catch (error) {
       console.error("Error adding project:", error);
     }
   };
+  
   const handleDeleteForm = (id) => {
     deleteForm(id)
       .then(response => {

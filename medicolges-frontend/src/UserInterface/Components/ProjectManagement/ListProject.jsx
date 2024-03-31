@@ -22,7 +22,7 @@ export default function ListProject() {
   const [searchTerm, setSearchTerm] = useState("");
   const [goUp, setGoUp] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const projectsPerPage = 6;
+  const projectsPerPage = 9;
 
   const getProjects = async () => {
     try {
@@ -143,7 +143,7 @@ export default function ListProject() {
               )
             ))}
           </div>
-          <div className="pagination-container">
+          <div className="pagination-container center">
             <ul className="pagination">
               {pageNumbers.map((number) => (
                 <li
@@ -154,6 +154,10 @@ export default function ListProject() {
                 >
                   <button
                     className="page-link"
+                    style={{
+                      background:"#1990aa",
+                      border: "1px solid #1990aa"
+                    }}
                     onClick={() => handlePaginate(number)}
                   >
                     {number}

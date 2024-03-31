@@ -1421,9 +1421,30 @@ export default function Step2({ formDataProject, setformDataProject, onNext }) {
     </Paper>
     </Col>
       </Row>
-      <Button variant="primary" type="submit" className="my-3">
-        Next
-      </Button> 
+      <Row className="mt-5">
+          <div
+            class="flex"
+            style={{
+              display: "flex",
+              justifyContent: "center",
+            }}
+          >
+            <IconButton
+              className="border-0 w-100"
+              style={{
+                background: `linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)`,
+                color: "white",
+                fontSize: "16px",
+                fontWeight: 600,
+                padding: "8px 16px",
+                borderRadius: "20px",
+              }}
+              type="submit"
+            >
+              Next
+            </IconButton>
+          </div>
+        </Row>
     </Form>
   );
 };

@@ -72,6 +72,7 @@ body {
     letter-spacing: .8px;
     cursor: pointer;
     transition: all .4s ease;
+    width: 15%;
 }
 
 .navbar-btn:hover {

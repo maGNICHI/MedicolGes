@@ -95,7 +95,7 @@ export default function AddProject() {
                     }}
                   >
                     <div className="progress"
-                      style={{width: `${calculateProgressBarWidth()}%`, background:"#007bff"}}
+                      style={{width: `${calculateProgressBarWidth()}%`, background:"#1990aa"}}
                     ></div>
                   </div>
                 </div>
