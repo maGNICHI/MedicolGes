@@ -11,6 +11,7 @@ import Form from "../Dashboard/compnents/Form/Form";
 import Customizer from "../Dashboard/compnents/Form/Customizer";
 import Chat from "../Dashboard/compnents/Chatt/Chat";
 import { FaRobot } from "react-icons/fa";
+import AfficheFormById from "../Dashboard/compnents/AfficheFormById";
 // import DarkMode from "../Dashboard/compnents/Dark/DarkMode"
 function Dashboard() {
   const [selectedName, setSelectedName] = useState("Form Generation");
@@ -68,6 +69,7 @@ function Dashboard() {
     </div>
     {/* <DarkMode> */}
     <Form className="-pt-5" />
+   
     {/* </DarkMode> */}
   </Col>
 </Row>

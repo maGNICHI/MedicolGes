@@ -242,7 +242,11 @@ function ReponseByForm() {
                           <>
                             <strong>Response:</strong>{' '}
                             {/* //ajouter */}
-                            
+                            {/* {question.questionType === "multipleChoice" && response.responses[qIndex].responseValue.selectedOption && (
+        <>
+          {response.responses[qIndex].responseValue.selectedOption}<br />
+        </>
+      )} */}
                             {question.questionType === "toggle" ? (
   response.responses[qIndex].responseValue.toString() // Affiche directement la valeur booléenne sous forme de chaîne
   ) : (

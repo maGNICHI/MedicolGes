@@ -302,24 +302,47 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
           ...prev,
           ["questions"]: prev.questions.map((obj) => {
             if (obj.id === id) {
-              // Update the properties for the object with id 2
+              // Update the properties for the object with the given id
+              const checked = obj.responseValue.checked || []; // Ensure checked is an array
+              const updatedChecked = checked.includes(responseValue)
+                ? checked.filter((x) => x !== responseValue)
+                : [...checked, responseValue];
+  
               return {
                 ...obj,
                 ["responseValue"]: {
                   ...obj.responseValue,
-                  ["checked"]: obj.responseValue.checked.includes(responseValue)
-                    ? obj.responseValue.checked.filter(
-                        (x) => x != responseValue
-                      )
-                    : obj.responseValue.checked.push(responseValue),
+                  ["checked"]: updatedChecked,
                 },
-              }; // Add or update other properties as needed
+              };
             }
             // If the id doesn't match, return the original object
             return obj;
           }),
         }));
         break;
+        // setFormData((prev) => ({
+        //   ...prev,
+        //   ["questions"]: prev.questions.map((obj) => {
+        //     if (obj.id === id) {
+        //       // Update the properties for the object with id 2
+        //       return {
+        //         ...obj,
+        //         ["responseValue"]: {
+        //           ...obj.responseValue,
+        //           ["checked"]: obj.responseValue.checked.includes(responseValue)
+        //             ? obj.responseValue.checked.filter(
+        //                 (x) => x != responseValue
+        //               )
+        //             : obj.responseValue.checked.push(responseValue),
+        //         },
+        //       }; // Add or update other properties as needed
+        //     }
+        //     // If the id doesn't match, return the original object
+        //     return obj;
+        //   }),
+        // }));
+        // break;
       case "email":
         setFormData((prev) => ({
           ...prev,
