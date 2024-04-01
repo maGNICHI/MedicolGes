@@ -287,6 +287,9 @@ body {
   align-items: center;
   height: 100%;
   width: 100%;
+  font-family: 'Poppins', sans-serif;
+  font-weight: bolder;
+  font-size: 18px;
 }
 
 .step-number {
@@ -331,9 +334,10 @@ body {
   background: #1990aa;
 }
 
-.step{
+::placeholder{
   font-family: 'Poppins', sans-serif;
-  font-weight: bolder;
-  font-size: 18px;
 }
 
+option{
+  font-family: 'Poppins', sans-serif;
+}

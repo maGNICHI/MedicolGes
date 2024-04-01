@@ -246,13 +246,13 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
                 value={formDataProject.organization}
                 onChange={handleChange}
                 onBlur={() => handleBlur("organization")}
-                style={{ borderRadius: "50px" }}
+                style={{ borderRadius: "50px", fontFamily:`'Poppins', sans-serif` }}
                 required
                 isInvalid={
                   touched.organization && formDataProject.organization === ""
                 }
               >
-                <option value="" hidden>
+                <option className="op" value="" hidden>
                   Select an organization
                 </option>
                 {organizations.map((organization) => (
