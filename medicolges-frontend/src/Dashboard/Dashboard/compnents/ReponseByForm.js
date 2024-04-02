@@ -248,13 +248,13 @@ function ReponseByForm() {
           {response.responses[qIndex].responseValue.selectedOption}<br />
         </>
       )} */}
-{question.questionType === "multipleChoice" && response.responses[qIndex].responseValue.selectedOption && (
+{/* {question.questionType === "multipleChoice" && response.responses[qIndex].responseValue.selectedOption && (
   <>
     <strong>Response:</strong>{' '}
     {response.responses[qIndex].responseValue.selectedOption}
     <br />
   </>
-)}
+)} */}
 
 
                             {question.questionType === "toggle" ? (
