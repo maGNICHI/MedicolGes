@@ -44,6 +44,9 @@ import axios from 'axios';
   const preset_key="cw1paxgz";
   const cloud_name="dwkto7nzl";
 const AjouterForm = () => {
+  const [error, setError] = useState(''); // Définition de l'état error
+  const [textError, setTextError] = useState('');
+
   const [formData, setFormData] = useState({id:"",name: "", questions: [] });
   console.log("formdata from ajouter form",formData._id)
   const [formId, setFormId] = useState(""); // Initialiser formId à null ou une valeur par défaut appropriée
@@ -436,8 +439,9 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
             }}
             label={question.questionType === "date"}
             fullWidth
-             required 
-          />
+            required
+
+    />
         );
       case "telephone":
         return (
@@ -527,6 +531,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
         );
       case "paragraph":
         return (
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
           <TextField
             name="paragraphAnswer"
             multiline
@@ -535,6 +540,14 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
             value={question.responseValue}
             onChange={(e) => {
               handleResponse(question.id, e.target.value, "paragraph");
+              //ajouter
+            // Ajouter la validation ici
+          if (e.target.value.length > 0 && e.target.value.length < 20) {
+            setTextError('Votre réponse doit contenir au moins 20 caractères.');
+          } else {
+            setTextError('');
+          }
+              
             }}
             label={
               question.questionType === "paragraph"
@@ -542,10 +555,18 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
                 : ""
             }
             fullWidth
-          />
+            />
+
+            {error && (
+              <Typography variant="caption" color="error" style={{marginRight: '1172px', marginTop: '8px' }}>
+                {textError}
+              </Typography>
+           )}
+           </div>
         );
       case "text":
         return (
+          <div>
           <TextField
             name="textAnswer"
             rows={4}
@@ -553,13 +574,23 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
             value={question.responseValue}
             onChange={(e) => {
               handleResponse(question.id, e.target.value, "text");
+              if (e.target.value.length > 0 && e.target.value.length < 8) {
+                setError('Votre réponse doit contenir au moins 8 caractères.');
+              } else {
+                setError('');
+              }
             }}
             label={question.questionType === "text" ? "Your Text Answer" : ""}
             fullWidth
             required  // Rendre le champ obligatoire
-          error={question.responseValue === ""}  // Afficher une erreur si le champ est vide
-          helperText={question.responseValue === "" ? "Ce champ est obligatoire" : ""}  // Message d'erreur
+         
           />
+          {error && (
+  <Typography variant="caption" color="error" style={{  marginTop: '8px', marginRight: '1172px' }}>
+    {error}
+  </Typography>
+)}
+</div>
         );
       case "file":
         return (
