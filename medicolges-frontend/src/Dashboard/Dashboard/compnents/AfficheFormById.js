@@ -3,7 +3,7 @@ import { useParams } from 'react-router-dom';
 import { fetchFormById } from "../compnents/api/index";
 import {
     TextField,FormControl,InputLabel,Select,MenuItem,
-    Radio,FormControlLabel,  Checkbox,
+    Radio,FormControlLabel,  Checkbox
 
 
   } from "@material-ui/core";
@@ -11,9 +11,17 @@ import {
 
   import PhoneInput from "react-phone-input-2";
   import Switch from "@mui/material/Switch";
+  //import Layout from "../../../Dashboard/SuperAdminLayout/Layout";
+
+  import { Card, Col, Container, Row } from "react-bootstrap";
+  //import Layout from '../../SuperAdminLayout/Layout';
+
+import Layout from '../../SuperAdminLayout/Layout';
 
 
 function AfficheFormById() {
+  const [selectedName, setSelectedName] = useState("Dashboard");
+
   const { id } = useParams();
   const [formData, setFormData] = useState({ name: "", questions: [] });
 
@@ -31,6 +39,8 @@ function AfficheFormById() {
             }}
             label={question.questionType === "date"}
             fullWidth
+            style={{ marginTop: '19px', marginBottom: '8px' }} // Ajoutez ces styles pour les marges
+
           />
         );
       case "telephone":
@@ -43,12 +53,14 @@ function AfficheFormById() {
             }}
             countryCodeEditable={false} // Empêche l'édition manuelle du code de pays
             enableSearch={true} // Activer la recherche pour choisir le code de pays
-            style={{ width: "50px", height: "30px", fontSize: "14px" }} // Styles personnalisés pour ajuster la taille
+            style={{ width: "50px", height: "30px", fontSize: "14px",   marginTop: '19px', 
+            marginBottom: '8px'  }} // Styles personnalisés pour ajuster la taille
           />
         );
       case "toggle":
         return (
-          <div style={{ display: "flex", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", marginTop: '8px', marginBottom: '8px'  // Ajoutez ces styles pour les marges
+        }}>
             <FormControlLabel
               control={
                 <Switch
@@ -64,6 +76,7 @@ function AfficheFormById() {
         );
       case "paragraph":
         return (
+          
           <TextField
             name="paragraphAnswer"
             multiline
@@ -79,6 +92,7 @@ function AfficheFormById() {
                 : ""
             }
             fullWidth
+            style={{ marginTop: '19px', marginBottom: '8px' }} 
           />
         );
       // case "telephone":
@@ -93,8 +107,10 @@ function AfficheFormById() {
       //   );
       case "time":
         return (
-          <TimePickerInput
+          <TimePickerInput       style={{ marginTop: '19px', marginBottom: '8px' }} // Ajoutez ces styles pour les marges
+
             value={question.responseValue}
+
             // onChange={(e) =>
             //   handleResponse(question.id, e.target.value, "time")
             // }
@@ -148,7 +164,7 @@ function AfficheFormById() {
         );
       case "gender":
         return (
-          <FormControl variant="outlined" fullWidth>
+          <FormControl variant="outlined" fullWidth style={{ marginTop: '19px', marginBottom: '8px' }}>
             <InputLabel id={`dropdown-label-${question.id}`}>Genre</InputLabel>
             <Select
               labelId={`dropdown-label-${question.id}`}
@@ -176,6 +192,8 @@ function AfficheFormById() {
             }}
             label={question.questionType === "text" ? "Your Text Answer" : ""}
             fullWidth
+            style={{ marginTop: '19px', marginBottom: '8px' }} // Ajoutez ces styles pour les marges
+
           />
         );
       case "number":
@@ -198,10 +216,13 @@ function AfficheFormById() {
         return (
           <input
             type="file"
+            style={{ marginTop: '19px', marginBottom: '8px' }} // Ajoutez ces styles pour les marges
+
             // onChange={(event) =>
             //   handleResponse(question.id, event.target.files[0], "file")
             // } // Utilisez 'event' au lieu de 'e'
           />
+        
         );
       case "dropdown":
         return (
@@ -241,7 +262,8 @@ function AfficheFormById() {
       case "multipleChoice":
         console.log(("rrrrrrrrrrrrr", question));
         return (
-          <div>
+          <div   style={{ marginTop: '19px', marginBottom: '8px' }} // Ajoutez ces styles pour les marges
+          >
             {[...Array(question.optionsCount)].map((item, index) => (
               <div
                 key={index}
@@ -322,7 +344,7 @@ function AfficheFormById() {
       ///cmobox
       case "combobox":
         return (
-          <div>
+          <div  style={{ marginTop: '19px', marginBottom: '8px' }}>
             {[...Array(question.optionsCount)].map((item, index) => (
               <div key={index}>
                 <TextField
@@ -430,6 +452,8 @@ function AfficheFormById() {
             //   handleResponse(question.id, e.target.value, "email");
             }}
             fullWidth
+            style={{ marginTop: '19px', marginBottom: '8px' }} // Ajoutez ces styles pour les marges
+
           />
         );
       default:
@@ -459,27 +483,60 @@ function AfficheFormById() {
   }, [id]);
 
   return (
-    <div>
-      {formData ? (
-        <div>
-          <h1>{formData.name}</h1>
-          {formData.id}
-          <ul>
-          {formData.questions.map((question, index) => (
-              <li key={index}>
-                Question: {question.question} <br />
-                Type de question: {question.questionType} <br />
-                {renderInputField(question)}
+    // <div>
+    //   {formData ? (
+    //     <div>
+    //       <h1>{formData.name}</h1>
+    //       {formData.id}
+    //       <ul>
+    //       {formData.questions.map((question, index) => (
+    //           <li key={index}>
+    //             Question: {question.question} <br />
+    //             Type de question: {question.questionType} <br />
+    //             {renderInputField(question)}
 
-                {/* Ajoutez d'autres propriétés de question si nécessaire */}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <p>Chargement...</p>
-      )}
-    </div>
+    //             {/* Ajoutez d'autres propriétés de question si nécessaire */}
+    //           </li>
+    //         ))}
+    //       </ul>
+    //     </div>
+    //   ) : (
+    //     <p>Chargement...</p>
+    //   )}
+    // </div>
+    <Layout selectedName={selectedName}>
+
+  <Container fluid className="mt-4" style={{ height: "100vh" }}>
+    <Card className="card h-100" style={{ overflowY: "auto" }}>
+      <Card.Body
+        style={{
+          backgroundColor: "#ffffffa9",
+          padding: "20px",
+          borderRadius: "20px",
+        }}
+      >
+        {formData ? (
+          <div>
+            <strong style={{ color: 'black' }}> <h2>Nom of Fom: {formData.name}</h2></strong>
+            {formData.id}
+            <ul>
+              {formData.questions.map((question, index) => (
+                <li key={index}>
+                 <strong style={{ color: 'black' }}>Question: {question.question} </strong> <br />
+                  {/* Type de question: {question.questionType}  */}
+                  {renderInputField(question)}
+                  <br/>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <p>Chargement...</p>
+        )}
+      </Card.Body>
+    </Card>
+  </Container>
+</Layout>
   );
 }
 

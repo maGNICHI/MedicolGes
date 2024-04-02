@@ -168,29 +168,30 @@ function ReponseByForm() {
             }),
           }));
           break;
-        case "combobox":
-          setFormData((prev) => ({
-            ...prev,
-            ["questions"]: prev.questions.map((obj) => {
-              if (obj.id === id) {
-                // Update the properties for the object with id 2
-                return {
-                  ...obj,
-                  ["responseValue"]: {
-                    ...obj.responseValue,
-                    ["checked"]: obj.responseValue.checked.includes(responseValue)
-                      ? obj.responseValue.checked.filter(
-                          (x) => x != responseValue
-                        )
-                      : obj.responseValue.checked.push(responseValue),
-                  },
-                }; // Add or update other properties as needed
-              }
-              // If the id doesn't match, return the original object
-              return obj;
-            }),
-          }));
-          break;
+          case "combobox":
+            setFormData((prev) => ({
+              ...prev,
+              ["questions"]: prev.questions.map((obj) => {
+                if (obj.id === id) {
+                  // Update the properties for the object with the given id
+                  const checked = obj.responseValue.checked || []; // Ensure checked is an array
+                  const updatedChecked = checked.includes(responseValue)
+                    ? checked.filter((x) => x !== responseValue)
+                    : [...checked, responseValue];
+      
+                  return {
+                    ...obj,
+                    ["responseValue"]: {
+                      ...obj.responseValue,
+                      ["checked"]: updatedChecked,
+                    },
+                  };
+                }
+                // If the id doesn't match, return the original object
+                return obj;
+              }),
+            }));
+            break;
         case "email":
           setFormData((prev) => ({
             ...prev,
@@ -234,7 +235,7 @@ function ReponseByForm() {
                   {formData.questions.map((question, qIndex) => (
                     <div key={qIndex}>
                       <Card.Title style={{ fontSize: '16px', marginBottom: '5px' }}>
-                        Question: {question.question} <br />
+                      <strong> Question:</strong> {question.question} <br />
                         Type de question: {question.questionType} <br />
                       </Card.Title>
                       <Card.Text style={{marginBottom:'2px'}}>
@@ -247,6 +248,15 @@ function ReponseByForm() {
           {response.responses[qIndex].responseValue.selectedOption}<br />
         </>
       )} */}
+{question.questionType === "multipleChoice" && response.responses[qIndex].responseValue.selectedOption && (
+  <>
+    <strong>Response:</strong>{' '}
+    {response.responses[qIndex].responseValue.selectedOption}
+    <br />
+  </>
+)}
+
+
                             {question.questionType === "toggle" ? (
   response.responses[qIndex].responseValue.toString() // Affiche directement la valeur booléenne sous forme de chaîne
   ) : (
