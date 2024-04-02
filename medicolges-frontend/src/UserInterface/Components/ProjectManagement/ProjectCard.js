@@ -17,7 +17,7 @@ export default function ProjectCard({ project, onFollow }) {
     }
   };
   
-
+  const user = JSON.parse(localStorage.getItem("userInfo"));
   const handleFollow = async () => {
     try {
       setIsFollowing(true);
@@ -25,7 +25,7 @@ export default function ProjectCard({ project, onFollow }) {
       const response = await axios.post(
         `http://localhost:5000/api/project/${project._id}/follow`,
         {
-          userId: "65ee427a26afa5d7eaddcc67",
+          userId: user._id,
         }
       );
       onFollow(response.data.project);
@@ -95,7 +95,7 @@ export default function ProjectCard({ project, onFollow }) {
             <p style={{ fontWeight: "bold" }}>{followersCount} Followers</p>
           </Col>
           <Col md={6}>
-            {isFollowing ? (
+            {isFollowing  ? (
               <IconButton
                 className="border-0 w-100"
                 style={{
