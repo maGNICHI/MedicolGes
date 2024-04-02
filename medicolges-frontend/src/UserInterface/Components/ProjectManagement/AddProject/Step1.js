@@ -20,6 +20,8 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
   const [selectedCollaboratorsId, setSelectedCollaboratorsId] = useState([]);
   const [collaboratives, setCollaboratives] = useState([]);
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  console.log("userinfo", user._id);
 
   const handleBlur = (field) => {
     setTouched({
@@ -33,6 +35,7 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
     setformDataProject((prevData) => ({
       ...prevData,
       [name]: value,
+      creator: user._id,
     }));
   };
 
@@ -246,7 +249,10 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
                 value={formDataProject.organization}
                 onChange={handleChange}
                 onBlur={() => handleBlur("organization")}
-                style={{ borderRadius: "50px", fontFamily:`'Poppins', sans-serif` }}
+                style={{
+                  borderRadius: "50px",
+                  fontFamily: `'Poppins', sans-serif`,
+                }}
                 required
                 isInvalid={
                   touched.organization && formDataProject.organization === ""

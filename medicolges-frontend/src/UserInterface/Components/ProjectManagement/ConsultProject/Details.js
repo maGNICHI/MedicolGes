@@ -15,7 +15,7 @@ import axios from "axios";
 
 export default function Details({ projectData, organization }) {
   const [showShareFeedBackModal, setShowShareFeedBackModal] = useState(false);
-  const [emails, setEmails] = useState([""]); 
+  const [emails, setEmails] = useState([""]);
 
   const handleCloseShareFeedBackModal = () => setShowShareFeedBackModal(false);
   const handleShowShareFeedBackModal = () => {
@@ -51,7 +51,7 @@ export default function Details({ projectData, organization }) {
       console.error("Error sharing project:", error);
     }
   };
-   
+
   const downloadFile = async () => {
     try {
       const response = await axios.get(
@@ -84,6 +84,27 @@ export default function Details({ projectData, organization }) {
           <br />
           <div className="details-item">
             <Title
+              title={"This Project Is Created By: "}
+              fontWeight={600}
+              fontSize={"16px"}
+              className="inline-title"
+            />
+            <p className="inline-content">{projectData.creator}</p>
+          </div>
+          {projectData.collaboratives && (
+            <div className="details-item">
+              <Title
+                title={"In A Collaboration With: "}
+                fontWeight={600}
+                fontSize={"16px"}
+                className="inline-title"
+              />
+              <p className="inline-content">{projectData.collaboratives}</p>
+            </div>
+          )}
+          <div className="details-item"></div>
+          <div className="details-item">
+            <Title
               title={"Address Of The Organization: "}
               fontWeight={600}
               fontSize={"16px"}
@@ -103,10 +124,7 @@ export default function Details({ projectData, organization }) {
           <hr />
         </Col>
         <Col md={3} className="d-none d-md-block">
-          <img
-            src={process.env.PUBLIC_URL + "/images/avatar/useravatar.jpg"}
-            alt="organization"
-          />
+          <img src={organization.image} alt="organization" />
         </Col>
       </Row>
       <Row className="mb-5">

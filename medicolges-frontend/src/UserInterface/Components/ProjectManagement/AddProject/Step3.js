@@ -18,7 +18,7 @@ export default function Step3({ formDataProject, onNext }) {
         formDataProject
       );
       console.log(response.data);
-      onNext(); // Call the onNext function passed from the parent component
+      navigate(`/projects/consult/${response.data.success.project._id}`) // Call the onNext function passed from the parent component
     } catch (error) {
       console.error("Error adding project:", error);
     }
