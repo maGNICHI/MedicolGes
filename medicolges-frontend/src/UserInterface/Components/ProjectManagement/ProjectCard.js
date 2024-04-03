@@ -6,7 +6,8 @@ import axios from "axios";
 import { NavLink } from "react-router-dom";
 
 export default function ProjectCard({ project, onFollow }) {
-  const [isFollowing, setIsFollowing] = useState(false);
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const [following, setFollowing] = useState(project.followers.includes(user?._id));
   const [followersCount, setFollowersCount] = useState(project.numberFollowers);
 
   const truncateDescription = (text, maxLength) => {
@@ -17,17 +18,16 @@ export default function ProjectCard({ project, onFollow }) {
     }
   };
   
-  const user = JSON.parse(localStorage.getItem("userInfo"));
   const handleFollow = async () => {
     try {
-      setIsFollowing(true);
-      setFollowersCount((prevCount) => prevCount + 1);
       const response = await axios.post(
         `http://localhost:5000/api/project/${project._id}/follow`,
         {
           userId: user._id,
         }
       );
+      setFollowing(true);
+      setFollowersCount((prevCount) => prevCount + 1);
       onFollow(response.data.project);
     } catch (error) {
       console.error("Error following project:", error);
@@ -36,14 +36,16 @@ export default function ProjectCard({ project, onFollow }) {
 
   const handleUnfollow = async () => {
     try {
-      setIsFollowing(false);
-      setFollowersCount((prevCount) => prevCount - 1);
       const response = await axios.delete(
         `http://localhost:5000/api/project/${project._id}/unfollow`,
         {
-          userId: "65ee427a26afa5d7eaddcc67",
+          data: {
+            userId: user._id,
+          },
         }
       );
+      setFollowing(false);
+      setFollowersCount((prevCount) => Math.max(0, prevCount - 1));
       onFollow(response.data.project);
     } catch (error) {
       console.error("Error unfollowing project:", error);
@@ -95,7 +97,7 @@ export default function ProjectCard({ project, onFollow }) {
             <p style={{ fontWeight: "bold" }}>{followersCount} Followers</p>
           </Col>
           <Col md={6}>
-            {isFollowing  ? (
+            {following ? (
               <IconButton
                 className="border-0 w-100"
                 style={{

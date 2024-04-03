@@ -23,8 +23,13 @@ export default function ConsultProject({ onFollow }) {
   const [showDetails, setShowDetails] = useState(true);
   const [showFeedback, setShowFeedback] = useState(false); // State for showing Feedback component
   const [feedbacks, setFeedbacks] = useState([]);
+  const [feedbackCount, setFeedbackCount] = useState(0);
   const { id } = useParams();
   const [goUp, setGoUp] = useState(false);
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  const [following, setFollowing] = useState(
+    projectData?.followers?.includes(user?._id) || false
+  );
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -59,7 +64,12 @@ export default function ConsultProject({ onFollow }) {
     const fetchPosts = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/posts");
-        setPosts(response.data.length);
+        // Filter posts related to the project
+        const postsRelatedToProject = response.data.filter(
+          (post) => post.project === id
+        );
+        // Set the number of posts related to the project
+        setPosts(postsRelatedToProject.length);
       } catch (error) {
         console.error("Error fetching posts:", error);
       }
@@ -67,8 +77,11 @@ export default function ConsultProject({ onFollow }) {
 
     const fetchFeedbacks = async (id) => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/feedback/project/${id}`);
+        const response = await axios.get(
+          `http://localhost:5000/api/feedback/project/${id}`
+        );
         setFeedbacks(response.data.success.feedback); // Update to set feedbacks from response
+        setFeedbackCount(response.data.success.feedback.length);
       } catch (error) {
         console.error("Error fetching feedback:", error);
       }
@@ -77,27 +90,27 @@ export default function ConsultProject({ onFollow }) {
     fetchData();
     fetchPosts();
     fetchOrganization();
-    if (projectData._id) { // Add condition to ensure projectData._id is available
+    if (projectData._id) {
+      // Add condition to ensure projectData._id is available
       fetchFeedbacks(projectData._id);
     }
-    
+
     const onPageScroll = () => {
-        if (window.scrollY > 600) {
-          setGoUp(true);
-        } else {
-          setGoUp(false);
-        }
-      };
-      window.addEventListener("scroll", onPageScroll);
-  
-      return () => {
-        window.removeEventListener("scroll", onPageScroll);
+      if (window.scrollY > 600) {
+        setGoUp(true);
+      } else {
+        setGoUp(false);
+      }
     };
-    
+    window.addEventListener("scroll", onPageScroll);
+
+    return () => {
+      window.removeEventListener("scroll", onPageScroll);
+    };
 
     onPageScroll();
   }, [id, projectData.organization]);
-  
+
   // Calculate statistics
   const calculateStatistics = () => {
     const statistics = {
@@ -122,15 +135,15 @@ export default function ConsultProject({ onFollow }) {
 
   const handleFollow = async () => {
     try {
-      setIsFollowing(true);
-      setFollowersCount((prevCount) => prevCount + 1);
       const response = await axios.post(
-        `http://localhost:5000/api/project/${projectData._id}/follow`,
+        `http://localhost:5000/api/project/${projectData?._id}/follow`,
         {
-          userId: "65ee427a26afa5d7eaddcc67",
+          userId: user._id,
         }
       );
-      onFollow(projectData);
+      setFollowing(true);
+      setFollowersCount((prevCount) => prevCount + 1);
+      onFollow(response.data.project);
     } catch (error) {
       console.error("Error following project:", error);
     }
@@ -138,15 +151,17 @@ export default function ConsultProject({ onFollow }) {
 
   const handleUnfollow = async () => {
     try {
-      setIsFollowing(false);
-      setFollowersCount((prevCount) => prevCount - 1);
       const response = await axios.delete(
-        `http://localhost:5000/api/project/${projectData._id}/unfollow`,
+        `http://localhost:5000/api/project/${projectData?._id}/unfollow`,
         {
-          userId: "65ee427a26afa5d7eaddcc67",
+          data: {
+            userId: user._id,
+          },
         }
       );
-      onFollow(projectData);
+      setFollowing(false);
+      setFollowersCount((prevCount) => Math.max(0, prevCount - 1));
+      onFollow(response.data.project);
     } catch (error) {
       console.error("Error unfollowing project:", error);
     }
@@ -168,7 +183,8 @@ export default function ConsultProject({ onFollow }) {
                 <div
                   className="icon"
                   style={{
-                    background: "linear-gradient(-45deg, #3615e7, #44a2f6)",
+                    background:
+                      "linear-gradient(-45deg, rgb(25, 144, 170) 0%, rgb(138, 194, 187) 100%)",
                     borderRadius: "50%",
                     width: "100px",
                     height: "100px",
@@ -211,7 +227,7 @@ export default function ConsultProject({ onFollow }) {
                 </Col>
                 <Col md={4} className="mt-2">
                   <p style={{ fontWeight: "bold", marginBottom: "5px" }}>
-                    {posts}
+                    {feedbackCount}
                   </p>
                   <p
                     style={{ fontSize: "14px", color: "gray", marginTop: "0" }}
@@ -222,51 +238,56 @@ export default function ConsultProject({ onFollow }) {
               </Row>
               <hr />
               <Row>
-              <div className="mb-6">
-          <h4 className="mb-3">User reviews</h4>
-          <span className="font-14">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <i
-                key={index}
-                className={`fas fa-star ${
-                  index < Math.floor(statistics.percentages[4 - index] / 20)
-                    ? "fas fa-star text-warning"
-                    :
-                     "far fa-star text-warning"
-                }`}
-              ></i>
-            ))}
-          </span>
-          <span className="h5">{statistics.totalRatings} out of 5</span>
-          <p className="font-14">{statistics.totalRatings} user ratings</p>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <div className="row align-items-center mb-1" key={index}>
-              <div className="col-md-2 col-2 pr-0">
-                <div className="font-12 text-dark">{5 - index} Star</div>
-              </div>
-              <div className="col-md-8 col-8 pr-2">
-                <div
-                  className="progress"
-                  style={{ height: "8px" }}
-                >
-                  <div
-                    className="progress-bar bg-warning"
-                    role="progressbar"
-                    style={{ width: `${statistics.percentages[4 - index]}%` }}
-                    aria-valuenow={statistics.percentages[4 - index]}
-                    aria-valuemin="0"
-                    aria-valuemax="100"
-                  ></div>
+                <div className="mb-6">
+                  <h4 className="mb-3">User reviews</h4>
+                  <span className="font-14">
+                    {Array.from({ length: 5 }).map((_, index) => (
+                      <i
+                        key={index}
+                        className={`fas fa-star ${
+                          index <
+                          Math.floor(statistics.percentages[4 - index] / 20)
+                            ? "fas fa-star text-warning"
+                            : "far fa-star text-warning"
+                        }`}
+                      ></i>
+                    ))}
+                  </span>
+                  <span className="h5">{statistics.totalRatings} out of 5</span>
+                  <p className="font-14">
+                    {statistics.totalRatings} user ratings
+                  </p>
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div className="row align-items-center mb-1" key={index}>
+                      <div className="col-md-1 col-1 pr-0">
+                        <div className="font-12 text-dark">{5 - index}</div>
+                      </div>
+                      <div className="col-md-9 col-9 pr-2">
+                        <div className="progress" style={{ height: "8px" }}>
+                          <div
+                            className="progress-bar bg-warning"
+                            role="progressbar"
+                            style={{
+                              width: `${statistics.percentages[4 - index]}%`,
+                            }}
+                            aria-valuenow={statistics.percentages[4 - index]}
+                            aria-valuemin="0"
+                            aria-valuemax="100"
+                          ></div>
+                        </div>
+                      </div>
+                      <div className="col-md-2 col-2">
+                        <div className="font-12 text-primary">
+                          {isNaN(Math.round(statistics.percentages[4 - index]))
+                            ? "0%"
+                            : `${Math.round(
+                                statistics.percentages[4 - index]
+                              )}%`}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              </div>
-              <div className="col-md-2 col-2">
-                <div className="font-12 text-primary">
-                  {Math.round(statistics.percentages[4 - index])}%
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
               </Row>
             </Col>
             <Col md={9} xs={12}>
@@ -276,24 +297,47 @@ export default function ConsultProject({ onFollow }) {
                   {" "}
                   <li className="nav-item">
                     {" "}
-                    <a className="nav-link" href="#details" onClick={() => {setShowDetails(true); setShowFeedback(false)}}>
+                    <a
+                      className="nav-link"
+                      href="#details"
+                      onClick={() => {
+                        setShowDetails(true);
+                        setShowFeedback(false);
+                      }}
+                    >
                       Details
                     </a>{" "}
                   </li>{" "}
                   <li className="nav-item">
                     {" "}
-                    <a className="nav-link" href="#posts" onClick={() => {setShowDetails(false);setShowFeedback(false)}}>
+                    <a
+                      className="nav-link"
+                      href="#posts"
+                      onClick={() => {
+                        setShowDetails(false);
+                        setShowFeedback(false);
+                      }}
+                    >
                       Posts
                     </a>{" "}
                   </li>{" "}
                   <li className="nav-item">
                     {" "}
-                    <a className="nav-link" href="#feedback" onClick={() => {setShowFeedback(true); setShowDetails(false)}}> {/* Update onClick to show feedback */}
+                    <a
+                      className="nav-link"
+                      href="#feedback"
+                      onClick={() => {
+                        setShowFeedback(true);
+                        setShowDetails(false);
+                      }}
+                    >
+                      {" "}
+                      {/* Update onClick to show feedback */}
                       Feedback
                     </a>{" "}
                   </li>{" "}
                 </ul>
-                {isFollowing ? (
+                {following ? (
                   <IconButton
                     className="border-0 w-100"
                     style={{
@@ -314,7 +358,7 @@ export default function ConsultProject({ onFollow }) {
                     className="border-0 w-100"
                     style={{
                       background:
-                        "linear-gradient(-45deg, #3615e7 0%, #44a2f6 100%)",
+                        "linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)",
                       color: "white",
                       fontSize: "16px",
                       fontWeight: 600,
@@ -329,11 +373,14 @@ export default function ConsultProject({ onFollow }) {
               </nav>
               {/* Conditionally render Details, Posts, or Feedback component based on state */}
               {showDetails ? (
-                <Details projectData={projectData} organization={organizationId} />
+                <Details
+                  projectData={projectData}
+                  organization={organizationId}
+                />
               ) : showFeedback ? (
                 <Feedback projectId={projectData} /> // Pass feedbacks as props to Feedback component
               ) : (
-                <Feed inproject={true} projectId={id}/>
+                <Feed inproject={true} projectId={id} />
               )}
             </Col>
           </div>

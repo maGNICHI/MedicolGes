@@ -85,11 +85,9 @@ router.delete("/deleteProject/:_id", async (req, res) => {
   const { _id } = req.params;
   try {
     const deletedProject = await Project.findOneAndDelete({ _id });
-    res
-      .status(200)
-      .send({
-        success: { msg: "Project deleted successfully", deletedProject },
-      });
+    res.status(200).send({
+      success: { msg: "Project deleted successfully", deletedProject },
+    });
   } catch (error) {
     res.status(400).send({ errors: [{ msg: error.message }] });
   }
@@ -121,11 +119,9 @@ router.get("/organization/:_id", async (req, res) => {
         .status(400)
         .send({ errors: [{ msg: "Organization not found" }] });
     }
-    res
-      .status(200)
-      .send({
-        success: { msg: "Organization found successfully", organization },
-      });
+    res.status(200).send({
+      success: { msg: "Organization found successfully", organization },
+    });
   } catch (error) {
     res.status(400).send({ errors: [{ msg: error.message }] });
   }
@@ -200,10 +196,17 @@ router.delete("/:projectId/unfollow", async (req, res) => {
         .json({ error: "User is not following the project" });
     }
 
-    project.followers = project.followers.filter(
-      (followerId) => followerId !== userId
-    );
-    project.numberFollowers -= 1;
+    // Find the index of userId in the followers array
+    const index = project.followers.indexOf(userId);
+    if (index !== -1) {
+      // Remove userId from the followers array
+      project.followers.splice(index, 1);
+    }
+
+    // Update the number of followers
+    project.numberFollowers = Math.max(0, project.numberFollowers - 1);
+
+    // Save the updated project
     await project.save();
 
     res
@@ -213,6 +216,7 @@ router.delete("/:projectId/unfollow", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
 
 // Route to send invitation through email
 router.post("/shareProject/:projectId", async (req, res) => {
