@@ -81,31 +81,30 @@ function ReponseByForm() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <h1 style={{ fontSize: '20px', marginBottom: '36px' }}>Responses for Form: {formData.name} ({responses.length} responses)</h1>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
-        {responses.map((response, index) => (
-          <div key={index} style={{ width: '400px', backgroundColor: 'rgb(255, 255, 255)', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px', gap: '20px', position: 'relative', overflow: 'hidden', boxShadow: '2px 2px 20px rgba(0, 0, 0, 0.062)' }}>
-            {response.responses.map((res, resIndex) => (
-              <div key={resIndex}>
-                <Card style={{ width: '100%' }}>
-                  <Card.Body>
-                    <Card.Title style={{ fontSize: '16px', marginBottom: '5px' }}>
-                      <strong> Question:</strong> {formData.questions.find((question) => question.id === res.questionId).question} <br />
-                      Type de question: {formData.questions.find((question) => question.id === res.questionId).questionType} <br />
-                    </Card.Title>
-                    <Card.Text style={{marginBottom:'2px'}}>
-                      {returResponse(formData.questions.find((question) => question.id === res.questionId).questionType, res)}
-                      <br />
-                    </Card.Text>
-                  </Card.Body>
-                </Card>
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
+    <h1 style={{ fontSize: '20px', marginBottom: '36px' }}>Responses for Form: {formData.name} ({responses.length} responses)</h1>
+    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', justifyContent: 'center' }}>
+      {responses.map((response, index) => (
+        <div key={index} style={{ width: '400px', backgroundColor: 'rgb(255, 255, 255)', borderRadius: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px', gap: '20px', position: 'relative', overflow: 'hidden', boxShadow: '2px 2px 20px rgba(0, 0, 0, 0.062)' }}>
+          <Card style={{ width: '100%' }}>
+            <Card.Body>
+              {response.responses.map((res, resIndex) => (
+                <div key={resIndex}>
+                  <Card.Title style={{ fontSize: '16px', marginBottom: '5px' }}>
+                    <strong> Question:</strong> {formData.questions.find((question) => question.id === res.questionId).question} <br />
+                    Type de question: {formData.questions.find((question) => question.id === res.questionId).questionType} <br />
+                  </Card.Title>
+                  <Card.Text style={{marginBottom:'2px'}}>
+                  <strong>Reponse :</strong> {returResponse(formData.questions.find((question) => question.id === res.questionId).questionType, res)}
+                    <br />
+                  </Card.Text>
+                </div>
+              ))}
+            </Card.Body>
+          </Card>
+        </div>
+      ))}
     </div>
-  );
+  </div>
+);
 }
-
 export default ReponseByForm;
