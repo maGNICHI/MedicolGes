@@ -15,6 +15,10 @@ const FeedbackSchema = new mongoose.Schema({
         ref: 'Project',
         required: true
     },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }
 },
 {
     timestamps: true

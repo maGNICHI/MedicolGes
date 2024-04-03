@@ -37,6 +37,22 @@ const UsersByRole = async (req, res) => {
     res.status(500).send("Server Error");
   }
 }
+const UsersById = async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findById(userId); // Use findById instead of find
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    res.json({ success: { user } });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+}
+
+module.exports = { allUsers, UsersByRole, UsersById };
 
 
-module.exports = { allUsers, UsersByRole };
+
+module.exports = { allUsers, UsersByRole, UsersById };

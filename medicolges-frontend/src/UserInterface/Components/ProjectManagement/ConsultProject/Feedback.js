@@ -10,9 +10,12 @@ export default function Feedback({ projectId }) {
   const [description, setDescription] = useState("");
   const [rating, setRating] = useState(0);
   const [feedbacks, setFeedbacks] = useState([]);
+  const [userDetails, setUserDetails] = useState();
   const [sortOption, setSortOption] = useState("mostRecent");
+  const [feedb, setFeedb] = useState({}); // Initialize feedb as an empty object
   const [displayedFeedbacks, setDisplayedFeedbacks] = useState([]);
   const [numDisplayedReviews, setNumDisplayedReviews] = useState(3);
+  const user = JSON.parse(localStorage.getItem("userInfo"));
 
   const handleCloseAddFeedBackModal = () => setShowAddFeedBackModal(false);
   const handleShowAddFeedBackModal = () => setShowAddFeedBackModal(true);
@@ -22,19 +25,38 @@ export default function Feedback({ projectId }) {
       const response = await axios.get(
         `http://localhost:5000/api/feedback/project/${id}`
       );
-      setFeedbacks(response.data.success.feedback); // Update to set feedbacks from response
+      setFeedbacks(response.data.success.feedback);
       setDisplayedFeedbacks(response.data.success.feedback);
     } catch (error) {
       console.error("Error fetching feedback:", error);
     }
   };
 
+  const fetchUser = async (id) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/user/getUserById/${id}`
+      );
+      setUserDetails(response.data.success.user);
+    } catch (error) {
+      console.error("Error fetching user:", error);
+    }
+  };
+  
   useEffect(() => {
     if (projectId._id) {
-      // Add condition to ensure projectData._id is available
       fetchFeedbacks(projectId._id);
     }
-  }, []);
+  }, [projectId]);
+
+  useEffect(() => {
+    feedbacks.forEach((feedback) => {
+      setFeedb(feedback); // Update feedb for each feedback
+      if (feedback.userId) {
+        fetchUser(feedback.userId);
+      }
+    });
+  }, [feedbacks]);
 
   const handleAddFeedback = async () => {
     try {
@@ -43,9 +65,10 @@ export default function Feedback({ projectId }) {
         description,
         rating,
         projectId: projectId._id,
+        userId: user._id
       });
       handleCloseAddFeedBackModal();
-      fetchFeedbacks();
+      fetchFeedbacks(projectId._id); // Fetch updated feedbacks after adding new feedback
     } catch (error) {
       console.error("Error adding feedback:", error);
     }
@@ -72,7 +95,7 @@ export default function Feedback({ projectId }) {
   };
 
   const handleShowMoreReviews = () => {
-    setNumDisplayedReviews(numDisplayedReviews + 3); // Increase the number of displayed reviews by 3
+    setNumDisplayedReviews(numDisplayedReviews + 3);
   };
 
   return (
@@ -114,6 +137,7 @@ export default function Feedback({ projectId }) {
         {displayedFeedbacks
           .slice(0, numDisplayedReviews)
           .map((feedback, index) => (
+            feedback.isDeleted ===false &&(
             <div key={index} className="mb-4 pb-4 border-bottom">
               {/* User avatar and name */}
               <div className="d-flex mb-3 align-items-center">
@@ -128,7 +152,7 @@ export default function Feedback({ projectId }) {
                 {/* User name */}
                 <div className="ml-2">
                   <h5 className="mb-1">
-                    Araari Eya
+                    {userDetails ? userDetails.username : 'unknown'}
                     <img src="../assets/images/verified.svg" alt="" />
                   </h5>
                   <p className="font-12 mb-0">
@@ -160,7 +184,7 @@ export default function Feedback({ projectId }) {
               <a href="#!" className="text-inherit font-14">
                 Report abuse
               </a> */}
-            </div>
+            </div>)
           ))}
         {/* Show more reviews button */}
         {numDisplayedReviews < displayedFeedbacks.length && (

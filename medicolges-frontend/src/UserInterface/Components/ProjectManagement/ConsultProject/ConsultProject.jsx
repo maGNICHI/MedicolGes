@@ -27,9 +27,9 @@ export default function ConsultProject({ onFollow }) {
   const { id } = useParams();
   const [goUp, setGoUp] = useState(false);
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  const [following, setFollowing] = useState(
-    projectData?.followers?.includes(user?._id) || false
-  );
+  const [following, setFollowing] = useState(false);
+
+  console.log("followwwwwwww",following);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -42,6 +42,7 @@ export default function ConsultProject({ onFollow }) {
           `http://localhost:5000/api/project/${id}`
         );
         setProjectData(response.data.success.project);
+        setFollowing(projectData?.followers?.includes(user?._id));
         setFollowersCount(response.data.success.project.numberFollowers);
       } catch (error) {
         console.error("Error fetching project data:", error);

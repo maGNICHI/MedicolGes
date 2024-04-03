@@ -71,7 +71,7 @@ export default function Details({ projectData, organization }) {
     }
   };
   return (
-    <Card className="mt-5 mx-1 px-4 py-3" style={{ background: "#3b47ec26" }}>
+    <Card className="mt-5 mx-1 px-4 py-3" style={{ background: "#8ac2bb4d" }}>
       <Row>
         <Col md={9} xs={12}>
           <Title
@@ -143,7 +143,7 @@ export default function Details({ projectData, organization }) {
           <IconButton
             className="border-0 w-100"
             style={{
-              background: "linear-gradient(-45deg, #3615e7 0%, #44a2f6 100%)",
+              background: "linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)",
               color: "white",
               fontSize: "16px",
               fontWeight: 600,
@@ -160,7 +160,7 @@ export default function Details({ projectData, organization }) {
           <IconButton
             className="border-0 w-100 mt-3 mt-md-0"
             style={{
-              background: "linear-gradient(-45deg, #3615e7 0%, #44a2f6 100%)",
+              background: "linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)",
               color: "white",
               fontSize: "16px",
               fontWeight: 600,
@@ -175,11 +175,11 @@ export default function Details({ projectData, organization }) {
           <IconButton
             className="border-0 w-100 mt-3 mt-md-0"
             style={{
-              background: "linear-gradient(-45deg, #3615e7 0%, #44a2f6 100%)",
+              background: "linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)",
               color: "white",
               fontSize: "16px",
               fontWeight: 600,
-              padding: "5px 5px",
+              padding: "8px 16px",
               borderRadius: "20px",
             }}
             startIcon={<FaShareAlt />}
