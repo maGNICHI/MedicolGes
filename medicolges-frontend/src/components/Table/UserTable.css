@@ -1,0 +1,4 @@
+.tab{
+        width: calc(100% -600px);
+        overflow-x: scroll;
+}
