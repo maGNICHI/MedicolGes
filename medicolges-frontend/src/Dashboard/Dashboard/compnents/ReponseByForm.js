@@ -71,6 +71,8 @@ function ReponseByForm() {
         break;
       case "combobox":
         return <span> {response.responseValue.checked.map(item => <> {item + ', ' }</>) } </span>;
+        case "number":
+        return <span> {response.responseValue} </span>;
         break;
 
       default:
