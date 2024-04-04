@@ -2,6 +2,7 @@ import React from "react";
 import Doctor from "../Assets/doctor-group.png";
 import SolutionStep from "./SolutionStep";
 import "../Styles/About.css";
+import { Link, NavLink } from "react-router-dom";
 
 function About() {
   return (
@@ -10,33 +11,48 @@ function About() {
         <img src={Doctor} alt="Doctor Group" className="about-image1" />
       </div>
 
-      <div className="about-text-content">
+      <div className="about-text-content my-20">
         <h3 className="about-title">
           <span>About Us</span>
         </h3>
         <p className="about-description">
-          Welcome to Health Plus, your trusted partner for accessible and
-          personalized healthcare. Our expert doctors offer online consultations
-          and specialized services, prioritizing your well-being. Join us on
-          this journey towards a healthier you.
+          Welcome to MediColGes, We pride ourselves on offering a tailored
+          solution designed to meet the specific needs of healthcare
+          professionals and researchers in Algeria. Through our partnership with
+          MISC Laboratory and ESPIRIT University, we've combined cutting-edge
+          technology with expert insights to create a platform that streamlines
+          medical data management, facilitates collaborative research projects,
+          and enhances healthcare delivery in Algeria. With a focus on
+          innovation and collaboration, we are committed to driving advancements
+          in medical research, improving patient care, and ultimately,
+          contributing to the overall well-being of individuals in Algeria and
+          beyond. Join us on this journey as we revolutionize healthcare with
+          technology and expertise.
         </p>
-
-        <h4 className="about-text-title">Your Solutions</h4>
-
-        <SolutionStep
-          title="Choose a Specialist"
-          description="Find your perfect specialist and book with ease at Health Plus. Expert doctors prioritize your health, offering tailored care."
-        />
-
-        <SolutionStep
-          title="Make a Schedule"
-          description="Choose the date and time that suits you best, and let our dedicated team of medical professionals ensure your well-being with personalized care."
-        />
-
-        <SolutionStep
-          title="Get Your Solutions"
-          description="Our experienced doctors and specialists are here to provide expert advice and personalized treatment plans, helping you achieve your best possible health."
-        />
+        <div className="flex justify-items-center justify-content-center gap-20">
+          <Link to="https://www.misc-lab.org/fr/">
+            <img
+              src={process.env.PUBLIC_URL + "/images/logo/misc.png"}
+              alt="logo"
+              style={{
+                marginTop: "10px",
+              }}
+              height={"160px"}
+              width={"180px"}
+            />
+          </Link>
+          <Link to="https://esprit.tn/">
+            <img
+              src={process.env.PUBLIC_URL + "/images/logo/esprit.png"}
+              alt="logo"
+              style={{
+                marginTop: "10px",
+              }}
+              height={"160px"}
+              width={"180px"}
+            />
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -9,7 +9,16 @@ const FeedbackSchema = new mongoose.Schema({
         min: 1,
         max: 5
     },
-    isDeleted: Boolean
+    isDeleted: Boolean,
+    projectId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Project',
+        required: true
+    },
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }
 },
 {
     timestamps: true

@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./style.css";
 import "bootstrap/dist/css/bootstrap.css";
 import "bootstrap/dist/js/bootstrap.js";
 import PostList from "./PostList";
 import Navbar from "../Navbar";
+import Footer from "../Footer";
 
 const CreatePost = () => {
   const [message, setMessage] = useState("");
@@ -35,11 +36,11 @@ const CreatePost = () => {
 
   return (
     <>
-      <Navbar />
+    {/* <Navbar /> */}
 
-      <div className="container-fluid gedf-wrapper">
+      <div className="container-fluid gedf-wrapper ">
         <div className="row justify-content-center">
-          <div className="col-lg-7">
+          <div className="col-md-12">
             <div className="card gedf-card">
               <div className="card-header">
                 <ul
@@ -163,7 +164,7 @@ const CreatePost = () => {
               </div>
             </div>
           </div>
-          <div
+          {/* <div
             className="col-lg-3"
             style={{
               backgroundImage: `url('/dd.png')`,
@@ -172,11 +173,11 @@ const CreatePost = () => {
               overflow: "hidden", // Masque tout contenu débordant de l'élément
             }}
           >
-            {/* Contenu à afficher par-dessus l'image */}
-          </div>
+          </div> */}
         </div>
-        <PostList />
       </div>
+      
+      <PostList />
     </>
   );
 };

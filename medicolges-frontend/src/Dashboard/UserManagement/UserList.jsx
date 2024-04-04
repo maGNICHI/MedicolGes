@@ -6,6 +6,7 @@ import IconButton from "../../components/Button/IconButton";
 import { FaPlus } from "react-icons/fa";
 import CheckTable from "../../components/Table/UserTable";
 import "../Dashboard/Dashboard.css"
+import '../Dashboard.css'
 
 export default function UserList() {
   const [selectedName, setSelectedName] = useState("User Management");

@@ -79,13 +79,13 @@ const PostItem = ({ post }) => {
 
   return (
     <div className="row justify-content-left">
-      <div className="post-item-container">
+      {/* <div className="post-item-container"> */}
         <div className="profile-content">
-          <div className="tab-content">
-            <div className="tab-pane fade active show">
+          {/* <div className="tab-content"> */}
+            {/* <div className="tab-pane fade active show"> */}
               <ul className="timeline">
                 <li>
-                  <div className="timeline-time">
+                  {/* <div className="timeline-time">
                     <small>
                       <span className="date">{}</span>
                       <br />
@@ -93,7 +93,7 @@ const PostItem = ({ post }) => {
                         {getFormattedTime(post.createdAt)}
                       </span>
                     </small>
-                  </div>
+                  </div> */}
 
                   <div className="timeline-icon">
                     <a href="javascript:;"> </a>
@@ -137,10 +137,10 @@ const PostItem = ({ post }) => {
                   </div>
                 </li>
               </ul>
-            </div>
-          </div>
+            {/* </div> */}
+          {/* </div> */}
         </div>
-      </div>
+      {/* </div> */}
     </div>
   );
 };

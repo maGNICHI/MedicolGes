@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Doctor from "../Assets/doctor-picture.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarCheck, faAngleUp } from "@fortawesome/free-solid-svg-icons";
-import { useNavigate  } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../Styles/Hero.css";
 
 function Hero() {
@@ -34,25 +34,28 @@ function Hero() {
 
   return (
     <div className="section-container">
-      <div className="hero-section">
-        <div className="text-section">
-          <p className="text-headline">❤️ Health comes first</p>
+      <div className="hero-section ">
+        <div className="text-section my-10">
           <h2 className="text-title">
-            Find your Doctor and make an Appointments
+            Empower Your Project, Uncover Vital Data, and Connect with Patients
           </h2>
           <p className="text-descritpion">
-            Talk to online doctors and get medical advice, online prescriptions,
-            refills and medical notes within minutes. On-demand healthcare
-            services at your fingertips.
+            Welcome to MediColGes – your all-in-one solution for medical data
+            management and collaboration. Our platform empowers healthcare
+            professionals, institutions, researchers, and patients with
+            intuitive tools for streamlined workflows, enhanced patient care,
+            and innovative healthcare solutions. Join us in revolutionizing the
+            future of healthcare with MediColGes.
+            If you are interested with our web application:
           </p>
+          <NavLink to="/signup">
           <button
             className="text-appointment-btn"
             type="button"
-            onClick={handleBookAppointmentClick}
           >
-            <FontAwesomeIcon icon={faCalendarCheck} /> Book Appointment
+            <i className="fa fa-sign-in" aria-hidden="true"></i> Create an account
           </button>
-          <div className="text-stats">
+          {/* <div className="text-stats">
             <div className="text-stats-container">
               <p>145k+</p>
               <p>Receive Patients</p>
@@ -67,10 +70,11 @@ function Hero() {
               <p>10+</p>
               <p>Years of Experience</p>
             </div>
-          </div>
+          </div> */}
+          </NavLink>
         </div>
 
-        <div className="hero-image-section">
+        <div className="hero-image-section mt-5">
           <img className="hero-image1" src={Doctor} alt="Doctor" />
         </div>
       </div>

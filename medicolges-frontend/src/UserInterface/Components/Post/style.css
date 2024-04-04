@@ -1,6 +1,15 @@
+
 body{
     margin-top:20px;
-    background:#eee;
+    height: 100%;
+}
+
+
+.about-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to right, #ECF2FF, #FBFCFF);
 }
 
 .profile-header {
@@ -37,7 +46,7 @@ body{
 
 .profile-header-img {
     float: left;
-    width: 120px;
+    width: 300px;
     height: 120px;
     overflow: hidden;
     position: relative;
@@ -178,10 +187,10 @@ body{
     border: none
 }
 
-.profile-header .profile-header-tab>li.active>a,
+/* .profile-header .profile-header-tab>li.active>a,
 .profile-header .profile-header-tab>li>a.active {
     color: #242a30
-}
+} */
 
 .profile-content {
     padding: 25px;
@@ -417,7 +426,7 @@ select.form-control:not([size]):not([multiple]) {
     margin: 0;
     padding: 0;
     position: relative;
-    right:13%
+    right:13%;
 }
 
 .timeline:before {
@@ -619,7 +628,7 @@ select.form-control:not([size]):not([multiple]) {
 
 .timeline-comment-box .user {
     float: left;
-    width: 34px;
+    width: 100%;
     height: 34px;
     overflow: hidden;
     border-radius: 30px
@@ -684,7 +693,7 @@ body {
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  background-color: #fff;
+  background: #fff;
 }
 
 .form-group {
@@ -707,15 +716,6 @@ select {
   box-sizing: border-box;
 }
 
-button {
-  background-color: #4caf50;
-  color: #fff;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-button:hover {
-  background-color: #45a049;
+.contentUser {
+    padding-top: 80px; /* Adjust this value based on the height of your navbar */
 }

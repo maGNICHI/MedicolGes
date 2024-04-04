@@ -1,3 +1,6 @@
+body {
+    background-color: #FBFCFF !important;
+}
 .form-container {
     padding: 32px;
     display: flex;

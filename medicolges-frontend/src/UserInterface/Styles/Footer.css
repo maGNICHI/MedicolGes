@@ -1,3 +1,6 @@
+body {
+    background-color: white !important;
+}
 .footer-section {
     background-color: #1B2433;
 }
@@ -31,14 +34,14 @@
     width: 420px;
     margin: 16px 0 40px;
     color: #D0D3DA;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 20px;
     letter-spacing: .8px;
     line-height: 1.7rem;
 }
 .ft-input-title {
     color: white;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 22px;
     font-weight: bold;
     letter-spacing: .8px;
@@ -52,7 +55,7 @@
     border: 1px solid transparent;
     border-radius: 50px;
     outline: transparent;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 18px;
     letter-spacing: .8px;
 }
@@ -64,7 +67,7 @@
     outline: transparent;
     background-color: #1A8EFD;
     font-size: 18px;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     letter-spacing: .8px;
     cursor: pointer;
     transition: all .4s ease;
@@ -77,7 +80,7 @@
 /* Lists */
 .ft-list-title {
     margin: 16px 0;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 24px;
     font-weight: bold;
     letter-spacing: .8px;
@@ -94,7 +97,7 @@
 }
 .ft-list-items li {
     margin: 24px 0;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 16px;
     font-weight: bold;
     letter-spacing: .8px;
@@ -109,7 +112,7 @@
     justify-content: space-between;
     align-items: center;
     color: #cbcdd3;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 18px;
     font-weight: bold;
     letter-spacing: .8px;

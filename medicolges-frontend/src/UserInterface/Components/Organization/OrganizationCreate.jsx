@@ -10,14 +10,14 @@ import {
   Alert,
 } from "react-bootstrap";
 import {
-  FaPlus,
   FaUser,
   FaMapMarkerAlt,
   FaPhone,
   FaBuilding,
   FaIndustry,
-} from "react-icons/fa";
+} from "react-icons/fa"; // Importing necessary icons
 import Navbar from "../Navbar";
+import { useNavigate } from "react-router-dom";
 
 function CreateOrganization() {
   const [name, setName] = useState("");
@@ -25,7 +25,11 @@ function CreateOrganization() {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [category, setCategory] = useState("Organization");
   const [type, setType] = useState("");
+  const [otherCategory, setOtherCategory] = useState("");
   const [errors, setErrors] = useState({});
+  const [otherType, setOtherType] = useState("");
+  const [selectedImages, setSelectedImages] = useState([]);
+  const navigate = useNavigate();
 
   const validateForm = () => {
     const errors = {};
@@ -44,12 +48,16 @@ function CreateOrganization() {
       errors.phoneNumber = "Phone Number must contain only digits";
     }
 
-    if (!category.trim()) {
-      errors.category = "Category is required";
-    }
-
     if (!type.trim()) {
       errors.type = "Type is required";
+    }
+
+    if (category === "Other" && !otherCategory.trim()) {
+      errors.otherCategory = "Other Category is required";
+    }
+
+    if (type === "other" && !otherType.trim()) {
+      errors.otherType = "Other Type is required";
     }
 
     setErrors(errors);
@@ -61,20 +69,31 @@ function CreateOrganization() {
 
     if (validateForm()) {
       try {
-        await axios.post("http://localhost:5000/api/organization/", {
-          name,
-          address,
-          phoneNumber,
-          category,
-          type,
-        });
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("address", address);
+        formData.append("phoneNumber", phoneNumber);
+        formData.append("category", otherCategory || category);
+        formData.append("type", otherType || type);
 
-        // Redirect or show success message
+        for (const image of selectedImages) {
+          formData.append("media", image);
+        }
+
+        await axios.post("http://localhost:5000/api/organization/", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        navigate('/organizationShow');
       } catch (error) {
         console.error("Error creating organization:", error);
-        // Handle error
       }
     }
+  };
+
+  const handleImageChange = (e) => {
+    setSelectedImages([...e.target.files]);
   };
 
   return (
@@ -84,26 +103,10 @@ function CreateOrganization() {
         <Row className="justify-content-center">
           <Col xs={12} md={8}>
             <Card className="card">
-              <Card.Header style={{ padding: "20px" }}>
-                <Row className="align-items-center">
-                  <Col xs={12} md={10}></Col>
-                  <Col xs={12} md={2} className="text-md-end mt-3 mt-md-0">
-                    <Button
-                      variant="primary"
-                      style={{
-                        fontSize: "16px",
-                        fontWeight: 600,
-                        padding: "8px 16px",
-                        borderRadius: "20px",
-                      }}
-                    >
-                      <FaPlus style={{ marginRight: "8px" }} />
-                      Add Organization
-                    </Button>
-                  </Col>
-                </Row>
-              </Card.Header>
               <Card.Body>
+                <h2 class=" text-2xl font-bold text-gray-800 mb-4">
+                  Create Organization
+                </h2>
                 <Form onSubmit={handleSubmit}>
                   {Object.keys(errors).length > 0 && (
                     <Alert variant="danger">
@@ -185,10 +188,24 @@ function CreateOrganization() {
                       <option value="Organization">Organization</option>
                       <option value="Industry">Industry</option>
                       <option value="Establishment">Establishment</option>
+                      <option value="Other">Other</option>
                     </Form.Control>
-                    {errors.category && (
+                    {/* Render input for other category if category is Other */}
+                    {category === "Other" && (
+                      <Form.Control
+                        type="text"
+                        value={otherCategory}
+                        onChange={(e) => setOtherCategory(e.target.value)}
+                        placeholder="Enter other category"
+                        className={`rounded-pill mt-2 ${
+                          errors.otherCategory ? "is-invalid" : ""
+                        }`}
+                      />
+                    )}
+                    {/* Display error message if other category is invalid */}
+                    {errors.otherCategory && category === "Other" && (
                       <Form.Text className="text-danger">
-                        {errors.category}
+                        {errors.otherCategory}
                       </Form.Text>
                     )}
                   </Form.Group>
@@ -197,27 +214,59 @@ function CreateOrganization() {
                       <FaIndustry /> Type:
                     </Form.Label>
                     <Form.Control
-                      type="text"
+                      as="select"
                       value={type}
                       onChange={(e) => setType(e.target.value)}
-                      placeholder="Enter organization type"
-                      className={`rounded-pill ${
-                        errors.type ? "is-invalid" : ""
-                      }`}
-                    />
-                    {errors.type && (
+                      className="rounded-pill"
+                    >
+                      <option value="hospitals">Hospitals</option>
+                      <option value="clinics">Clinics</option>
+                      <option value="diagnostic centers">
+                        Diagnostic Centers
+                      </option>
+                      <option value="laboratoiries">Laboratories</option>
+                      <option value="medical organizations">
+                        Medical Organizations
+                      </option>
+                      <option value="other">Other</option>
+                    </Form.Control>
+                    {/* Render input for other type if type is Other */}
+                    {type === "other" && (
+                      <Form.Control
+                        type="text"
+                        value={otherType}
+                        onChange={(e) => setOtherType(e.target.value)}
+                        placeholder="Enter other type"
+                        className={`rounded-pill mt-2 ${
+                          errors.otherType ? "is-invalid" : ""
+                        }`}
+                      />
+                    )}
+                    {/* Display error message if other type is invalid */}
+                    {errors.otherType && type === "other" && (
                       <Form.Text className="text-danger">
-                        {errors.type}
+                        {errors.otherType}
                       </Form.Text>
                     )}
                   </Form.Group>
-                  <Button
-                    variant="primary"
+                  <Form.Group>
+                    <Form.Label>
+                      Upload Images:{" "}
+                      {/* Ajouter une étiquette pour les images */}
+                    </Form.Label>
+                    <Form.Control
+                      type="file"
+                      accept="image/*" // Accepter uniquement les fichiers image
+                      onChange={handleImageChange}
+                      multiple // Permettre la sélection de plusieurs fichiers
+                    />
+                  </Form.Group>
+                  <button
+                    class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150"
                     type="submit"
-                    className="rounded-pill"
                   >
                     Create
-                  </Button>
+                  </button>
                 </Form>
               </Card.Body>
             </Card>

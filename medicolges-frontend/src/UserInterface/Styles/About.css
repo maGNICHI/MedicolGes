@@ -1,3 +1,7 @@
+body {
+    background-color: white !important;
+}
+
 .about-section {
     padding: 32px;
     display: flex;
@@ -33,7 +37,7 @@
     position: absolute;
     width: 75%;
     height: 4px;
-    background-color: #9D2553;
+    background-color: #1990aa;
     border-radius: 8px;
     left: 0;
     bottom: -12px;
@@ -41,7 +45,7 @@
 .about-description {
     margin: 32px 0;
     color: #4d4b4b;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 18px;
     letter-spacing: .7px;
     line-height: 1.7rem;
@@ -59,7 +63,7 @@
     margin: 16px 0;
 }
 .about-text-sTitle {
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 18px;
     font-weight: bold;
     letter-spacing: .7px;
@@ -67,7 +71,7 @@
 .about-text-description {
     margin: 8px 24px;
     color: #4d4b4b;
-    font-family: 'Rubik', sans-serif;
+    font-family: 'Poppins', sans-serif;
     letter-spacing: .7px;
     line-height: 1.6rem;
 }

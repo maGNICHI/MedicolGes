@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { Card, Container } from "react-bootstrap";
 import Title from "../../components/Title/Title";
 import Layout from "../SuperAdminLayout/Layout";
-import './Dashboard.css'
+import './Dashboard.css';
+import '../Dashboard.css'
 
 function Dashboard() {
   const [selectedName, setSelectedName] = useState("Dashboard");

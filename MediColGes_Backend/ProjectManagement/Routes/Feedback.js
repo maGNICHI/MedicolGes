@@ -25,6 +25,18 @@ router.post("/addFeedback", async (req, res) => {
     }
 });
 
+router.get("/project/:projectId", async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    const feedback = await Feedback.find({ projectId }); // Corrected query
+    res.json({ success: { feedback } });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+
 router.put("/updateFeedback/:_id", async (req, res) => {
   const { _id } = req.params;
   const resFound = req.body;

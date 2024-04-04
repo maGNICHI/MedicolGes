@@ -1,3 +1,5 @@
+// Navbar Component
+
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -8,10 +10,20 @@ import {
 import "../Styles/Navbar.css";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
+import { NavDropdown } from "react-bootstrap";
 
 function Navbar() {
   const [nav, setNav] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const closeDropdown = () => {
+    setDropdownOpen(false);
+  };
 
   const openNav = () => {
     setNav(!nav);
@@ -31,99 +43,123 @@ function Navbar() {
     <div className="navbar-section">
       <h1 className="navbar-title">
         <Link to="/">
-          MediColGes <span className="navbar-sign"></span>
+          <img
+            src={process.env.PUBLIC_URL + "/images/logo/logoM.png"}
+            alt="logo"
+            style={{
+              marginTop: "10px",
+            }}
+            height={"50px"}
+            width={"80px"}
+          />
         </Link>
       </h1>
       {/* Desktop */}
-      <ul className="navbar-items">
+      <ul className="navbar-items mt-3">
         <li>
           <Link to="/" className="navbar-links">
             Home
           </Link>
         </li>
-        
-          <li>
-            <Link to="/" className="navbar-links">
-              Organisation
-            </Link>
-            <ul className="dropdown">
-              <li>
-                <Link to="/organizationFront">Create Organization</Link>
-              </li>
-              <li>
-                <Link to="/organization/show">Show Organization</Link>
-              </li>
-            </ul>
-          </li>
         <li>
-          <a href="#about" className="navbar-links">
-            Form
+          <a href="/#info" className="navbar-links">
+            Informations
           </a>
         </li>
         <li>
-          <a href="/post" className="navbar-links">
+          <a href="/#about" className="navbar-links">
+            About Us
+          </a>
+        </li>
+        <li>
+          <a href="/projects" className="navbar-links">
+            Projects
+          </a>
+        </li>
+        <li>
+          <div className="dropdown" onClick={toggleDropdown}>
+            <p className="navbar-links">Organization</p>
+            {dropdownOpen &&(
+              <ul className="dropdown-content">
+                <li>
+                  <a href="/organizationFront">Create Organization</a>
+                </li>
+                <li>
+                  <a href="/organizationShow">Show Organization</a>
+                </li>
+              </ul>
+            )}
+          </div>
+        </li>
+        <li>
+          <a href="/homeNew" className="navbar-links">
             Post
           </a>
         </li>
-        {/* <li>
-          <a href="#doctors" className="navbar-links">
-            Doctors
+        <li>
+          <a href="/login" className="navbar-links">
+            Login
           </a>
-        </li> */}
-        <button
-          className="navbar-btn"
-          type="button"
-          disabled={isButtonDisabled}
-          onClick={handleChatBtnClick}
-        >
-          Login
-        </button>
+        </li>
       </ul>
 
       <button
         className="navbar-btn"
         type="button"
-        disabled={isButtonDisabled}
-        onClick={handleChatBtnClick}
+       
       >
-        <FontAwesomeIcon icon={faCommentDots} /> Live Chat
+       <a href="/chats" className="navbar-links">
+           
+          
+        <FontAwesomeIcon icon={faCommentDots} /> Live Chat</a>
       </button>
 
       {/* Mobile */}
-      <div className={`mobile-navbar ${nav ? "open-nav" : ""}`}>
+      <div className={`mobile-navbar ${nav ? "open-nav" : ""} pt-4`}>
         <div onClick={openNav} className="mobile-navbar-close">
           <FontAwesomeIcon icon={faXmark} className="hamb-icon" />
         </div>
 
-        <ul className="mobile-navbar-links">
+        <ul className="mobile-navbar-links pt-5">
           <li>
-            <Link onClick={openNav} to="/">
+            <a onClick={openNav} href="/">
               Home
-            </Link>
-          </li>
-          <li>
-            <a onClick={openNav} href="#services">
-              Services
             </a>
           </li>
           <li>
-            <a onClick={openNav} href="#about">
-              About
+            <a onClick={openNav} href="/#info">
+              Information
             </a>
           </li>
           <li>
-            <a onClick={openNav} href="#reviews">
-              Reviews
+            <a onClick={openNav} href="/#about">
+              About Us
             </a>
           </li>
           <li>
-            <a onClick={openNav} href="#doctors">
-              Doctors
+          <a href="/projects" onClick={openNav}>
+            Projects
+          </a>
+        </li>
+          <li>
+            <a href="/organizationFront">Create Organization</a>
+          </li>
+          <li>
+            <a href="/organizationShow">Show Organization</a>
+          </li>
+          <li>
+            <a onClick={openNav} href="/homeNew">
+              Posts
             </a>
           </li>
           <li>
-            <a onClick={openNav} href="#contact">
-              Contact
+            <a onClick={openNav} href="/chats">
+              chats
+            </a>
+          </li>
+          <li>
+            <a onClick={openNav} href="/login">
+              Login
             </a>
           </li>
         </ul>

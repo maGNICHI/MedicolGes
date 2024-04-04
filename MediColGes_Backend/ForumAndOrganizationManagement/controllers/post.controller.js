@@ -1,10 +1,11 @@
 const postModel = require("../models/post.model");
 const PostModel = require("../models/post.model");
 const ObjectID = require("mongoose").Types.ObjectId;
-const { promisify } = require("util");
+//const { promisify } = require("util");
 const upload = require("../../multer");
 const cloudinary = require("../../cloudinary");
 const fs = require("fs");
+
 
 module.exports.readPost = async (req, res) => {
   try {
@@ -16,84 +17,43 @@ module.exports.readPost = async (req, res) => {
   }
 };
 
+
 module.exports.createPost = async (req, res) => {
-  // let fileName;
-
-  // if (req.file !== null) {
-  //   try {
-  //     if (
-  //       req.file.detectedMimeType != "image/jpg" &&
-  //       req.file.detectedMimeType != "image/png" &&
-  //       req.file.detectedMimeType != "image/jpeg"
-  //     )
-  //       throw Error("invalid file");
-
-  //     if (req.file.size > 500000) throw Error("max size");
-  //   } catch (err) {
-  //     const errors = uploadErrors(err);
-  //     return res.status(201).json({ errors });
-  //   }
-  //   fileName = req.body.posterId + Date.now() + ".jpg";
-
-  //   await pipeline(
-  //     req.file.stream,
-  //     fs.createWriteStream(
-  //       `${__dirname}/../client/public/uploads/posts/${fileName}`
-  //     )
-  //   );
-  // }
+  const { posterId, message, picture, video, tags, project } = req.body;
+  const formattedTags = Array.isArray(tags) ? tags.join(",") : tags;
 
   const newPost = new postModel({
-    posterId: req.body.posterId,
-    message: req.body.message,
-    picture: req.body.picture, //file !== null ? "./uploads/posts/" + fileName : "",
-    video: req.body.video,
+    posterId,
+    message,
+    tags: formattedTags
+      ? formattedTags.split(",").map((tag) => tag.trim())
+      : [],
+    video,
     likers: [],
     comments: [],
+    project,
   });
 
+  const uploader = async (path) => await cloudinary.uploads(path, "Images");
+  const uploadedImages = [];
+
   try {
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const { path } = file;
+        const newPath = await uploader(path);
+        uploadedImages.push(newPath.url);
+        fs.unlinkSync(path);
+      }
+      newPost.image = uploadedImages;
+    }
+
     const post = await newPost.save();
     return res.status(201).json(post);
   } catch (err) {
     return res.status(400).send(err);
   }
 };
-// module.exports.createPost = async (req, res) => {
-//   try {
-//     // Check if file is uploaded
-//     if (!req.file) {
-//       return res.status(400).json({ message: "No file uploaded" });
-//     }
-
-//     // Log the req.file object to inspect its contents
-//     console.log("Uploaded file:", req.file);
-
-//     // Upload image to Cloudinary
-//     const uploader = async (path) => await cloudinary.uploads(path, "Images");
-//     const newPath = await uploader(req.file.path);
-//     fs.unlinkSync(req.file.path); // Remove the temporary file
-
-//     // Create new post with Cloudinary URL
-//     const newPost = new PostModel({
-//       posterId: req.body.posterId,
-//       message: req.body.message,
-//       picture: newPath.url, // Store the Cloudinary URL
-//       video: req.body.video,
-//       likers: [],
-//       comments: [],
-//     });
-
-//     // Save post to database
-//     const post = await newPost.save();
-//     res
-//       .status(201)
-//       .json({ success: { msg: "Post created successfully", post } });
-//   } catch (err) {
-//     console.error("Error creating post:", err);
-//     res.status(400).json({ errors: [{ msg: err.message }] });
-//   }
-// };
 
 module.exports.updatePost = async (req, res) => {
   const postId = req.params.id;
@@ -130,65 +90,79 @@ module.exports.deletePost = async (req, res) => {
   }
 };
 
+// Inside likePost Controller
 module.exports.likePost = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
-    const updatedPost = await PostModel.findByIdAndUpdate(
+    const userId = req.headers['user-id']; // Extract user ID from request headers
+
+    await PostModel.findByIdAndUpdate(
       req.params.id,
-      { $addToSet: { likers: "65da89a83a19c50a83054dac" } }, // Remplacez "65da89a83a19c50a83054dac" par l'ID de votre utilisateur
+      {
+        $addToSet: { likers: userId }, // Use userId extracted from headers
+      },
       { new: true }
     );
 
-    res.json(updatedPost);
+    // Send response
+    res.status(200).json({ message: "Post liked successfully" });
   } catch (err) {
     return res.status(400).send(err);
   }
 };
 
+// Inside unlikePost Controller
 module.exports.unlikePost = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
-    const updatedPost = await PostModel.findByIdAndUpdate(
+    const userId = req.headers['user-id']; // Extract user ID from request headers
+
+    await PostModel.findByIdAndUpdate(
       req.params.id,
-      { $pull: { likers: "65da89a83a19c50a83054dac" } }, // Remplacez "65da89a83a19c50a83054dac" par l'ID de votre utilisateur
+      {
+        $pull: { likers: userId }, // Use userId extracted from headers
+      },
       { new: true }
     );
 
-    res.json(updatedPost);
+    // Send response
+    res.status(200).json({ message: "Post unliked successfully" });
   } catch (err) {
     return res.status(400).send(err);
   }
 };
 
-module.exports.commentPost = async (req, res) => {
+module.exports.commentPost = (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
-    const post = await PostModel.findByIdAndUpdate(
+    return PostModel.findByIdAndUpdate(
       req.params.id,
       {
         $push: {
           comments: {
-            commenterId: "65da89a83a19c50a83054dac", // Static user ID
-            commenterPseudo: "utilisateur_test", // Static username
+            commenterId: req.body.commenterId,
+            commenterPseudo: req.body.commenterPseudo,
             text: req.body.text,
             timestamp: new Date().getTime(),
           },
         },
       },
       { new: true }
-    );
-
-    res.json(post);
+    )
+      .then((data) => res.send(data))
+      .catch((err) => res.status(500).send({ message: err }));
   } catch (err) {
     return res.status(400).send(err);
   }
 };
+
+
 
 module.exports.editCommentPost = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
@@ -245,4 +219,17 @@ module.exports.getAllComments = async (req, res) => {
   } catch (err) {
     return res.status(400).send(err);
   }
+};
+
+// Fonction pour traiter la requête de l'utilisateur
+module.exports.processUserRequest = async (req, res) => {
+    const userInput = req.body.message; // Obtenez le texte de la requête de l'utilisateur
+
+    try {
+        const botResponse = await sendQueryToWit(userInput); // Envoyez la requête à Wit.ai
+        res.json({ botResponse }); // Retourner la réponse de Wit.ai à l'utilisateur
+    } catch (error) {
+        console.error('Error processing user request:', error);
+        res.status(500).json({ error: 'Internal server error' });
+    }
 };

@@ -5,6 +5,7 @@ import Layout from "../SuperAdminLayout/Layout";
 import Title from "../../components/Title/Title";
 import { FaPlus } from "react-icons/fa";
 import "../Dashboard/Dashboard.css";
+import '../Dashboard.css'
 
 function CreateOrganization() {
   const [name, setName] = useState("");

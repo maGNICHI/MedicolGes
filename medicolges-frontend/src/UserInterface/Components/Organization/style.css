@@ -1,0 +1,101 @@
+
+.organization-card {
+    background-color: #f8f9fa;
+    border: 2px solid #ced4da;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    position: relative;
+    margin-left: 20px; 
+  
+  }
+  
+  .organization-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card-image-container {
+    height: 450px;
+   
+  }
+  
+  .card-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  .card-body {
+    padding: 30px;
+  }
+  
+  .title {
+    font-size: 2rem;
+    font-weight: bold;
+    color: blue;
+    text-transform: capitalize;
+    letter-spacing: 1px;
+  
+  }
+  
+  .organization-details {
+    font-size: 1rem;
+    color: #666666;
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    transition: all 0.3s ease;
+  }
+  
+  .organization-card:hover .organization-details {
+    display: block;
+  }
+  
+  .social-icons {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+  }
+  
+  .social-icons li {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .social-link {
+    color: #333333;
+    font-size: 1.2rem;
+    text-decoration: none;
+  }
+  
+  .social-link:hover {
+    color: #007bff;
+  }
+  
+  .organization-card::before,
+  .organization-card::after {
+    content: "";
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    z-index: 1;
+    transition: all 0.3s ease;
+  }
+  
+  .organization-card::before {
+    top: -25px;
+    left: -25px;
+  }
+  
+  .organization-card::after {
+    bottom: -25px;
+    right: -25px;
+  }
+  
+  

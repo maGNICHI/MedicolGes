@@ -1,3 +1,6 @@
+body {
+    background-color: white !important;
+}
 .review-section {
     padding: 32px;
     display: flex;
@@ -124,3 +127,6 @@
         font-size: 40px;
     }
 }
+*:focus {
+    outline: none;
+  }

@@ -8,6 +8,7 @@ import useStyles from "../../styless";
 import { useDispatch } from "react-redux";
 import { getForms } from "../../actions/cards";
 import Form from "../Dashboard/compnents/Form/Form";
+import '../Dashboard.css'
 
 function Dashboard() {
   const [selectedName, setSelectedName] = useState("Form Generation");
@@ -21,8 +22,8 @@ function Dashboard() {
 
   return (
     <Layout selectedName={selectedName}>
-      <Container fluid className="mt-4" style={{ height: "100vh" }}>
-        <Card className="card h-100" style={{ overflowY: "auto" }}>
+      <Container fluid className="mt-4" style={{ height: "screen" }}>
+        <Card className="card h-100" >
           <Card.Body
             style={{
               backgroundColor: "#ffffffa9",

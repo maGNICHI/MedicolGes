@@ -1,31 +1,27 @@
 import React from "react";
 import "../Styles/Footer.css";
-import SubscribeNewsletter from "./SubscribeNewsletter";
 import { Link } from "react-router-dom";
 
 function Footer() {
+  const currentYear = new Date().getFullYear();
   return (
     <div className="footer-section">
       <div className="footer-container">
         <div className="ft-info">
           <div className="ft-info-p1">
-            <p className="ft-title">
-              Health <span className="ft-sign">+</span>
-            </p>
+            <p className="ft-title">CoMediC</p>
             <p className="ft-description">
-              Talk to online doctors and get medical advice, online
-              prescriptions, refills and medical notes within minutes. On-demand
-              healthcare services at your fingertips.
+              Empowering Healthcare Innovation Through Collaboration,
+              Communication, Data Collection and Expertise with Creating
+              Collaborative Projects
             </p>
           </div>
-
-          <SubscribeNewsletter />
         </div>
 
         <div className="ft-list">
           <p className="ft-list-title">Services</p>
           <ul className="ft-list-items">
-            <li>
+            {/* <li>
               <a href="#services">Emergency Care</a>
             </li>
             <li>
@@ -39,7 +35,7 @@ function Footer() {
             </li>
             <li>
               <a href="#services">Insights for doctors</a>
-            </li>
+            </li> */}
           </ul>
         </div>
 
@@ -49,7 +45,7 @@ function Footer() {
             <li>
               <Link to={"/legal"}>General Info</Link>
             </li>
-            <li>
+            {/* <li>
               <Link to={"/legal"}>Privacy Policy</Link>
             </li>
             <li>
@@ -60,14 +56,14 @@ function Footer() {
             </li>
             <li>
               <Link to={"/legal"}>How it Works</Link>
-            </li>
+            </li> */}
           </ul>
         </div>
 
         <div className="ft-list" id="contact">
           <p className="ft-list-title">Talk To Us</p>
           <ul className="ft-list-items">
-            <li>
+            {/* <li>
               <a href="mailto:support@healthplus.com">support@healthplus.com</a>
             </li>
             <li>
@@ -80,13 +76,13 @@ function Footer() {
             </li>
             <li>
               <a href="tel:+022 2326 6232">+022 2326 6232</a>
-            </li>
+            </li> */}
           </ul>
         </div>
       </div>
 
       <div className="ft-copyright">
-        <p>© 2013-2023 Health+. All rights reserved.</p>
+        <p>© {currentYear} DevUp. All rights reserved.</p>
 
         <ul className="ft-social-links">
           <li>
