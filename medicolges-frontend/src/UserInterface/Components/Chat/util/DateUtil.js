@@ -24,5 +24,5 @@ export const formatDate = (date) => {
   const minute = dateObj.getMinutes();
 
 
-  return `${formatForSingleDigit(day)} ${monthList[month+1]} ${year}, ${formatForSingleDigit(hour)}:${formatForSingleDigit(minute)}`;
+  return `${formatForSingleDigit(day)} ${monthList[month]} ${year}, ${formatForSingleDigit(hour)}:${formatForSingleDigit(minute)}`;
 };

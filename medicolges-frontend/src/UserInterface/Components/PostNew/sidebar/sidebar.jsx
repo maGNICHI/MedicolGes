@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import "./sidebar.css";
 import {
   RssFeed,
@@ -34,12 +35,13 @@ export default function Sidebar() {
       <div className="sidebar1Wrapper">
         <ul className="sidebar1List">
           <li className="sidebar1ListItem">
+              <Link to="/feed" className="sidebar1Link"></Link>
             <RssFeed className="sidebar1Icon" />
             <span className="sidebar1ListItemText">Feed</span>
           </li>
           <li className="sidebar1ListItem">
             <Chat className="sidebar1Icon" />
-            <span className="sidebar1ListItemText">Chats</span>
+            <span className="sidebar1ListItemText">recent posts</span>
           </li>
           <li className="sidebar1ListItem">
             <PlayCircleFilledOutlined className="sidebar1Icon" />

@@ -77,3 +77,116 @@
     border-bottom: 1px dashed gray;
     font-size: 15px;
 }
+
+.Btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background: rgba(255, 65, 65, 1) ;
+
+}
+
+/* plus sign */
+.sign {
+  width: 100%;
+  transition-duration: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sign svg {
+  width: 17px;
+}
+
+.sign svg path {
+  fill: white;
+}
+/* text */
+.text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  transition-duration: 0.3s;
+}
+/* hover effect on button width */
+.Btn:hover {
+  width: 125px;
+  border-radius: 40px;
+  transition-duration: 0.3s;
+}
+
+.Btn:hover .sign {
+  width: 30%;
+  transition-duration: 0.3s;
+  padding-left: 20px;
+}
+/* hover effect button's text */
+.Btn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: 0.3s;
+  padding-right: 10px;
+}
+/* button click effect*/
+.Btn:active {
+  transform: translate(2px, 2px);
+}
+.postImages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.singleImage {
+  justify-content: center;
+}
+
+.postImg {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+}
+
+.multiImg {
+  max-width: calc(50% - 5px);
+}
+
+@media (max-width: 768px) {
+  .multiImg {
+    max-width: calc(100% - 5px);
+  }
+}
+ .shareButton{
+    border: none;
+    padding: 7px;
+    border-radius: 5px;
+    background-color: #1990aa;
+    font-weight: 500;
+    margin-right: 20px;
+    cursor: pointer;
+    color: white;
+}
+
+.icon-container {
+  display: inline-block;
+  margin-right: 10px; /* Adjust margin as needed */
+}
+
+.delete-icon,
+.edit-icon {
+  display: block;
+}

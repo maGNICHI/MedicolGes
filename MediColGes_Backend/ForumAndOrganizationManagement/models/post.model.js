@@ -3,8 +3,8 @@ const mongoose = require("mongoose");
 const PostSchema = new mongoose.Schema(
   {
     posterId: {
-      type: String,
-      required: true,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
     },
     message: {
       type: String,
@@ -15,7 +15,7 @@ const PostSchema = new mongoose.Schema(
       type: [String], // Modifier pour un tableau de chaînes de caractères
       required: false,
     },
-    
+
     tags: {
       type: [String],
     },
@@ -29,7 +29,7 @@ const PostSchema = new mongoose.Schema(
     comments: {
       type: [
         {
-          commenterId: String,
+          commenterId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
           commenterPseudo: String,
           text: String,
           timestamp: Number,

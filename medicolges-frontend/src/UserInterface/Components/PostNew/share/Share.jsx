@@ -1,15 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./share.css";
 import { PermMedia, Label, Room, EmojiEmotions } from "@material-ui/icons";
 
-export default function CreatePost({project}) {
+export default function CreatePost({ project }) {
   const [content, setContent] = useState("");
-  const [file, setFile] = useState(null);
+  const [files, setFiles] = useState([]);
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState([]);
   const [showTagInput, setShowTagInput] = useState(false);
   const [tagSuggestions, setTagSuggestions] = useState([]);
+  const [userPic, setUserPic] = useState(""); // State to store user's profile picture
+
+  // Fetch user's profile picture from local storage when component mounts
+  useEffect(() => {
+    const userData = JSON.parse(localStorage.getItem("userInfo"));
+    if (userData && userData.pic) {
+      setUserPic(userData.pic);
+    }
+  }, []);
 
   const handleTagClick = () => {
     setShowTagInput(!showTagInput);
@@ -19,7 +28,7 @@ export default function CreatePost({project}) {
     const input = e.target.value;
     setTagInput(input);
 
-    // Filtrer les suggestions de tags basées sur l'entrée de l'utilisateur
+    // Filter tag suggestions based on user input
     const filteredTags = tags.filter((tag) =>
       tag.toLowerCase().startsWith(input.toLowerCase())
     );
@@ -45,25 +54,26 @@ export default function CreatePost({project}) {
     e.preventDefault();
 
     try {
-      if (!content && !file) {
+      if (!content && files.length === 0) {
         console.error("Please enter content or select a file.");
         return;
       }
 
+      const userData = JSON.parse(localStorage.getItem("userInfo"));
+      const posterId = userData ? userData._id : null; // Get the user's ID from localStorage
+
       const formData = new FormData();
-      formData.append("posterId", "123"); // Remplacez '123' par l'ID réel du poster
+      formData.append("posterId", posterId);
       formData.append("message", content);
-      formData.append("image", file);
-      formData.append("tags", tags.join(",")); // Inclure les tags dans le formData
+      for (let i = 0; i < files.length; i++) {
+        formData.append("image", files[i]);
+      }
+      formData.append("tags", tags.join(","));
       if (project) {
         formData.append("project", project);
       }
-      
-      
-      console.log("prooooooooject", formData);
-      
 
-      // Envoyer la requête POST à l'API backend
+      // Send the POST request to the backend API
       const response = await axios.post(
         "http://localhost:5000/api/posts",
         formData,
@@ -73,25 +83,32 @@ export default function CreatePost({project}) {
           },
         }
       );
+
+      // Fetch user details after successfully creating the post
+      const userResponse = await axios.get(
+        `http://localhost:5000/api/user/${posterId}`
+      );
+
+      // Update state with user's details
+      setUserPic(userResponse.data.pic);
+
+      // Reload the page or perform other actions as needed
       window.location.reload();
 
-      console.log("Post créé :", response.data);
-      // Vous pouvez ajouter d'autres actions en cas de création de poste réussie, par exemple une redirection ou l'affichage d'un message de succès
+      console.log("Post created:", response.data);
     } catch (error) {
-      console.error("Erreur lors de la création du post :", error);
-      // Gérer l'erreur : afficher un message d'erreur à l'utilisateur ou réessayer
+      console.error("Error creating post:", error);
     }
   };
-  
-  console.log("idddddddd", project);
 
   return (
     <div className="share">
       <div className="shareWrapper">
         <div className="shareTop">
-          <img className="shareProfileImg" src="/assets/person/1.jpeg" alt="" />
+          <img className="shareProfileImg" src={userPic} alt="User Profile" />{" "}
+          {/* Display user's profile picture */}
           <input
-            placeholder="Qu'est-ce qui vous passe par la tête ?"
+            placeholder="What's going through your mind? "
             className="shareInput"
             value={content}
             onChange={(e) => setContent(e.target.value)}
@@ -102,13 +119,14 @@ export default function CreatePost({project}) {
           <form onSubmit={handleSubmit} className="shareOptions">
             <label htmlFor="file" className="shareOption">
               <PermMedia htmlColor="tomato" className="shareIcon" />
-              <span className="shareOptionText">Photo ou Vidéo</span>
+              <span className="shareOptionText">Photo & Video</span>
               <input
                 type="file"
                 style={{ display: "none" }}
                 id="file"
                 accept=".png, .jpg, .jpeg"
-                onChange={(e) => setFile(e.target.files[0])}
+                multiple // Allow selecting multiple files
+                onChange={(e) => setFiles([...files, ...e.target.files])} // Add new files to the files list
               />
             </label>
             <div className="shareOption" onClick={handleTagClick}>
@@ -118,12 +136,12 @@ export default function CreatePost({project}) {
             {showTagInput && (
               <div className="shareOption">
                 {tags.map((tag, index) => (
-                  <div key={index} className="tagBubble">
+                  <div key={index} className="tagBadge">
                     #{tag}
                   </div>
                 ))}
                 <input
-                  placeholder="Entrez les tags (appuyez sur Entrée pour ajouter)"
+                  placeholder="Enter tags (press Enter to add)"
                   className="shareInput"
                   value={tagInput}
                   onChange={handleTagChange}
@@ -147,14 +165,14 @@ export default function CreatePost({project}) {
             )}
             <div className="shareOption">
               <Room htmlColor="green" className="shareIcon" />
-              <span className="shareOptionText">Localisation</span>
+              <span className="shareOptionText">Location</span>
             </div>
             <div className="shareOption">
               <EmojiEmotions htmlColor="goldenrod" className="shareIcon" />
-              <span className="shareOptionText">Émotions</span>
+              <span className="shareOptionText">Emotions</span>
             </div>
             <button type="submit" className="shareButton">
-              Partager
+              Share
             </button>
           </form>
         </div>

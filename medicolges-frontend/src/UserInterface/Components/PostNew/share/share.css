@@ -69,9 +69,19 @@
     border: none;
     padding: 7px;
     border-radius: 5px;
-    background-color: blue;
+    background-color: #1990aa;
     font-weight: 500;
     margin-right: 20px;
     cursor: pointer;
     color: white;
+}
+
+.tagBadge {
+  display: inline-block;
+  padding: 5px 10px;
+  margin-right: 5px;
+  background-color: #1990aa;
+  color: #fff;
+  border-radius: 20px;
+  cursor: default;
 }

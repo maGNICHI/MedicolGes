@@ -3,6 +3,7 @@ import IconButton from "../../../../components/Button/IconButton";
 import { Button, Form, Modal } from "react-bootstrap";
 import Title from "../../../../components/Title/Title";
 import axios from "axios";
+import Feed from "./Feed";
 
 export default function Feedback({ projectId }) {
   const [showAddFeedBackModal, setShowAddFeedBackModal] = useState(false);
@@ -42,7 +43,7 @@ export default function Feedback({ projectId }) {
       console.error("Error fetching user:", error);
     }
   };
-  
+
   useEffect(() => {
     if (projectId._id) {
       fetchFeedbacks(projectId._id);
@@ -65,7 +66,7 @@ export default function Feedback({ projectId }) {
         description,
         rating,
         projectId: projectId._id,
-        userId: user._id
+        userId: user._id,
       });
       handleCloseAddFeedBackModal();
       fetchFeedbacks(projectId._id); // Fetch updated feedbacks after adding new feedback
@@ -102,7 +103,10 @@ export default function Feedback({ projectId }) {
     <div class="row mt-5">
       <div className="col-lg-12 col-md-12 col-12 px-5">
         <div className="mb-5">
-          <h4 class="mb-2">Review this project & <span> Share your thoughts with other users.</span></h4>
+          <h4 class="mb-2">
+            Review this project &{" "}
+            <span> Share your thoughts with other users.</span>
+          </h4>
           <IconButton
             className="border-0 w-100"
             style={{
@@ -136,56 +140,12 @@ export default function Feedback({ projectId }) {
         {/* Display feedbacks */}
         {displayedFeedbacks
           .slice(0, numDisplayedReviews)
-          .map((feedback, index) => (
-            feedback.isDeleted ===false &&(
-            <div key={index} className="mb-4 pb-4 border-bottom">
-              {/* User avatar and name */}
-              <div className="d-flex mb-3 align-items-center">
-                {/* Avatar */}
-                <img
-                  src={process.env.PUBLIC_URL + "/images/avatar/useravatar.jpg"}
-                  width={"50px"}
-                  height={"50px"}
-                  alt="Profile"
-                  className="rounded-circle avatar-lg"
-                />
-                {/* User name */}
-                <div className="ml-2">
-                  <h5 className="mb-1">
-                    {userDetails ? userDetails.username : 'unknown'}
-                    <img src="../assets/images/verified.svg" alt="" />
-                  </h5>
-                  <p className="font-12 mb-0">
-                    {/* Date */}
-                    <span>{formatDate(feedback.createdAt)}</span>
-                  </p>
-                </div>
-              </div>
-              {/* User rating */}
-              <div className="mb-2">
-                {[...Array(5)].map((_, starIndex) => (
-                  <span key={starIndex} className="font-14 mr-2">
-                    {starIndex < feedback.rating ? (
-                      <i className="fas fa-star text-warning"></i>
-                    ) : (
-                      <i className="far fa-star text-warning"></i>
-                    )}
-                  </span>
-                ))}
-                {/* Review title */}
-                <span className="h5">{feedback.title}</span>
-              </div>
-              {/* Review description */}
-              <p>{feedback.description}</p>
-              {/* Helpful and Report abuse links */}
-              {/* <a href="#!" className="btn btn-light btn-sm mr-2">
-                Helpful
-              </a>
-              <a href="#!" className="text-inherit font-14">
-                Report abuse
-              </a> */}
-            </div>)
-          ))}
+          .map(
+            (feedback, index) =>
+              feedback.isDeleted === false && (
+                <Feed index={index} feedback={feedback} />
+              )
+          )}
         {/* Show more reviews button */}
         {numDisplayedReviews < displayedFeedbacks.length && (
           <Button variant="primary" onClick={handleShowMoreReviews}>

@@ -90,65 +90,79 @@ module.exports.deletePost = async (req, res) => {
   }
 };
 
+// Inside likePost Controller
 module.exports.likePost = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
-    const updatedPost = await PostModel.findByIdAndUpdate(
+    const userId = req.headers['user-id']; // Extract user ID from request headers
+
+    await PostModel.findByIdAndUpdate(
       req.params.id,
-      { $addToSet: { likers: "65da89a83a19c50a83054dac" } }, // Remplacez "65da89a83a19c50a83054dac" par l'ID de votre utilisateur
+      {
+        $addToSet: { likers: userId }, // Use userId extracted from headers
+      },
       { new: true }
     );
 
-    res.json(updatedPost);
+    // Send response
+    res.status(200).json({ message: "Post liked successfully" });
   } catch (err) {
     return res.status(400).send(err);
   }
 };
 
+// Inside unlikePost Controller
 module.exports.unlikePost = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
-    const updatedPost = await PostModel.findByIdAndUpdate(
+    const userId = req.headers['user-id']; // Extract user ID from request headers
+
+    await PostModel.findByIdAndUpdate(
       req.params.id,
-      { $pull: { likers: "65da89a83a19c50a83054dac" } }, // Remplacez "65da89a83a19c50a83054dac" par l'ID de votre utilisateur
+      {
+        $pull: { likers: userId }, // Use userId extracted from headers
+      },
       { new: true }
     );
 
-    res.json(updatedPost);
+    // Send response
+    res.status(200).json({ message: "Post unliked successfully" });
   } catch (err) {
     return res.status(400).send(err);
   }
 };
 
-module.exports.commentPost = async (req, res) => {
+module.exports.commentPost = (req, res) => {
   if (!ObjectID.isValid(req.params.id))
     return res.status(400).send("ID unknown : " + req.params.id);
 
   try {
-    const post = await PostModel.findByIdAndUpdate(
+    return PostModel.findByIdAndUpdate(
       req.params.id,
       {
         $push: {
           comments: {
-            commenterId: "65da89a83a19c50a83054dac", // Static user ID
-            commenterPseudo: "utilisateur_test", // Static username
+            commenterId: req.body.commenterId,
+            commenterPseudo: req.body.commenterPseudo,
             text: req.body.text,
             timestamp: new Date().getTime(),
           },
         },
       },
       { new: true }
-    );
-
-    res.json(post);
+    )
+      .then((data) => res.send(data))
+      .catch((err) => res.status(500).send({ message: err }));
   } catch (err) {
     return res.status(400).send(err);
   }
 };
+
+
 
 module.exports.editCommentPost = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
@@ -219,4 +233,3 @@ module.exports.processUserRequest = async (req, res) => {
         res.status(500).json({ error: 'Internal server error' });
     }
 };
-

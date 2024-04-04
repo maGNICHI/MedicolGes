@@ -8,7 +8,8 @@ const bodyParser = require('body-parser');
 const upload = require('./multer')
 const cloudinary= require('./cloudinary')
 const fs = require ('fs')
-
+// //ajouter 
+const OpenAI = require("openai");
 /*app.listen(process.env.PORT, () => { 
     console.log('server started on port ' + (process.env.PORT));
 });*/
@@ -16,7 +17,10 @@ const fs = require ('fs')
 require('dotenv').config(); 
 db();
 const app = express();
-
+// //ajouter 
+const openai = new OpenAI({
+  apiKey: process.env.OPEN_AI_SECRET_KEY,
+});
 app.use(bodyParser.json({ limit: '50mb' }));
 // Increase payload size limit for URL encoded data
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
@@ -25,6 +29,27 @@ app.use(cors({
   origin: 'http://localhost:3000' // Allow requests from localhost:3000
 }));
 app.use(express.json())
+// //ajouter 
+const conversationHistory = [
+  { role: "system", content: "Vous êtes un assistant utile" }
+];
+
+app.post("/ask", async (req, res) => {
+  const userMessage = req.body.message; 
+  conversationHistory.push({ role: "user", content: userMessage });
+  try {
+    const completion = await openai.chat.completions.create({
+      messages: conversationHistory,
+      model: "gpt-3.5-turbo",
+    });
+    const botResponse = completion.choices[0].message.content; 
+    res.json({ message: botResponse });
+  } catch (error) {
+    console.error("OpenAI API Error:", error);
+    res.status(500).send("Error generating response from OpenAI");
+  }
+});
+
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 

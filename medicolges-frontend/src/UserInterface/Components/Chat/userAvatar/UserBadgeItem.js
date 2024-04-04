@@ -1,3 +1,4 @@
+import { Avatar } from "@chakra-ui/avatar";
 import { CloseIcon } from "@chakra-ui/icons";
 import { Badge } from "@chakra-ui/layout";
 
@@ -15,6 +16,13 @@ const UserBadgeItem = ({ user, handleFunction, admin }) => {
       cursor="pointer"
       onClick={handleFunction}
     >
+      <Avatar
+        mr={2}
+        size="sm"
+        cursor="pointer"
+        name={user.username}
+        src={user.pic}
+      />
       {user.username}
       {admin === user._id && <span> (Admin)</span>}
       <CloseIcon pl={1} />

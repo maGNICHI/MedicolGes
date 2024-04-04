@@ -1,28 +1,46 @@
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./sidebar.css";
-import {
-  RssFeed,
-  Chat,
-  PlayCircleFilledOutlined,
-  Group,
-  Bookmark,
-  HelpOutline,
-  WorkOutline,
-  Event,
-  School,
-} from "@material-ui/icons";
-import { Users } from "./dummyData";
-import CloseFriend from "../closeFriend/CloseFriend";
 
 export default function Sidebar() {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        const token = userInfo.token;
+
+        const response = await axios.get("http://localhost:5000/api/user/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUsers(response.data);
+      } catch (error) {
+        console.error("Error loading users:", error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
   return (
     <div className="sidebar1">
-        <h4>Online Friends :</h4>
-        <ul className="sidebar1FriendList">
-          {Users.map((u) => (
-            <CloseFriend key={u.id} user={u} />
-          ))}
-        </ul>
-      </div>
- 
+      <h3>Users :</h3>
+      <ul className="sidebar1FriendList">
+        {users.map((user) => (
+          user.isDeleted ===false &&(
+          <div key={user._id} className="userRow">
+            <img
+              className="postProfileImg"
+              src={user.pic}
+              alt={user.username}
+            />
+            <span className="username">{user.username}</span>
+          </div>)
+        ))}
+      </ul>
+    </div>
   );
 }
