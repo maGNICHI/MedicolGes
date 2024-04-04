@@ -106,10 +106,12 @@ function Navbar() {
       <button
         className="navbar-btn"
         type="button"
-        disabled={isButtonDisabled}
-        onClick={handleChatBtnClick}
+       
       >
-        <FontAwesomeIcon icon={faCommentDots} /> Live Chat
+       <a href="/chats" className="navbar-links">
+           
+          
+        <FontAwesomeIcon icon={faCommentDots} /> Live Chat</a>
       </button>
 
       {/* Mobile */}
@@ -148,6 +150,11 @@ function Navbar() {
           <li>
             <a onClick={openNav} href="/homeNew">
               Posts
+            </a>
+          </li>
+          <li>
+            <a onClick={openNav} href="/chats">
+              chats
             </a>
           </li>
           <li>

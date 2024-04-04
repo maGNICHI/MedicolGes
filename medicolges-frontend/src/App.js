@@ -1,4 +1,5 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import React from "react";
+import {  Route, Routes } from 'react-router-dom';
 import './App.css';
 import Dashboard from '../src/Dashboard/Dashboard/Dashboard';
 import UserManagement from './Dashboard/UserManagement/UserList';
@@ -12,10 +13,10 @@ import Appointment from "./UserInterface/Pages/Appointment";
 import ProjectList from './Dashboard/ProjectManagement/ProjectList';
 import OrganizationList from './Dashboard/OrganizationManagement/OrganizationList';
 import FeedbackList from './Dashboard/FeedBackManagement/FeedbackList';
-import { applyMiddleware, createStore, compose } from 'redux';
-import { reducers } from './reducers';
-import {thunk }from 'redux-thunk';
-import { Provider } from 'react-redux';
+//import { applyMiddleware, createStore, compose } from 'redux';
+//import { reducers } from './reducers';
+//import {thunk }from 'redux-thunk';
+//import { Provider } from 'react-redux';
 import Form from './Dashboard/FormGeneration/Form';
 import CreateOrganization from './Dashboard/OrganizationManagement/OrganizationCreate';
 import CreatePost from './UserInterface/Components/Post/CreatePost'
@@ -30,14 +31,13 @@ import Add from './UserInterface/Components/ProjectManagement/AddProject/AddProj
 import Consult from './UserInterface/Components/ProjectManagement/ConsultProject/ConsultProject';
 import AfficheForm from './Dashboard/Dashboard/compnents/AfficheForm';
 import HomePost1 from './UserInterface/Components/PostNew/home/homePost1'
-
+const ChatPage = React.lazy(() => import("./UserInterface/Pages/ChatPage"));
 
 function App() {
-  const store = createStore(reducers, compose(applyMiddleware(thunk)));
+ // const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
   return (
-    <BrowserRouter>
-      <Provider store={store}>
+    
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path='/signup' element={<Signup />} />
@@ -47,6 +47,7 @@ function App() {
         <Route path="/formGeneration" element={<Form />} />
         <Route path="/addProject" element={<AddProject />} />
         <Route path="/post" element={<CreatePost />} />
+        <Route path="/chats" element={<ChatPage />} /> 
         <Route path="/liste" element={<PostList />} />
         <Route path="/consultProject/:id" element={<ConsultProject />} />
         <Route path="/organizationList" element={<OrganizationList />} />
@@ -67,8 +68,7 @@ function App() {
 
         <Route path="*" element={<NotFound />} />
       </Routes>
-      </Provider>
-    </BrowserRouter>
+      
 
   );
 }

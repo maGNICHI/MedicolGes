@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+// import { Button } from "@mui/material";
 import React from "react";
 
 const IconButton = ({
@@ -14,7 +14,7 @@ const IconButton = ({
 }) => {
   return (
     <div className="flex">
-      <Button
+      <button
         disabled={disabled}
         color={color}
         type={type}
@@ -30,7 +30,7 @@ const IconButton = ({
         onClick={onClick}
       >
         {children}
-      </Button>
+      </button>
     </div>
   );
 };
