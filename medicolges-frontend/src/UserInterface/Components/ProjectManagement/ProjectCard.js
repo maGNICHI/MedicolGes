@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 
 export default function ProjectCard({ project, onFollow }) {
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  const [following, setFollowing] = useState(project.followers.includes(user?._id));
+  const [following, setFollowing] = useState(project.followers && project.followers.includes(user?._id));
   const [followersCount, setFollowersCount] = useState(project.numberFollowers);
 
   const truncateDescription = (text, maxLength) => {

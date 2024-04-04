@@ -12,6 +12,7 @@ import Feedback from "./Feedback";
 import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Feed from "../../PostNew/feed/feed";
+import Questionnaire from "../../Questionnaire/Questionnaire";
 
 export default function ConsultProject({ onFollow }) {
   const [selectedName, setSelectedName] = useState("Consult Project");
@@ -22,6 +23,7 @@ export default function ConsultProject({ onFollow }) {
   const [followersCount, setFollowersCount] = useState(0);
   const [showDetails, setShowDetails] = useState(true);
   const [showFeedback, setShowFeedback] = useState(false); // State for showing Feedback component
+  const [showPosts, setShowPosts] = useState(false);
   const [feedbacks, setFeedbacks] = useState([]);
   const [feedbackCount, setFeedbackCount] = useState(0);
   const { id } = useParams();
@@ -29,7 +31,7 @@ export default function ConsultProject({ onFollow }) {
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const [following, setFollowing] = useState(false);
 
-  console.log("followwwwwwww",following);
+  console.log("followwwwwwww", following);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -304,6 +306,7 @@ export default function ConsultProject({ onFollow }) {
                       onClick={() => {
                         setShowDetails(true);
                         setShowFeedback(false);
+                        setShowPosts(false);
                       }}
                     >
                       Details
@@ -317,6 +320,7 @@ export default function ConsultProject({ onFollow }) {
                       onClick={() => {
                         setShowDetails(false);
                         setShowFeedback(false);
+                        setShowPosts(true);
                       }}
                     >
                       Posts
@@ -330,11 +334,28 @@ export default function ConsultProject({ onFollow }) {
                       onClick={() => {
                         setShowFeedback(true);
                         setShowDetails(false);
+                        setShowPosts(false);
                       }}
                     >
                       {" "}
                       {/* Update onClick to show feedback */}
                       Feedback
+                    </a>{" "}
+                  </li>{" "}
+                  <li className="nav-item">
+                    {" "}
+                    <a
+                      className="nav-link"
+                      href="#feedback"
+                      onClick={() => {
+                        setShowFeedback(false);
+                        setShowDetails(false);
+                        setShowPosts(false);
+                      }}
+                    >
+                      {" "}
+                      {/* Update onClick to show feedback */}
+                      Questionnaire Details
                     </a>{" "}
                   </li>{" "}
                 </ul>
@@ -378,10 +399,12 @@ export default function ConsultProject({ onFollow }) {
                   projectData={projectData}
                   organization={organizationId}
                 />
-              ) : showFeedback ? (
-                <Feedback projectId={projectData} /> // Pass feedbacks as props to Feedback component
-              ) : (
+              ) : showPosts ? (
                 <Feed inproject={true} projectId={id} />
+              ) : showFeedback ? (
+                <Feedback projectId={projectData} />
+              ) : (
+                <Questionnaire formId={projectData.form}/>
               )}
             </Col>
           </div>

@@ -43,3 +43,15 @@ export const fetchResponsesByFormId = async (formId) => {
       throw error;
   }
 };
+// export const fetchResponsesByFormId = async (formId) => {
+//   try {
+//       const [responses, formData] = await Promise.all([
+//         axios.get(`${url1}/responses/${formId}`),
+//         fetchFormById(formId) // Supposons que vous avez une fonction fetchFormById pour récupérer les détails du formulaire
+//       ]);
+//       return { responses: responses.data, formData: formData.data };
+//   } catch (error) {
+//       console.error('Erreur lors de la récupération des réponses pour le formulaire:', error);
+//       throw error;
+//   }
+// };

@@ -30,7 +30,11 @@ import ListProject from './UserInterface/Components/ProjectManagement/ListProjec
 import Add from './UserInterface/Components/ProjectManagement/AddProject/AddProject';
 import Consult from './UserInterface/Components/ProjectManagement/ConsultProject/ConsultProject';
 import AfficheForm from './Dashboard/Dashboard/compnents/AfficheForm';
-import HomePost1 from './UserInterface/Components/PostNew/home/homePost1'
+import HomePost1 from './UserInterface/Components/PostNew/home/homePost1';
+import AddResponseComponent from './UserInterface/Components/Questionnaire/AddResponseComponent';
+import UpdateQuestionnaireComponent from './UserInterface/Components/Questionnaire/UpdateQuestionnaireComponent';
+import EditQuestionnaire from './UserInterface/Components/Questionnaire/EditQuestionnaire';
+import GetFormById from './UserInterface/Components/Questionnaire/GetFormById';
 const ChatPage = React.lazy(() => import("./UserInterface/Pages/ChatPage"));
 
 function App() {
@@ -47,7 +51,7 @@ function App() {
         <Route path="/formGeneration" element={<Form />} />
         <Route path="/addProject" element={<AddProject />} />
         <Route path="/post" element={<CreatePost />} />
-        <Route path="/chats" element={<ChatPage />} /> 
+        <Route path="/chats" element={<ChatPage />} />
         <Route path="/liste" element={<PostList />} />
         <Route path="/consultProject/:id" element={<ConsultProject />} />
         <Route path="/organizationList" element={<OrganizationList />} />
@@ -60,6 +64,10 @@ function App() {
         <Route path="/legal" element={<Legal />} />
         <Route path="/appointment" element={<Appointment />} />
         <Route path="/ajouterForm" element={<AjouterForm />} />
+        <Route path='/addResponse' element={<AddResponseComponent />} />
+        <Route path='/updateForm' element={<UpdateQuestionnaireComponent />} />
+        <Route path='/editForm' element={<EditQuestionnaire />} />
+        <Route path="/afficheId/:id" element={<GetFormById />} />
         <Route path='/projects' element={<ListProject />} />
         <Route path='/projects/add' element={<Add />} />
         <Route path='/projects/consult/:id' element={<Consult />} />

@@ -2,17 +2,12 @@ import React, { useState, useEffect } from "react";
 import { Card, Col, Container, Row } from "react-bootstrap";
 //SuperAdminLayout/Layout
 import Title from "../../../components/Title/Title";
-import Layout from "../../../Dashboard/SuperAdminLayout/Layout";
-import "../../Dashboard/Dashboard.css";
-import TimePickerInput from "../compnents/Form/TimePickerInput";
 
 import { AppBar } from "@material-ui/core";
 import useStyles from "../../../styless";
 import { useDispatch } from "react-redux";
-import Dashboard from "../Dashboard"; // Import the Dashboard component
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { putForm } from "../compnents/api/index"
 
 import {
   CardActions,
@@ -36,10 +31,11 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import IconButton from "../../../components/Button/IconButton";
 import { FaAd, FaAngleDown, FaArchive, FaSave } from "react-icons/fa";
-import { addForm ,sendResponse} from "../compnents/api/index";
 import Switch from "@mui/material/Switch";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
+import { sendResponse } from "../../../Dashboard/Dashboard/compnents/api";
+import TimePickerInput from "../../../Dashboard/Dashboard/compnents/Form/TimePickerInput";
   //image
   const preset_key="cw1paxgz";
   const cloud_name="dwkto7nzl";
@@ -67,7 +63,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
 
   const handleUpdate = async (e) => {
 
-    navigate("/formGeneration", { state: { formData } });
+    navigate("/editForm", { state: { formData } });
   };
 
   //togle
@@ -106,6 +102,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
     console.log("Form data before saving:", formData); // Vérifiez les données du formulaire avant la sauvegarde
 
     createForm(formData);
+    navigate('/projects')
     // navigate("/affucheyourReponse", { state: { formData } });
 
   };
@@ -869,9 +866,8 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
     }
   };
   return (
-    <Layout selectedName={selectedName}>
-      <Container fluid className="mt-4" style={{ height: "100vh" }}>
-        <Card className="card h-100" style={{ overflowY: "auto" }}>
+      <Container fluid className="mt-4">
+        <Card className="card h-100">
           <Card.Body
             style={{
               backgroundColor: "#ffffffa9",
@@ -879,24 +875,22 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
               borderRadius: "20px",
             }}
           >
-            <Title title={"Create Form"} fontWeight={600} fontSize={"24px"} />
-            <hr />
             <Row>
-              <Col xs={12} md={12} className="text-center">
+            <Col xs={12} md={12} className="text-center">
                 <AppBar
                   className={classes.appBar}
                   position="static"
                   color="inherit"
                   style={{
-                    height: "450px",
-                    backgroundImage: `url(${process.env.PUBLIC_URL}/images/Background/background.png)`,
+                    height: "210px",
+                    backgroundImage: `url(${process.env.PUBLIC_URL}/images/Background/backgray.jpg)`,
                     backgroundRepeat: "no-repeat",
                     backgroundSize: "cover",
                   }}
                 >
                   <Title
                     secondTitle={"Form Generation"}
-                    fontSize={"90px"}
+                    fontSize={"50px"}
                     color={"black"}
                     fontWeight={900}
                   />
@@ -925,7 +919,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
                             style={{
                               marginBottom: "0px",
                               marginRight: "7px",
-                              fontFamily: "Arial, sans-serif",
+                              fontFamily: "Poppins, sans-serif",
                             }} // Police de caractères identique
                           />
                         </div>
@@ -939,7 +933,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
                               style={{
                                 marginBottom: "7px",
                                 fontSize: "18px",
-                                fontFamily: "Arial, sans-serif",
+                                fontFamily: "Poppins, sans-serif",
                               }} // Taille de police et police de caractères identiques
                             >
                               {formData.name}
@@ -965,7 +959,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
                                   style={{
                                     fontSize: "18px", // Taille de police identique
                                     fontWeight: 600, // Poids de police identique
-                                    fontFamily: "Arial, sans-serif", // Police de caractères identique
+                                    fontFamily: "Poppins, sans-serif", // Police de caractères identique
                                     paddingBottom: "8px", // Espacement en bas identique
                                   }}
                                 >
@@ -986,9 +980,9 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
                 <div className="col-md-12 col-xs-12 d-flex justify-content-end">
                   {location.state && location.state.case == "create" ? (
                     <IconButton
-                      className="h-100 border-0"
+                      className="w-100 border-0"
                       style={{
-                        background: "#047db9",
+                        background: "#1990aa",
                         color: "white",
                         fontSize: "16px",
                         fontWeight: 600,
@@ -1003,9 +997,9 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
                     </IconButton>
                   ) : (
                     <IconButton
-                      className="h-100 border-0"
+                      className="w-100 border-0"
                       style={{
-                        background: "#047db9",
+                        background: "#1990aa",
                         color: "white",
                         fontSize: "16px",
                         fontWeight: 600,
@@ -1025,7 +1019,6 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
           </Card.Body>
         </Card>
       </Container>
-    </Layout>
   );
 };
 export default AjouterForm;

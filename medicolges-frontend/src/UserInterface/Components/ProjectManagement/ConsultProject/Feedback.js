@@ -106,7 +106,7 @@ export default function Feedback({ projectId }) {
           <IconButton
             className="border-0 w-100"
             style={{
-              background: "linear-gradient(-45deg, #3615e7 0%, #44a2f6 100%)",
+              background: "linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)",
               color: "white",
               fontSize: "16px",
               fontWeight: 600,

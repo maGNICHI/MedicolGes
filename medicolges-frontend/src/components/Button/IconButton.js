@@ -22,7 +22,7 @@ const IconButton = ({
         startIcon={startIcon}
         endIcon={endIcon}
         style={{
-          fontFamily: "Work Sans",
+          fontFamily: "Poppins",
           fontStyle: "normal",
           textTransform: "none",
           ...style,

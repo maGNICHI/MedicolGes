@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -6,21 +6,33 @@ import {
   Container,
   Form,
   Modal,
+  NavLink,
   Row,
 } from "react-bootstrap";
 import Title from "../../../../components/Title/Title";
 import IconButton from "../../../../components/Button/IconButton";
 import { FaDownload, FaPlus, FaShareAlt, FaTrash } from "react-icons/fa";
 import axios from "axios";
+import {
+  fetchForm,
+  fetchFormById,
+} from "../../../../Dashboard/Dashboard/compnents/api";
+import { useNavigate } from "react-router-dom";
 
 export default function Details({ projectData, organization }) {
   const [showShareFeedBackModal, setShowShareFeedBackModal] = useState(false);
   const [emails, setEmails] = useState([""]);
+  const [form, setForm] = useState({});
+  const [link, setLink] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const navigate = useNavigate();
 
   const handleCloseShareFeedBackModal = () => setShowShareFeedBackModal(false);
   const handleShowShareFeedBackModal = () => {
     setEmails([""]);
     setShowShareFeedBackModal(true);
+    openFormInBrowser(projectData.form);
   };
 
   const addEmailInput = () => {
@@ -70,6 +82,50 @@ export default function Details({ projectData, organization }) {
       console.error("Error downloading file:", error);
     }
   };
+
+  const openFormInBrowser = async (formId) => {
+    try {
+      setLoading(true);
+      const formData = await fetchFormById(formId);
+      const link = `http://localhost:3000/afficheId/${formId}`;
+      setLink(link);
+    } catch (error) {
+      console.error("Erreur lors de la récupération du formulaire:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(link);
+    setCopied(true);
+  };
+
+  useEffect(() => {
+    fetchForm()
+      .then((res) => {
+        const forms = res.data;
+        const projectForm = forms.find((f) => f._id === projectData.form);
+        setForm(projectForm);
+      })
+      .catch((error) => {
+        console.error("Error fetching forms:", error);
+      });
+  }, [projectData.form]);
+
+  const save = (form) => {
+    navigate("/addResponse", {
+      state: {
+        case: "create",
+        formData: {
+          _id: form._id,
+          name: form.name,
+          questions: JSON.parse(form.questions),
+        },
+      },
+    }); // Redirige vers la page ajouterForm
+  };
+
   return (
     <Card className="mt-5 mx-1 px-4 py-3" style={{ background: "#8ac2bb4d" }}>
       <Row>
@@ -167,6 +223,9 @@ export default function Details({ projectData, organization }) {
               padding: "8px 16px",
               borderRadius: "20px",
             }}
+            onClick={() => {
+              save(form);
+            }}
           >
             Answer Questionnaire
           </IconButton>
@@ -199,6 +258,13 @@ export default function Details({ projectData, organization }) {
         <Form onSubmit={handleSubmit}>
           <Modal.Body>
             {/* Existing User */}
+            <Form.Group>
+              <Form.Label>If you want to copy the url of the form</Form.Label>
+              <p>{link}</p>
+              <Button onClick={handleCopy} disabled={copied} className=" -pt-1 mb-1">
+                {copied ? "Copié !" : "Copier le lien"}
+              </Button>
+            </Form.Group>
             <Form.Group controlId="formExistingUser">
               <Form.Label>Choose user</Form.Label>
               <Form.Control

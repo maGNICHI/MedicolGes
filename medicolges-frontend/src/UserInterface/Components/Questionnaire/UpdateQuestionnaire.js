@@ -18,6 +18,7 @@ import {
   Grid,
   Checkbox,
   Input,
+  AppBar,
 } from "@material-ui/core";
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
@@ -25,18 +26,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import InsertInvitationIcon from "@material-ui/icons/InsertInvitation";
 
-import useStyles from "./styles";
+import useStyles from "../../../Dashboard/Dashboard/compnents/Form/styles";
 //import { createForm } from '../../api'
 import DeleteIcon from "@material-ui/icons/Delete";
 import { useEffect } from "react";
-import { addForm } from "../api/index";
-import Title from "../../../../components/Title/Title";
-import { Row } from "react-bootstrap";
-import IconButton from "../../../../components/Button/IconButton";
-import { FaBars, FaPlus, FaSave, FaTrash, FaEdit  } from "react-icons/fa";
-import AjouterForm from "../AjouterForm";
+import { Col, Row } from "react-bootstrap";
+import { FaBars, FaPlus, FaSave, FaTrash, FaEdit } from "react-icons/fa";
 // import { TimePicker } from "@material-ui/lab";
-import TimePickerInput from "../Form/TimePickerInput"; // Importer le composant TimePickerInput
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import TextFieldsIcon from "@material-ui/icons/TextFields";
 import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
@@ -48,17 +44,18 @@ import PeopleIcon from "@material-ui/icons/People";
 import DescriptionIcon from "@material-ui/icons/Description";
 import PhoneIcon from "@material-ui/icons/Phone";
 import EmailIcon from "@material-ui/icons/Email";
-import PhoneField from "./PhoneField"; // Assuming PhoneField is defined in a separate file
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
 import Switch from "@mui/material/Switch";
+import TimePickerInput from "../../../Dashboard/Dashboard/compnents/Form/TimePickerInput";
+import IconButton from "../../../components/Button/IconButton";
+import Title from "../../../components/Title/Title";
+import { addForm, putForm } from "../../../Dashboard/Dashboard/compnents/api";
 
-import {putForm} from "../api/index";
-
-const Form = () => {
+const UpdateQuestionnaire = () => {
   const [darkMode, setDarkMode] = useState(false);
 
-  const [formData, setFormData] = useState({id:"" , name: "", questions: [] });
-  console.log("data from formjs",formData)
+  const [formData, setFormData] = useState({ id: "", name: "", questions: [] });
+  console.log("data from formjs", formData);
   const [idCount, setIdCount] = useState(0);
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -116,7 +113,7 @@ const Form = () => {
     console.log("Question type:", questionType);
     console.log("Color:", color);
     console.log("Question colors:", questionColors);
-//
+    //
     setQuestionColors((prevColors) => ({
       ...prevColors,
       [questionType]: color,
@@ -175,33 +172,29 @@ const Form = () => {
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
-        //ajouter
-        try {
-          console.log("Case:", location.state); 
-          console.log(formData._id,'data')
-          if (formData._id  !== ""  ) {
-          
-            // If updating an existing form
-            await updateForm();
-            setTimeout(() => {
-              navigate("/afficheForm");  // Navigate back to afficheForm
-
-            }, 5000);
-          } 
-          if (formData._id  == undefined  ) {
-              // If you are creating a new form
-              await createForm(); // Create a new form
-              setTimeout(() => {
-                navigate("/ajouterForm", { state: { formData, case: "create" } }); // Navigate to ajouterForm
-
-              }, 5000);
-          }
-      } catch (error) {
-          console.error("Error handling form submission:", error);
-          // Handle error, display message, etc.
+    //ajouter
+    try {
+      console.log("Case:", location.state);
+      console.log(formData._id, "data");
+      if (formData._id !== "") {
+        // If updating an existing form
+        await updateForm();
+        setTimeout(() => {
+          navigate("/projects"); // Navigate back to afficheForm
+        }, 5000);
       }
+      if (formData._id == undefined) {
+        // If you are creating a new form
+        await createForm(); // Create a new form
+        setTimeout(() => {
+          navigate("/ajouterForm", { state: { formData, case: "create" } }); // Navigate to ajouterForm
+        }, 5000);
+      }
+    } catch (error) {
+      console.error("Error handling form submission:", error);
+      // Handle error, display message, etc.
+    }
     // createForm();
     // console.log("hhhhh", formData);
     // navigate("/ajouterForm", { state: { formData, case: "create" } });
@@ -228,7 +221,7 @@ const Form = () => {
     //assurer que les données de formulaire existent dans l'objet location.sta
     if (location.state && location.state.formData) {
       setFormData(location.state.formData);
-    }//execute lorsque location.state change
+    } //execute lorsque location.state change
   }, [location.state]);
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -364,10 +357,9 @@ const Form = () => {
       });
   };
   const updateForm = () => {
-    putForm(
-      formData._id, {
-        name: formData.name,
-        questions: JSON.stringify(formData.questions)
+    putForm(formData._id, {
+      name: formData.name,
+      questions: JSON.stringify(formData.questions),
     })
       .then((res) => {
         console.log(res);
@@ -1027,28 +1019,34 @@ const Form = () => {
     }));
   };
   const handleUpdateQuestion = (index) => {
-   // Récupérer la question à partir de l'index
-  const questionToUpdate = sortedQuestions[index];
+    // Récupérer la question à partir de l'index
+    const questionToUpdate = sortedQuestions[index];
 
-  // Demander à l'utilisateur de saisir la nouvelle version de la question
-  const updatedQuestion = prompt("Enter the updated question:", questionToUpdate.question);
+    // Demander à l'utilisateur de saisir la nouvelle version de la question
+    const updatedQuestion = prompt(
+      "Enter the updated question:",
+      questionToUpdate.question
+    );
 
-  // Vérifier si l'utilisateur a saisi une nouvelle question
-  if (updatedQuestion !== null) {
-    // Copier le tableau des questions
-    const updatedQuestions = [...formData.questions];
+    // Vérifier si l'utilisateur a saisi une nouvelle question
+    if (updatedQuestion !== null) {
+      // Copier le tableau des questions
+      const updatedQuestions = [...formData.questions];
 
-    // Mettre à jour la question dans le tableau
-    updatedQuestions[index] = { ...questionToUpdate, question: updatedQuestion };
+      // Mettre à jour la question dans le tableau
+      updatedQuestions[index] = {
+        ...questionToUpdate,
+        question: updatedQuestion,
+      };
 
-    // Mettre à jour le state avec les questions mises à jour
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      questions: updatedQuestions,
-    }));
-  }
+      // Mettre à jour le state avec les questions mises à jour
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        questions: updatedQuestions,
+      }));
+    }
   };
-  
+
   const renderQuestions = () => {
     return formData.questions.map((question, index) => (
       <div
@@ -1088,35 +1086,53 @@ const Form = () => {
   const sortedQuestions = formData.questions;
   return (
     <Paper className={classes.paper}>
-      <form 
+      <form
         autoComplete="off"
         noValidate
-              //className={darkMode ? 'dark-form' : 'light-form'}
+        //className={darkMode ? 'dark-form' : 'light-form'}
         className={`${classes.root} ${classes.form}`}
         onSubmit={handleSubmit}
       >
         <Container>
+        <Col xs={12} md={12} className="text-center mb-3">
+                <AppBar
+                  className={classes.appBar}
+                  position="static"
+                  color="inherit"
+                  style={{
+                    height: "210px",
+                    backgroundImage: `url(${process.env.PUBLIC_URL}/images/Background/backgray.jpg)`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                  }}
+                >
+                  <Title
+                    secondTitle={"Form Generation"}
+                    fontSize={"50px"}
+                    color={"black"}
+                    fontWeight={900}
+                  />
+                </AppBar>
+              </Col>
           <Row>
-            
             {/* <div className="mb-4 col-12"> */}
-              <Title
-                secondTitle={"Name of the questionnaire"}
-                fontSize={"18px"}
-                fontWeight={600}
-                className={"mb-2"}
-              />
-              <TextField
-                type="text"
-                placeholder="Enter Form Name"
-                className="rounded-pill"
-                name="Name"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                fullWidth // Ensures the input field takes the full width of its container
-              />
-           
+            <Title
+              secondTitle={"Name of the questionnaire"}
+              fontSize={"18px"}
+              fontWeight={600}
+              className={"mb-2"}
+            />
+            <TextField
+              type="text"
+              placeholder="Enter Form Name"
+              className="rounded-pill"
+              name="Name"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+              fullWidth // Ensures the input field takes the full width of its container
+            />
           </Row>
           {sortedQuestions.map((question, index) => (
             <div
@@ -1146,23 +1162,22 @@ const Form = () => {
                   onClick={() => handleDeleteQuestion(index)}
                   style={{ cursor: "pointer", marginLeft: "10px" }}
                 />
-                   <FaEdit // Utilisez EditIcon ici
-        color="info"
-        onClick={() => handleUpdateQuestion(index)} // Assurez-vous de définir cette fonction
-        style={{ cursor: "pointer", marginLeft: "10px" }}
-      />
+                <FaEdit // Utilisez EditIcon ici
+                  color="info"
+                  onClick={() => handleUpdateQuestion(index)} // Assurez-vous de définir cette fonction
+                  style={{ cursor: "pointer", marginLeft: "10px" }}
+                />
               </div>
               {renderInputField(question)}
             </div>
           ))}
-          
-          <div className="row text-center" style={{ marginRight: "-97px" }}>
-           
-            <div className="col-md-3 col-xs-12">
+
+          <div className="row text-center">
+            <div className="col-md-4 col-xs-12 mb-1">
               <IconButton
-                className="h-100 border-0"
+                className="w-100 border-0"
                 style={{
-                  background: "#047db9",
+                  background: "#1990aa",
                   color: "white",
                   fontSize: "16px",
                   fontWeight: 600,
@@ -1177,29 +1192,11 @@ const Form = () => {
                 {/* Change the button label */}
               </IconButton>
             </div>
-            <div className="col-md-3 col-xs-12">
+            <div className="col-md-4 col-xs-12 mb-1">
               <IconButton
-                className="h-100 border-0"
+                className="w-100 border-0"
                 style={{
-                  background: "#328CBD", // Couleur verte
-                  color: "white",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  padding: "8px 16px",
-                  borderRadius: "20px",
-                }}
-                startIcon={<FaBars />}
-                onClick={affichage}
-                fullWidth // Add fullWidth prop to make button take full width
-              >
-                <Title title={"Affiche"} /> {/* Change the button label */}
-              </IconButton>
-            </div>
-            <div className="col-md-3 col-xs-12">
-              <IconButton
-                className="h-100 border-0"
-                style={{
-                  background: "#047db9",
+                  background: "#1990aa",
                   color: "white",
                   fontSize: "16px",
                   fontWeight: 600,
@@ -1213,10 +1210,10 @@ const Form = () => {
                 <Title title={"Submit"} /> {/* Change the button label */}
               </IconButton>
             </div>
-            
-            <div className="col-md-3 col-xs-12 ">
+
+            <div className="col-md-4 col-xs-12 mb-1 ">
               <IconButton
-                className="h-100 border-0"
+                className="w-100 border-0"
                 style={{
                   background: "#bd6262",
                   color: "white",
@@ -1224,7 +1221,7 @@ const Form = () => {
                   fontWeight: 600,
                   padding: "8px 16px",
                   borderRadius: "20px",
-                  marginleft:"56px",
+                  marginleft: "56px",
                 }}
                 startIcon={<FaTrash />}
                 onClick={clear}
@@ -1437,7 +1434,6 @@ const Form = () => {
               color="primary"
               size="small"
               onClick={handleModalSubmit}
-              
             >
               OK
             </Button>
@@ -1448,4 +1444,4 @@ const Form = () => {
   );
 };
 
-export default Form;
+export default UpdateQuestionnaire;

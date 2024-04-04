@@ -182,7 +182,7 @@ export default function Step2({ formDataProject, setformDataProject, onNext }) {
     console.log("hhhhh", formData);
     onNext(); // Call onNext after creating the form
   };
-  
+
   ////ajouter
   // const cards = useSelector((state) => state.cards);
   // {cards.map((formData, index) => (
@@ -330,16 +330,16 @@ export default function Step2({ formDataProject, setformDataProject, onNext }) {
 
   const createForm = () => {
     addForm({
-      id:formData._id,
+      id: formData._id,
       name: formData.name,
       questions: JSON.stringify(formData.questions),
     })
       .then((res) => {
         setformDataProject({
-            ...formDataProject,
-            form: res.data._id,
+          ...formDataProject,
+          form: res.data._id,
         });
-        console.log("hhhhhhhhhhhhhh",res);
+        console.log("hhhhhhhhhhhhhh", res);
       })
       .catch((err) => {
         console.log(err);
@@ -1074,143 +1074,139 @@ export default function Step2({ formDataProject, setformDataProject, onNext }) {
   };
   const sortedQuestions = formData.questions;
   return (
-    <Form 
-    onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
       {/* Step 3 content */}
       <Row className="d-flex justify-items-center justify-content-center">
         <Col md={9} xs={12}>
-    <Paper className={classes.paper}>
-      <Row className=" mb-5 d-flex justify-items-center justify-content-center justify-elements-center">
-        <Col xs={12} md={12} className="text-center">
-          <AppBar
-            className={classes.appBar}
-            position="static"
-            color="inherit"
-            style={{
-              height: "210px",
-              backgroundImage: `url(${process.env.PUBLIC_URL}/images/Background/backgray.jpg)`,
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "cover",
-            }}
-          >
-            <Title
-              secondTitle={"Form Generation"}
-              fontSize={"50px"}
-              color={"black"}
-              fontWeight={900}
-            />
-          </AppBar>
-        </Col>
-      </Row>
-      <form
-        autoComplete="off"
-        noValidate
-        //className={darkMode ? 'dark-form' : 'light-form'}
-        className={`${classes.root} ${classes.form}`}
-      >
-        <Container>
-          <Row>
-            {/* <div className="mb-4 col-12"> */}
-            <Title
-              secondTitle={"Name of the questionnaire"}
-              fontSize={"18px"}
-              fontWeight={600}
-              className={"mb-2"}
-            />
-            <TextField
-              type="text"
-              placeholder="Enter Form Name"
-              className="rounded-pill"
-              name="Name"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
-              fullWidth // Ensures the input field takes the full width of its container
-            />
-          </Row>
-          {sortedQuestions.map((question, index) => (
-            <div
-              key={index}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                marginBottom: "10px",
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "10px",
-                }}
-              >
-                <Typography
-                  variant="body1"
-                  style={{ color: question.color, marginRight: "10px" }}
+          <Paper className={classes.paper}>
+            <Row className=" mb-5 d-flex justify-items-center justify-content-center justify-elements-center">
+              <Col xs={12} md={12} className="text-center">
+                <AppBar
+                  className={classes.appBar}
+                  position="static"
+                  color="inherit"
+                  style={{
+                    height: "210px",
+                    backgroundImage: `url(${process.env.PUBLIC_URL}/images/Background/backgray.jpg)`,
+                    backgroundRepeat: "no-repeat",
+                    backgroundSize: "cover",
+                  }}
                 >
-                  Question {index + 1}: {question.question} (
-                  {question.questionType})
-                </Typography>
-                <DeleteIcon
-                  color="info"
-                  onClick={() => handleDeleteQuestion(index)}
-                  style={{ cursor: "pointer", marginLeft: "10px" }}
-                />
-                <FaEdit // Utilisez EditIcon ici
-                  color="info"
-                  onClick={() => handleUpdateQuestion(index)} // Assurez-vous de définir cette fonction
-                  style={{ cursor: "pointer", marginLeft: "10px" }}
-                />
-              </div>
-              {renderInputField(question)}
-            </div>
-          ))}
-          <Row className="d-flex justify-items-center justify-content-center my-4">
-            <div className="col-md-3 col-xs-12 ">
-              <IconButton
-                className="h-100 border-0"
-                style={{
-                  background: "#bd6262",
-                  color: "white",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  padding: "8px 16px",
-                  borderRadius: "20px",
-                  marginleft: "56px",
-                }}
-                startIcon={<FaTrash />}
-                onClick={clear}
-                fullWidth // Add fullWidth prop to make button take full width
-              >
-                <Title title={"Clear"} /> {/* Change the button label */}
-              </IconButton>
-          </div>
-            <div className="col-md-3 col-xs-12">
-              <IconButton
-                className="h-100 border-0"
-                style={{
-                  background: "#047db9",
-                  color: "white",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  padding: "8px 16px",
-                  borderRadius: "20px",
-                }}
-                startIcon={<FaPlus />}
-                onClick={handleOpenModal}
-                fullWidth // Add fullWidth prop to make button take full width
-              >
-                <Title title={"Add questions"} />{" "}
-                {/* Change the button label */}
-              </IconButton>
-            </div>
-            
+                  <Title
+                    secondTitle={"Form Generation"}
+                    fontSize={"50px"}
+                    color={"black"}
+                    fontWeight={900}
+                  />
+                </AppBar>
+              </Col>
+            </Row>
+            <form
+              autoComplete="off"
+              noValidate
+              //className={darkMode ? 'dark-form' : 'light-form'}
+              className={`${classes.root} ${classes.form}`}
+            >
+              <Container>
+                <Row>
+                  {/* <div className="mb-4 col-12"> */}
+                  <Title
+                    secondTitle={"Name of the questionnaire"}
+                    fontSize={"18px"}
+                    fontWeight={600}
+                    className={"mb-2"}
+                  />
+                  <TextField
+                    type="text"
+                    placeholder="Enter Form Name"
+                    className="rounded-pill"
+                    name="Name"
+                    value={formData.name}
+                    onChange={(e) =>
+                      setFormData({ ...formData, name: e.target.value })
+                    }
+                    fullWidth // Ensures the input field takes the full width of its container
+                  />
+                </Row>
+                {sortedQuestions.map((question, index) => (
+                  <div
+                    key={index}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      marginBottom: "10px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginBottom: "10px",
+                      }}
+                    >
+                      <Typography
+                        variant="body1"
+                        style={{ color: question.color, marginRight: "10px" }}
+                      >
+                        Question {index + 1}: {question.question} (
+                        {question.questionType})
+                      </Typography>
+                      <DeleteIcon
+                        color="info"
+                        onClick={() => handleDeleteQuestion(index)}
+                        style={{ cursor: "pointer", marginLeft: "10px" }}
+                      />
+                      <FaEdit // Utilisez EditIcon ici
+                        color="info"
+                        onClick={() => handleUpdateQuestion(index)} // Assurez-vous de définir cette fonction
+                        style={{ cursor: "pointer", marginLeft: "10px" }}
+                      />
+                    </div>
+                    {renderInputField(question)}
+                  </div>
+                ))}
+                <Row className="d-flex justify-items-center justify-content-center my-4">
+                  <div className="col-md-3 col-xs-12 ">
+                    <IconButton
+                      className="h-100 border-0"
+                      style={{
+                        background: "#bd6262",
+                        color: "white",
+                        fontSize: "16px",
+                        fontWeight: 600,
+                        padding: "8px 16px",
+                        borderRadius: "20px",
+                        marginleft: "56px",
+                      }}
+                      startIcon={<FaTrash />}
+                      onClick={clear}
+                      fullWidth // Add fullWidth prop to make button take full width
+                    >
+                      <Title title={"Clear"} /> {/* Change the button label */}
+                    </IconButton>
+                  </div>
+                  <div className="col-md-3 col-xs-12">
+                    <IconButton
+                      className="h-100 border-0"
+                      style={{
+                        background: "#047db9",
+                        color: "white",
+                        fontSize: "16px",
+                        fontWeight: 600,
+                        padding: "8px 16px",
+                        borderRadius: "20px",
+                      }}
+                      startIcon={<FaPlus />}
+                      onClick={handleOpenModal}
+                      fullWidth // Add fullWidth prop to make button take full width
+                    >
+                      <Title title={"Add questions"} />{" "}
+                      {/* Change the button label */}
+                    </IconButton>
+                  </div>
+                </Row>
 
-          </Row>
-
-          
-          {/* <IconButton
+                {/* <IconButton
               className={classes.buttonSubmit}
               variant="contained"
               color="primary"
@@ -1220,47 +1216,47 @@ export default function Step2({ formDataProject, setformDataProject, onNext }) {
             >
               Submit
             </IconButton> */}
-        </Container>
-      </form>
-      <Modal open={openModal} onClose={handleCloseModal}>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            backgroundColor: "white",
-            padding: "20px",
-            width: "45%", // Ajustez la largeur de la modal
-            // height: "40%", // Ajustez la hauteur de la modal
-            maxHeight: "80vh", // Empêchez la modal de dépasser la hauteur de la fenêtre
-            // overflowY: "auto", // Ajoutez un défilement vertical si nécessaire
-            borderColor: "rgba(219, 234, 254, 1)", // Définissez la couleur de la bordure
-            borderRadius: "1rem", // Définissez le rayon de la bordure
-          }}
-        >
-          <div className="mb-4 col-12">
-            <Title
-              secondTitle={"Ask your question"}
-              fontSize={"18px"}
-              fontWeight={600}
-              className={"mb-2"}
-            />
-            <TextField
-              type="text"
-              placeholder="Ask your question here"
-              className="rounded-pill"
-              name="question"
-              value={modalQuestion}
-              onChange={(e) => setModalQuestion(e.target.value)}
-              fullWidth
-              style={{ width: "100%", marginBottom: "15px" }}
-            />
-          </div>
-          {/* <Typography variant="h6" style={{ marginBottom: "10px" }}>
+              </Container>
+            </form>
+            <Modal open={openModal} onClose={handleCloseModal}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: "white",
+                  padding: "20px",
+                  width: "45%", // Ajustez la largeur de la modal
+                  // height: "40%", // Ajustez la hauteur de la modal
+                  maxHeight: "80vh", // Empêchez la modal de dépasser la hauteur de la fenêtre
+                  // overflowY: "auto", // Ajoutez un défilement vertical si nécessaire
+                  borderColor: "rgba(219, 234, 254, 1)", // Définissez la couleur de la bordure
+                  borderRadius: "1rem", // Définissez le rayon de la bordure
+                }}
+              >
+                <div className="mb-4 col-12">
+                  <Title
+                    secondTitle={"Ask your question"}
+                    fontSize={"18px"}
+                    fontWeight={600}
+                    className={"mb-2"}
+                  />
+                  <TextField
+                    type="text"
+                    placeholder="Ask your question here"
+                    className="rounded-pill"
+                    name="question"
+                    value={modalQuestion}
+                    onChange={(e) => setModalQuestion(e.target.value)}
+                    fullWidth
+                    style={{ width: "100%", marginBottom: "15px" }}
+                  />
+                </div>
+                {/* <Typography variant="h6" style={{ marginBottom: "10px" }}>
               Posez votre question
             </Typography>
             <TextField
@@ -1271,180 +1267,197 @@ export default function Step2({ formDataProject, setformDataProject, onNext }) {
               value={modalQuestion}
               onChange={(e) => setModalQuestion(e.target.value)}
             /> */}
-          <FormControl
-            style={{ width: "100%", marginTop: "10px", marginBottom: "10px" }}
-          >
-            <InputLabel id="question-type-label">Question type</InputLabel>
-            <Select
-              labelId="question-type-label"
-              id="question-type"
-              value={selectedQuestionType}
-              onChange={handleQuestionTypeChange}
-            >
-              <MenuItem value="date">
-                <DateRangeIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />{" "}
-                Date
-              </MenuItem>
-              <MenuItem value="paragraph">
-                <DescriptionIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />
-                Paragraphe
-              </MenuItem>
-              <MenuItem value="text">
-                <TextFieldsIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />{" "}
-                Textarea
-              </MenuItem>
-              <MenuItem value="file">
-                {" "}
-                <InsertDriveFileIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />
-                File upload
-              </MenuItem>
-              <MenuItem value="listederoulate">
-                <FormatListBulletedIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />
-                Liste déroulante
-              </MenuItem>
-              <MenuItem value="multipleChoice">
-                {" "}
-                <RadioButtonCheckedIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />
-                Choix multiple
-              </MenuItem>
-              <MenuItem value="gender">
-                {" "}
-                <PeopleIcon style={{ marginRight: "10px", color: "black" }} />
-                Gender
-              </MenuItem>
-              <MenuItem value="time">
-                {" "}
-                <AccessTimeIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />{" "}
-                Time
-              </MenuItem>
-              <MenuItem value="combobox">
-                {" "}
-                <CheckBoxIcon style={{ marginRight: "10px", color: "black" }} />
-                Combobox
-              </MenuItem>
-              <MenuItem value="telephone">
-                <PhoneIcon style={{ marginRight: "10px", color: "black" }} />{" "}
-                phone
-              </MenuItem>
-              <MenuItem value="email">
-                <EmailIcon style={{ marginRight: "10px", color: "black" }} />{" "}
-                Email
-              </MenuItem>
-              <MenuItem value="number">
-                <InsertInvitationIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />{" "}
-                Number
-              </MenuItem>
-              <MenuItem value="toggle">
-                <ToggleOnIcon style={{ marginRight: "10px", color: "black" }} />{" "}
-                Toggle
-              </MenuItem>
-            </Select>
-            <Input
-              type="color"
-              onChange={(e) => {
-                console.log(e);
-                setInputColor(e.target.value);
-              }}
-              style={{ marginTop: "8px" }}
-            />
-          </FormControl>
+                <FormControl
+                  style={{
+                    width: "100%",
+                    marginTop: "10px",
+                    marginBottom: "10px",
+                  }}
+                >
+                  <InputLabel id="question-type-label">
+                    Question type
+                  </InputLabel>
+                  <Select
+                    labelId="question-type-label"
+                    id="question-type"
+                    value={selectedQuestionType}
+                    onChange={handleQuestionTypeChange}
+                  >
+                    <MenuItem value="date">
+                      <DateRangeIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />{" "}
+                      Date
+                    </MenuItem>
+                    <MenuItem value="paragraph">
+                      <DescriptionIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />
+                      Paragraphe
+                    </MenuItem>
+                    <MenuItem value="text">
+                      <TextFieldsIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />{" "}
+                      Textarea
+                    </MenuItem>
+                    <MenuItem value="file">
+                      {" "}
+                      <InsertDriveFileIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />
+                      File upload
+                    </MenuItem>
+                    <MenuItem value="listederoulate">
+                      <FormatListBulletedIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />
+                      Liste déroulante
+                    </MenuItem>
+                    <MenuItem value="multipleChoice">
+                      {" "}
+                      <RadioButtonCheckedIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />
+                      Choix multiple
+                    </MenuItem>
+                    <MenuItem value="gender">
+                      {" "}
+                      <PeopleIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />
+                      Gender
+                    </MenuItem>
+                    <MenuItem value="time">
+                      {" "}
+                      <AccessTimeIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />{" "}
+                      Time
+                    </MenuItem>
+                    <MenuItem value="combobox">
+                      {" "}
+                      <CheckBoxIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />
+                      Combobox
+                    </MenuItem>
+                    <MenuItem value="telephone">
+                      <PhoneIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />{" "}
+                      phone
+                    </MenuItem>
+                    <MenuItem value="email">
+                      <EmailIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />{" "}
+                      Email
+                    </MenuItem>
+                    <MenuItem value="number">
+                      <InsertInvitationIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />{" "}
+                      Number
+                    </MenuItem>
+                    <MenuItem value="toggle">
+                      <ToggleOnIcon
+                        style={{ marginRight: "10px", color: "black" }}
+                      />{" "}
+                      Toggle
+                    </MenuItem>
+                  </Select>
+                  <Input
+                    type="color"
+                    onChange={(e) => {
+                      console.log(e);
+                      setInputColor(e.target.value);
+                    }}
+                    style={{ marginTop: "8px" }}
+                  />
+                </FormControl>
 
-          <TextField
-            name="numberOfOptions"
-            variant="outlined"
-            label="Number of Options"
-            type="number"
-            fullWidth
-            value={numberOfOptions}
-            onChange={(e) => {
-              setNumberOfOptions(Number(e.target.value));
-            }}
-            style={{ display: showNumberOfOptions ? "block" : "none" }}
-          />
+                <TextField
+                  name="numberOfOptions"
+                  variant="outlined"
+                  label="Number of Options"
+                  type="number"
+                  fullWidth
+                  value={numberOfOptions}
+                  onChange={(e) => {
+                    setNumberOfOptions(Number(e.target.value));
+                  }}
+                  style={{ display: showNumberOfOptions ? "block" : "none" }}
+                />
 
-          <TextField
-            name="numberOfInputs"
-            type="number"
-            label="Number of Inputs"
-            value={numberOfInputs}
-            onChange={(e) => setNumberOfInputs(parseInt(e.target.value))}
-            fullWidth
-            style={{
-              display: selectedQuestionType === "combobox" ? "block" : "none",
-            }}
-          />
+                <TextField
+                  name="numberOfInputs"
+                  type="number"
+                  label="Number of Inputs"
+                  value={numberOfInputs}
+                  onChange={(e) => setNumberOfInputs(parseInt(e.target.value))}
+                  fullWidth
+                  style={{
+                    display:
+                      selectedQuestionType === "combobox" ? "block" : "none",
+                  }}
+                />
 
-          <div></div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              width: "100%",
-              marginTop: "30px", // Ajoutez une marge en haut
-            }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={handleCloseModal}
-            >
-              Close Modal
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={handleModalSubmit}
-            >
-              OK
-            </Button>
-          </div>
-        </div>
-      </Modal>
-    </Paper>
-    </Col>
+                <div></div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    width: "100%",
+                    marginTop: "30px", // Ajoutez une marge en haut
+                  }}
+                >
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={handleCloseModal}
+                  >
+                    Close Modal
+                  </Button>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    size="small"
+                    onClick={handleModalSubmit}
+                  >
+                    OK
+                  </Button>
+                </div>
+              </div>
+            </Modal>
+          </Paper>
+        </Col>
       </Row>
       <Row className="mt-5">
-          <div
-            class="flex"
+        <div
+          class="flex"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <IconButton
+            className="border-0 w-100"
             style={{
-              display: "flex",
-              justifyContent: "center",
+              background: `linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)`,
+              color: "white",
+              fontSize: "16px",
+              fontWeight: 600,
+              padding: "8px 16px",
+              borderRadius: "20px",
             }}
+            type="submit"
           >
-            <IconButton
-              className="border-0 w-100"
-              style={{
-                background: `linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)`,
-                color: "white",
-                fontSize: "16px",
-                fontWeight: 600,
-                padding: "8px 16px",
-                borderRadius: "20px",
-              }}
-              type="submit"
-            >
-              Next
-            </IconButton>
-          </div>
-        </Row>
+            Next
+          </IconButton>
+        </div>
+      </Row>
     </Form>
   );
-};
+}
