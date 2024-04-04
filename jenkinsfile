@@ -4,21 +4,21 @@ pipeline {
         stage('Install dependencies') {
             steps {
                 script {
-                    sh 'npm install'
+                    sh('npm install')
                 }
             }
         }
         stage('Unit Test') {
             steps {
                 script {
-                    sh 'npm test'
+                    sh('npm test')
                 }
             }
         }
         stage('Build application') {
             steps {
                 script {
-                    sh 'npm run build-dev'
+                    sh('npm run build-dev')
                 }
             }
         }
