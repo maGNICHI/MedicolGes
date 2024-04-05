@@ -33,7 +33,7 @@ import { addForm } from "../api/index";
 import Title from "../../../../components/Title/Title";
 import { Row } from "react-bootstrap";
 import IconButton from "../../../../components/Button/IconButton";
-import { FaBars, FaPlus, FaSave, FaTrash, FaEdit  } from "react-icons/fa";
+import { FaBars, FaPlus, FaSave, FaTrash, FaEdit } from "react-icons/fa";
 import AjouterForm from "../AjouterForm";
 // import { TimePicker } from "@material-ui/lab";
 import TimePickerInput from "../Form/TimePickerInput"; // Importer le composant TimePickerInput
@@ -52,13 +52,13 @@ import PhoneField from "./PhoneField"; // Assuming PhoneField is defined in a se
 import ToggleOnIcon from "@mui/icons-material/ToggleOn";
 import Switch from "@mui/material/Switch";
 
-import {putForm} from "../api/index";
+import { putForm } from "../api/index";
 
 const Form = () => {
   const [darkMode, setDarkMode] = useState(false);
 
   const [formData, setFormData] = useState({ name: "", questions: [] });
-  console.log("data from formjs",formData)
+  console.log("data from formjs", formData);
   const [idCount, setIdCount] = useState(0);
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -116,7 +116,7 @@ const Form = () => {
     console.log("Question type:", questionType);
     console.log("Color:", color);
     console.log("Question colors:", questionColors);
-//
+    //
     setQuestionColors((prevColors) => ({
       ...prevColors,
       [questionType]: color,
@@ -175,33 +175,29 @@ const Form = () => {
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
-        //ajouter
-        try {
-          console.log("Case:", location.state); 
-          console.log(formData._id,'data')
-          if (formData._id  !== ""  ) {
-          
-            // If updating an existing form
-            await updateForm();
-            setTimeout(() => {
-              navigate("/afficheForm");  // Navigate back to afficheForm
-
-            }, 5000);
-          } 
-          if (formData._id  == undefined  ) {
-              // If you are creating a new form
-              await createForm(); // Create a new form
-              setTimeout(() => {
-                navigate("/ajouterForm", { state: { formData, case: "create" } }); // Navigate to ajouterForm
-
-              }, 5000);
-          }
-      } catch (error) {
-          console.error("Error handling form submission:", error);
-          // Handle error, display message, etc.
+    //ajouter
+    try {
+      console.log("Case:", location.state);
+      console.log(formData._id, "data");
+      if (formData._id !== "") {
+        // If updating an existing form
+        await updateForm();
+        setTimeout(() => {
+          navigate("/afficheForm"); // Navigate back to afficheForm
+        }, 5000);
       }
+      if (formData._id == undefined) {
+        // If you are creating a new form
+        await createForm(); // Create a new form
+        setTimeout(() => {
+          navigate("/ajouterForm", { state: { formData, case: "create" } }); // Navigate to ajouterForm
+        }, 5000);
+      }
+    } catch (error) {
+      console.error("Error handling form submission:", error);
+      // Handle error, display message, etc.
+    }
     // createForm();
     // console.log("hhhhh", formData);
     // navigate("/ajouterForm", { state: { formData, case: "create" } });
@@ -228,7 +224,8 @@ const Form = () => {
     //assurer que les données de formulaire existent dans l'objet location.sta
     if (location.state && location.state.formData) {
       setFormData(location.state.formData);
-    }//execute lorsque location.state change
+      setIdCount(location.state.formData.questions.length);
+    } //execute lorsque location.state change
   }, [location.state]);
   const handleCloseModal = () => {
     setOpenModal(false);
@@ -352,10 +349,8 @@ const Form = () => {
   };
 
   const createForm = () => {
-    addForm(
-   
-      {
-      _id:  formData._id,
+    addForm({
+      _id: formData._id,
       name: formData.name,
       questions: JSON.stringify(formData.questions),
     })
@@ -367,10 +362,9 @@ const Form = () => {
       });
   };
   const updateForm = () => {
-    putForm(
-      formData._id, {
-        name: formData.name,
-        questions: JSON.stringify(formData.questions)
+    putForm(formData._id, {
+      name: formData.name,
+      questions: JSON.stringify(formData.questions),
     })
       .then((res) => {
         console.log(res);
@@ -690,7 +684,7 @@ const Form = () => {
           <>
             <TextField
               label="Enter Option"
-              id="selectChoicesInput"
+              id={"selectChoicesInput" + question.id}
               onKeyDown={(e) => {
                 if (e.key == "Enter") {
                   e.preventDefault();
@@ -714,7 +708,9 @@ const Form = () => {
                       return obj;
                     }),
                   }));
-                  document.getElementById("selectChoicesInput").value = "";
+                  document.getElementById(
+                    "selectChoicesInput" + question.id
+                  ).value = "";
                 }
               }}
               fullWidth
@@ -824,7 +820,6 @@ const Form = () => {
           />
         );
       case "multipleChoice":
-        console.log(("rrrrrrrrrrrrr", question));
         return (
           <div>
             {[...Array(question.optionsCount)].map((item, index) => (
@@ -839,7 +834,7 @@ const Form = () => {
                 <FormControlLabel
                   value={
                     formData.questions.find((q) => q.id == question.id)
-                      ?.responseValue.options[index]
+                      ?.responseValue.options[index] || ""
                   }
                   control={<Radio />}
                   checked={
@@ -915,14 +910,17 @@ const Form = () => {
                   label={`Input ${index + 1}`}
                   fullWidth
                   value={
+                    //ajouter
                     formData.questions.find((q) => q.id == question.id)
-                      .responseValue.checkboxes[index]
+                      ?.responseValue?.checkboxes[index]
                   }
                   onChange={(e) => {
                     setFormData((prev) => ({
                       ...prev,
                       ["questions"]: prev.questions.map((obj) => {
                         if (obj.id === question.id) {
+                          console.log(obj);
+                          console.log(question);
                           // Update the properties for the object with id 2
                           return {
                             ...obj,
@@ -1023,35 +1021,40 @@ const Form = () => {
   };
 
   const handleDeleteQuestion = (id) => {
-    const updatedQuestions = formData.questions.filter((q) => q.id !== id);
     setFormData((prevFormData) => ({
       ...prevFormData,
-      questions: updatedQuestions,
+      ["questions"]: prevFormData.questions.filter((q) => q.id !== id),
     }));
   };
   const handleUpdateQuestion = (index) => {
-   // Récupérer la question à partir de l'index
-  const questionToUpdate = sortedQuestions[index];
+    // Récupérer la question à partir de l'index
+    const questionToUpdate = sortedQuestions[index];
 
-  // Demander à l'utilisateur de saisir la nouvelle version de la question
-  const updatedQuestion = prompt("Enter the updated question:", questionToUpdate.question);
+    // Demander à l'utilisateur de saisir la nouvelle version de la question
+    const updatedQuestion = prompt(
+      "Enter the updated question:",
+      questionToUpdate.question
+    );
 
-  // Vérifier si l'utilisateur a saisi une nouvelle question
-  if (updatedQuestion !== null) {
-    // Copier le tableau des questions
-    const updatedQuestions = [...formData.questions];
+    // Vérifier si l'utilisateur a saisi une nouvelle question
+    if (updatedQuestion !== null) {
+      // Copier le tableau des questions
+      const updatedQuestions = [...formData.questions];
 
-    // Mettre à jour la question dans le tableau
-    updatedQuestions[index] = { ...questionToUpdate, question: updatedQuestion };
+      // Mettre à jour la question dans le tableau
+      updatedQuestions[index] = {
+        ...questionToUpdate,
+        question: updatedQuestion,
+      };
 
-    // Mettre à jour le state avec les questions mises à jour
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      questions: updatedQuestions,
-    }));
-  }
+      // Mettre à jour le state avec les questions mises à jour
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        questions: updatedQuestions,
+      }));
+    }
   };
-  
+
   const renderQuestions = () => {
     return formData.questions.map((question, index) => (
       <div
@@ -1091,37 +1094,35 @@ const Form = () => {
   const sortedQuestions = formData.questions;
   return (
     <Paper className={classes.paper}>
-      <form 
+      <form
         autoComplete="off"
         noValidate
-              //className={darkMode ? 'dark-form' : 'light-form'}
+        //className={darkMode ? 'dark-form' : 'light-form'}
         className={`${classes.root} ${classes.form}`}
         onSubmit={handleSubmit}
       >
         <Container>
           <Row>
-            
             {/* <div className="mb-4 col-12"> */}
-              <Title
-                secondTitle={"Name of the questionnaire"}
-                fontSize={"18px"}
-                fontWeight={600}
-                className={"mb-2"}
-              />
-              <TextField
-                type="text"
-                placeholder="Enter Form Name"
-                className="rounded-pill"
-                name="Name"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                fullWidth // Ensures the input field takes the full width of its container
-              />
-           
+            <Title
+              secondTitle={"Name of the questionnaire"}
+              fontSize={"18px"}
+              fontWeight={600}
+              className={"mb-2"}
+            />
+            <TextField
+              type="text"
+              placeholder="Enter Form Name"
+              className="rounded-pill"
+              name="Name"
+              value={formData.name}
+              onChange={(e) =>
+                setFormData({ ...formData, name: e.target.value })
+              }
+              fullWidth // Ensures the input field takes the full width of its container
+            />
           </Row>
-          {sortedQuestions.map((question, index) => (
+          {formData.questions.map((question, index) => (
             <div
               key={index}
               style={{
@@ -1145,22 +1146,22 @@ const Form = () => {
                   {question.questionType})
                 </Typography>
                 <DeleteIcon
+                  key={index}
                   color="info"
-                  onClick={() => handleDeleteQuestion(index)}
+                  onClick={() => handleDeleteQuestion(question.id)}
                   style={{ cursor: "pointer", marginLeft: "10px" }}
                 />
-                   <FaEdit // Utilisez EditIcon ici
-        color="info"
-        onClick={() => handleUpdateQuestion(index)} // Assurez-vous de définir cette fonction
-        style={{ cursor: "pointer", marginLeft: "10px" }}
-      />
+                <FaEdit // Utilisez EditIcon ici
+                  color="info"
+                  onClick={() => handleUpdateQuestion(index)} // Assurez-vous de définir cette fonction
+                  style={{ cursor: "pointer", marginLeft: "10px" }}
+                />
               </div>
               {renderInputField(question)}
             </div>
           ))}
-          
+
           <div className="row text-center" style={{ marginRight: "-97px" }}>
-           
             <div className="col-md-3 col-xs-12">
               <IconButton
                 className="h-100 border-0"
@@ -1216,7 +1217,7 @@ const Form = () => {
                 <Title title={"Submit"} /> {/* Change the button label */}
               </IconButton>
             </div>
-            
+
             <div className="col-md-3 col-xs-12 ">
               <IconButton
                 className="h-100 border-0"
@@ -1227,7 +1228,7 @@ const Form = () => {
                   fontWeight: 600,
                   padding: "8px 16px",
                   borderRadius: "20px",
-                  marginleft:"56px",
+                  marginleft: "56px",
                 }}
                 startIcon={<FaTrash />}
                 onClick={clear}
@@ -1440,7 +1441,6 @@ const Form = () => {
               color="primary"
               size="small"
               onClick={handleModalSubmit}
-              
             >
               OK
             </Button>

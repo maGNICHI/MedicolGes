@@ -49,10 +49,7 @@ function App() {
         <Route path="/afficheId/:id" element={<AfficheFormById />} />
         <Route path="/affucheyourReponse" element={<AfficheYourReponse />} />
         <Route path="/AfficheReponse" element={<AfficheReponse />} />
-        
         <Route path="/reponseAll/:formId" element={<ReponseByForm />} />
-
-
         <Route path="*" element={<NotFound />} />
       </Routes>
       </Provider>
