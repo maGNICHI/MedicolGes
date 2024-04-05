@@ -12,7 +12,7 @@ pipeline {
             steps {
                 script {
                     sh('echo \"No test specified\" && exit 0')
-sh ('sleep 20')
+sh ('sleep 10')
             sh ('exit 0')
                 }
             }
@@ -21,7 +21,7 @@ sh ('sleep 20')
             steps {
                 script {
                     sh ('echo \"No Build specified\" && exit 0')
-sh ('sleep 20')
+sh ('sleep 10')
             sh ('exit 0')
                 }
             }
