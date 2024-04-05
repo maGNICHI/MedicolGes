@@ -18,7 +18,7 @@ pipeline {
         stage('Build application') {
             steps {
                 script {
-                    sh ('echo \"No test specified\" && exit 0')
+                    sh ('echo \"No Build specified\" && exit 0')
                 }
             }
         }
