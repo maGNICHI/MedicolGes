@@ -23,7 +23,15 @@ export default function ListProject() {
   const [goUp, setGoUp] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const projectsPerPage = 9;
+ 
+  useEffect(() => {
+    const userInformation = JSON.parse(localStorage.getItem("userInfo"));
 
+    if (userInformation) {
+      navigate("/projects");
+      //navigate("/projects");
+    }
+  }, [navigate]);
   const getProjects = async () => {
     try {
       const data = await axios.get("http://localhost:5000/api/project/");
