@@ -342,11 +342,11 @@ export default function ConsultProject({ onFollow }) {
                       Feedback
                     </a>{" "}
                   </li>{" "}
-                  <li className="nav-item">
+                  {projectData.creator ===user._id &&( <li className="nav-item">
                     {" "}
                     <a
                       className="nav-link"
-                      href="#feedback"
+                      href="#Questionnaire"
                       onClick={() => {
                         setShowFeedback(false);
                         setShowDetails(false);
@@ -357,7 +357,8 @@ export default function ConsultProject({ onFollow }) {
                       {/* Update onClick to show feedback */}
                       Questionnaire Details
                     </a>{" "}
-                  </li>{" "}
+                  </li>
+                  )}
                 </ul>
                 {following ? (
                   <IconButton

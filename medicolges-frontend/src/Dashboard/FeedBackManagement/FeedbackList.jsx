@@ -15,7 +15,7 @@ export default function FeedbackList() {
   return (
     <Layout selectedName={selectedName}>
       <Container fluid className="mt-4 h-screen" style={{overflowY: "auto", maxHeight:"100%", zIndex:0}}>
-        <Card className="card">
+        <Card>
           <Card.Header
             style={{ padding: "20px" }}
           >

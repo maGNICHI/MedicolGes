@@ -9,7 +9,7 @@ import likeIcon from "./like.png";
 export default function Post({ post }) {
   const [like, setLike] = useState(post.likers.length);
   const [isLiked, setIsLiked] = useState(
-    post.likes ? post.likes.includes(localStorage.getItem("userId")) : false
+    post.likes ? post.likes.includes(localStorage.getItem("userInfo")) : false
   );
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);

@@ -4,15 +4,16 @@ import { Col, Container, Row } from "react-bootstrap";
 import Title from "../../components/Title/Title";
 import IconButton from "../../components/Button/IconButton";
 import { FaPlus } from "react-icons/fa";
-import ProjectCard from "../../components/Cards/ProjectCard";
 import axios from "axios";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../Dashboard.css";
+import ProjectCard from "./ProjectCard";
 
 export default function ProjectList() {
   const [selectedName, setSelectedName] = useState("Project Management");
   const [projects, setProjects] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
   const projectsPerPage = 6;
 
   const getProjects = async () => {
@@ -51,6 +52,8 @@ export default function ProjectList() {
     setCurrentPage(pageNumber);
   };
 
+  const handleShowAddModal = () => navigate("/addProject");
+
   return (
     <Layout
       selectedName={selectedName}
@@ -66,25 +69,23 @@ export default function ProjectList() {
               fontSize={"24px"}
             />
           </Col>
-          <Col xs={12} md={2} className="text-md-end mt-3 mt-md-0">
-            <NavLink style={{ textDecoration: "none" }} to="/addProject">
+          <div className="col-md-2 col-xs-7 mt-3">
               <IconButton
-                className="h-100 border-0"
+                className="border-0 w-100"
                 style={{
-                  background:
-                    "linear-gradient(45deg, rgb(4, 159, 187) 0%, rgb(80, 246, 255) 100%)",
+                  background: `linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)`,
                   color: "white",
                   fontSize: "16px",
                   fontWeight: 600,
                   padding: "8px 16px",
                   borderRadius: "20px",
                 }}
+                onClick={handleShowAddModal}
                 startIcon={<FaPlus />}
               >
-                <Title title={"Add project"} />
+                Add New Project
               </IconButton>
-            </NavLink>
-          </Col>
+            </div>
         </Row>
         <Row>
           {currentProjects.map(
