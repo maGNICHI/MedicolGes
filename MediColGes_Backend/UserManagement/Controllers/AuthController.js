@@ -1,7 +1,8 @@
 const User = require("../Model/User");
 const generateToken = require("../../generateToken");
 const { uploads } = require('../../cloudinary');
-
+const asyncHandler = require("express-async-handler");
+const {destroyAuthToken} = require("../Middleware/AuthMiddleware");
 //@description     Register new user
 //@route           POST /api/user/
 //@access          Public
@@ -14,24 +15,13 @@ const registerUser = async (req, res) => {
     }
 
     const userExists = await User.findOne({ email });
-
     if (userExists) {
       return res.status(400).json({ message: "User already exists" });
     }
 
-    let picUrl = "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg";
-    let certificationUrl = "";
-
-    if (req.files) {
-      const pfpPath = await uploads(req.files['pfp'][0].path);
-      picUrl = pfpPath.url;
-
-      if (req.files['certification']) {
-        const certificationPath = await uploads(req.files['certification'][0].path);
-        certificationUrl = certificationPath.url;
-      }
-    }
-
+    let picUrl = req.files && req.files['pfp'] ? (await uploads(req.files['pfp'][0].path)).url : undefined;
+    let certificationUrl = req.files && req.files['certification'] ? (await uploads(req.files['certification'][0].path)).url : undefined;
+    const blocked = role === 'Professional' || role === 'Initiator';
     const user = await User.create({
       gender,
       username,
@@ -41,6 +31,7 @@ const registerUser = async (req, res) => {
       password,
       role,
       pic: picUrl,
+      blocked,
       certification: certificationUrl,
       isDeleted: false
     });
@@ -63,6 +54,7 @@ const registerUser = async (req, res) => {
     return res.status(500).json({ message: error.message });
   }
 };
+
 
 //@description     Auth the user
 //@route           POST /api/users/login
@@ -88,11 +80,17 @@ const authUser = async (req, res) => {
       pic: user.pic,
       certification: user.certification,
       isDeleted: user.isDeleted,
+      blocked:user.blocked,
       token: generateToken(user),
     });
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
+const logoutUser = asyncHandler(async (req, res) => {
+  
+  destroyAuthToken(res);
 
-module.exports = { registerUser, authUser };
+  res.status(200).json({ message: "User Logged Out" });
+});
+module.exports = { registerUser, authUser,logoutUser };

@@ -16,7 +16,7 @@ const UserSchema = mongoose.Schema(
     password: { type: "String", required: true },
     role: {
       type: String,
-      enum: ["super admin", "admin", "initiator", "Patient", "participative_member" ],
+      enum: ["super admin", "admin","Professionnal", "initiator", "Patient", "participative_member" ,"Coordinator_Member","participative_member" ],
       required: true,
       default: "participative_member",
     },
@@ -34,18 +34,36 @@ const UserSchema = mongoose.Schema(
       default: false,
     },
     isDeleted: Boolean,
+    blocked: {
+      type: Boolean,
+      default: false
+  }
   },
   {
     timestamps: true,
   }
 );
 
+// UserSchema.methods.matchPassword = async function (enteredPassword) {
+//   return await bcrypt.compare(enteredPassword, this.password);
+// };
+
+// UserSchema.pre("save", async function (next) {
+//   if (!this.isModified) {
+//     next();
+//   }
+
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password, salt);
+// });
 UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
+// Correct the pre-save hook
 UserSchema.pre("save", async function (next) {
-  if (!this.isModified) {
+  // Only hash the password if it has been modified (or is new)
+  if (!this.isModified('password')) {
     next();
   }
 

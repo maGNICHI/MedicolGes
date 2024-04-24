@@ -1,0 +1,53 @@
+.signup-screen {
+    min-height: 100vh;
+    background-color: #fffafa; /* Light grey background */
+  }
+  
+  .signup-container {
+    background-color: #ffffff;
+    border-radius: 20px;
+    overflow: hidden;
+    padding: 20px;
+  }
+  
+  .signup-form-col {
+    padding: 20px;
+  }
+  
+  .signup-form .form-control, .signup-form .form-select {
+    border-radius: 30px;
+    border: 1px solid #ffffff;
+  }
+  
+  .signup-form button {
+    border-radius: 30px;
+    background-color: #1990aa;
+    border: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .signup-form button:hover {
+    background-color: #107c92;
+  }
+  
+   
+  /* SignupScreen.css or wherever your styles are located */
+
+.signup-image {
+    max-width: 90%; /* Adjust the size as needed */
+    height: auto; /* Maintain aspect ratio */
+    margin: 0 auto; /* Center the image if smaller than max-width */
+  }
+  
+  .already-member-link {
+    color: #8ac2bb;
+    font-weight: bold;
+    margin-top: 20px; /* Added space between the image and the link */
+  }
+  
+  /* Add any additional styling here */
+  
+  .already-member-link:hover {
+    color: #669999;
+  }
+  

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -17,6 +18,16 @@ export const login = (email, password) => async (dispatch) => {
 
     const { data } = await axios.post('http://localhost:5000/api/user/login', { email, password }, config);
 
+    if (data.blocked) {
+      // Check if the user account is blocked
+      toast.error('Your account is blocked.');
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: 'Account is blocked.',
+      });
+      return; // Exit the function early to prevent further actions
+    }
+
     dispatch({
       type: LOGIN_SUCCESS,
       payload: data,
@@ -29,6 +40,13 @@ export const login = (email, password) => async (dispatch) => {
         window.location.href = 'http://localhost:3000/'; // Redirect to default URL
       }
   } catch (error) {
+    // Check for a response indicating invalid credentials
+    if (error.response && (error.response.status === 401 || error.response.data.message.toLowerCase().includes("invalid credentials"))) {
+      toast.error('Invalid email or password.');
+    } else {
+      toast.error(error.response && error.response.data.message ? error.response.data.message : 'Login failed. Please try again.');
+    }
+    
     dispatch({
       type: LOGIN_FAIL,
       payload: error.response && error.response.data.message ? error.response.data.message : error.message,

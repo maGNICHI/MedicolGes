@@ -12,7 +12,8 @@ import store from "./Redux/Store";
 import Chat from "./Chat/Chat";
 import { FaRobot } from "react-icons/fa";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; 
-
+import { AuthContextProvider } from './userScreens/AuthContext'
+import { UsersContextProvider } from './userScreens/UserContext'
 const queryClient = new QueryClient();
 
 const Root = () => {
@@ -28,8 +29,9 @@ const Root = () => {
     <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter forceRefresh={true}>
-             <ChatProvider>
-              <ChakraProvider>
+        <ChakraProvider>
+             {/* <ChatProvider>
+             
                 <QueryClientProvider client={queryClient}>
                   <div className="app-container position-absolute left-1">
                     <div className="app-container">
@@ -42,11 +44,16 @@ const Root = () => {
                         <FaRobot className="chat-icon" />
                       </button>
                     </div>
-                  </div>
+                  </div> */}
+                  <AuthContextProvider>
+                   <UsersContextProvider> 
                   <App />
-                </QueryClientProvider>
-              </ChakraProvider>
-            </ChatProvider>
+                  </UsersContextProvider>
+                 </AuthContextProvider>
+                {/* </QueryClientProvider>
+              
+            </ChatProvider> */}
+            </ChakraProvider>
          </BrowserRouter>
       </Provider>
     </React.StrictMode>

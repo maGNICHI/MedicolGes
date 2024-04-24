@@ -11,13 +11,20 @@ import "../Styles/Navbar.css";
 import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { NavDropdown } from "react-bootstrap";
-
+import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
+import { useLogout } from '../../userScreens/useLogout'
+import { useAuthContext } from "../../userScreens/useAuthContext";
+import {   Navigate , useNavigate} from "react-router-dom";
 function Navbar() {
   const [nav, setNav] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate();
   const location = useLocation();
-
+  const { logout } = useLogout()
+  const handleClick = () => {
+    navigate("/login");
+    logout()}
   const handleScrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -116,12 +123,21 @@ function Navbar() {
             Post
           </Link>
         </li>
-        <li>
+        {/* <li>
           <Link to="/login" className="navbar-links">
             Login
           </Link>
-        </li>
+        </li> */}
       </ul>
+
+      <a href="/Profile" className="navbar-links">
+          Profile
+          </a> 
+         
+        <a  onClick={handleClick} className="navbar-links">
+          
+          <FaSignOutAlt />logout  </a>
+
 
       <button
         className="navbar-btn"

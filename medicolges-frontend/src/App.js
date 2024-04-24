@@ -17,6 +17,7 @@ import FeedbackList from './Dashboard/FeedBackManagement/FeedbackList';
 //import { reducers } from './reducers';
 //import {thunk }from 'redux-thunk';
 //import { Provider } from 'react-redux';
+
 import Form from './Dashboard/FormGeneration/Form';
 import CreateOrganization from './Dashboard/OrganizationManagement/OrganizationCreate';
 import CreatePost from './UserInterface/Components/Post/CreatePost'
@@ -35,16 +36,26 @@ import AddResponseComponent from './UserInterface/Components/Questionnaire/AddRe
 import UpdateQuestionnaireComponent from './UserInterface/Components/Questionnaire/UpdateQuestionnaireComponent';
 import EditQuestionnaire from './UserInterface/Components/Questionnaire/EditQuestionnaire';
 import GetFormById from './UserInterface/Components/Questionnaire/GetFormById';
+import SignupScreen from "./userScreens/SignupScreen.js";
+import LoginScreen from "./userScreens/LoginScreen.js";
+import ProfileScreen from  './userScreens/profile/profile.js';
+import AdminProfileScreen from  './adminScreens/profile/profile.js';
+import { useAuthContext } from './userScreens/useAuthContext'
+import { ToastContainer } from 'react-toastify';
+import AutoLogout  from './userScreens/autoLogout'
 const ChatPage = React.lazy(() => import("./UserInterface/Pages/ChatPage"));
-
 function App() {
  // const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
   return (
-    
+    <>
       <Routes>
+  <Route path="/signup" element={<SignupScreen />} />
+        <Route path="/loginn" element={<LoginScreen />} />
+        <Route path="/Profile" element={<ProfileScreen />} />
         <Route path="/login" element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
+        <Route path='/signupp' element={<Signup />} />
+        <Route path="/AdminProfile" element={<AdminProfileScreen />} />
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/userList" element={<UserManagement />} />
         <Route path="/projectList" element={<ProjectList />} />
@@ -73,10 +84,12 @@ function App() {
         <Route path='/projects/consult/:id' element={<Consult />} />
         <Route path="/afficheForm" element={<AfficheForm/>} />
         <Route path="/homeNew" element={<HomePost1 />} />
-
+       
         <Route path="*" element={<NotFound />} />
       </Routes>
-      
+      <AutoLogout />
+      <ToastContainer />
+      </>
 
   );
 }

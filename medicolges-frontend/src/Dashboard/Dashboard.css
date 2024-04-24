@@ -2,6 +2,22 @@ body, html {
   margin: 0; /* Remove default margin */
   padding: 0; /* Remove default padding */ /* Hide overflow initially */
 }
+.custom-modal {
+  max-width: 10vw; /* or any appropriate value */
+  margin: auto; /* Center it horizontally */
+  overflow: hidden; /* Hide any overflow */
+}
+@media (max-width: 1024px) {
+  .custom-modal {
+    max-width: 80vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .custom-modal {
+    max-width: 95vw;
+  }
+}
 
 .container {
   width: calc(100% - 300px); /* Adjust width to leave space for fixed sidebar */
