@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useState, useEffect,useContext} from 'react';
 import useRecordingsList from '../../hooks/use-recordings-list';
 import { AiFillWarning } from 'react-icons/ai'
 import axios from 'axios';
@@ -6,13 +6,15 @@ import { useToast } from '@chakra-ui/react';
 //import { ChatState } from '../../../../../Context/ChatProvider';
 import ChatContext from "../../../../../Context/chat-context";
 import {Buffer} from 'buffer';
-//const ENDPOINT = 'http://localhost:5000';
+import { io } from 'socket.io-client';
+const ENDPOINT = 'http://localhost:5000';
 
 const RecordingsList = ({ audio }) => {
    const { recordings, deleteAudio } = useRecordingsList(audio);
    //const { user, selectedChat } = ChatState();
    const { user, selectedChat } = useContext(ChatContext);
    const toast=useToast();
+   const [socket, setSocket] = useState(null);
 
    const getUint8ArrayFromBlobUrl= async (blobUrl) => {
       const response = await fetch(blobUrl);
@@ -21,7 +23,13 @@ const RecordingsList = ({ audio }) => {
       const uint8Array = new Uint8Array(arrayBuffer);
       return uint8Array;
    }
+   useEffect(() => {
+      // Initialisation de la connexion WebSocket
+      const newSocket = io(ENDPOINT);
+      setSocket(newSocket);
 
+      return () => newSocket.close(); // Fermeture de la connexion lors du démontage du composant
+   }, []);
    const sendAudio = async () => {
       try {
          const config = {
@@ -41,6 +49,7 @@ const RecordingsList = ({ audio }) => {
          }, config);
          console.log(Uint8A);
          console.log(buffer);
+        
       } catch (err) {
          toast({
             title: "Error Occured!",

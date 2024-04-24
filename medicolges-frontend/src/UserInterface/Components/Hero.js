@@ -48,13 +48,13 @@ function Hero() {
             future of healthcare with MediColGes.
             If you are interested with our web application:
           </p>
-          <NavLink to="/signup">
+          {/* <NavLink to="/signup">
           <button
             className="text-appointment-btn"
             type="button"
           >
             <i className="fa fa-sign-in" aria-hidden="true"></i> Create an account
-          </button>
+          </button> */}
           {/* <div className="text-stats">
             <div className="text-stats-container">
               <p>145k+</p>
@@ -71,7 +71,7 @@ function Hero() {
               <p>Years of Experience</p>
             </div>
           </div> */}
-          </NavLink>
+          {/* </NavLink> */}
         </div>
 
         <div className="hero-image-section mt-5">

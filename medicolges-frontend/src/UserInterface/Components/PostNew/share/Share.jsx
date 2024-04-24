@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./share.css";
-import { PermMedia, Label, Room, EmojiEmotions } from "@material-ui/icons";
-
-export default function CreatePost({ project }) {
+import { MdPermMedia as PermMedia } from 'react-icons/md';
+import { MdLabel as Label } from 'react-icons/md';
+import { MdRoom as Room } from 'react-icons/md';
+import { MdEmojiEmotions as EmojiEmotions } from 'react-icons/md';
+export default function CreatePost({ project, setPosts }) {
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
   const [tagInput, setTagInput] = useState("");
@@ -92,9 +94,14 @@ export default function CreatePost({ project }) {
       // Update state with user's details
       setUserPic(userResponse.data.pic);
 
-      // Reload the page or perform other actions as needed
-      window.location.reload();
-
+   
+         try {
+          const response = await axios.get("http://localhost:5000/api/posts");
+          setPosts(response.data);
+        } catch (error) {
+          console.error("Error fetching posts:", error);
+        } 
+        setContent("")
       console.log("Post created:", response.data);
     } catch (error) {
       console.error("Error creating post:", error);
@@ -102,8 +109,8 @@ export default function CreatePost({ project }) {
   };
 
   return (
-    <div className="share">
-      <div className="shareWrapper">
+    <div className="share" style={{padding:"8px 10px"}}>
+      <div className="" style={{padding:"10px 10px 0 10px"}}>
         <div className="shareTop">
           <img className="shareProfileImg" src={userPic} alt="User Profile" />{" "}
           {/* Display user's profile picture */}
@@ -112,9 +119,10 @@ export default function CreatePost({ project }) {
             className="shareInput"
             value={content}
             onChange={(e) => setContent(e.target.value)}
+            style={{ width:"100%" }}
           />
         </div>
-        <hr className="shareHr" />
+        <hr className="shareHr" style={{width:"100%",margin:"20px 0 20px"}} />
         <div className="shareBottom">
           <form onSubmit={handleSubmit} className="shareOptions">
             <label htmlFor="file" className="shareOption">

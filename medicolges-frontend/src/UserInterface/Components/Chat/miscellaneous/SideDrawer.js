@@ -29,9 +29,10 @@ import { useToast } from "@chakra-ui/toast";
 import { Input, Spinner } from "@chakra-ui/react";
 import ChatLoading from "../ChatLoading";
 import UserListItem from "../userAvatar/UserListItem";
-import NotificationBadge from "react-notification-badge";
-import { Effect } from "react-notification-badge";
+//import NotificationBadge from "react-notification-badge";
+//import { Effect } from "react-notification-badge";
 import { getSender } from "../../../config/ChatLogics";
+import Navbar from "../../Navbar";
 
 
 const SideDrawer = () => {
@@ -108,22 +109,23 @@ const SideDrawer = () => {
   };
   return (
     <React.Fragment>
+      <Navbar />
+      <div className="p-2 sideDrawer-section">
       <Box
-        d="flex"
+        display="flex"
         justifyContent="space-between"
         alignItems="center"
         w="100%"
-        p="5px 10px 5px 10px"
-        borderWidth="5px"
-        borderColor="white.600"
-        bg="white.400"
-        color="#1990aa"
-      >
+        p="5px 10px 5px 30px"
+        boxShadow='lg'  
+        rounded='md' 
+        bg='white'
+       >
         <Tooltip label="Search Users to chat" hasArrow placement="bottom-end">
           <Button variant="ghost" bg='#1990aa' onClick={onOpen} color="white"
             _hover={{ background: "#7ea7ab", color: "#7ac1b1" }} _active={{ background: "#7ea7ab", color: "#7ac1b1" }}>
-            <i className="fas fa-search"></i>
-            <Text d={{ base: "none", md: "flex" }} px={4} fontWeight="bold">
+            <i className="fas fa-search me-2"></i>
+            <Text display={{ base: "none", md: "flex" }} m={0} fontWeight="bold">
               Search User
             </Text>
           </Button>
@@ -132,7 +134,7 @@ const SideDrawer = () => {
           Chat
         </Text>
         <div >
-          <Menu>
+          {/* <Menu>
             <MenuButton p={1}>
               <NotificationBadge
                 count={notification.length}
@@ -156,7 +158,7 @@ const SideDrawer = () => {
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu>
+          </Menu> */}
           {/* <Menu>
             <MenuButton as={Button} bg="blue.700"  rightIcon={<ChevronDownIcon/>}  
               _hover={{background: "purple.800", color:"yellow.400"}} _active={{background: "purple.800", color:"yellow.400"}}>
@@ -172,12 +174,13 @@ const SideDrawer = () => {
           </Menu> */}
         </div>
       </Box>
+      </div>
       <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerHeader borderBottomWidth="1px">Search Users</DrawerHeader>
           <DrawerBody>
-            <Box d="flex" pb={2}>
+            <Box display="flex" pb={2}>
               <Input
                 placeholder="Search by name or email"
                 mr={2}

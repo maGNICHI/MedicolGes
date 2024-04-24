@@ -1,21 +1,18 @@
 import React from "react";
-import { TextField } from "@material-ui/core";
+import { Input, FormLabel } from "@chakra-ui/react";
 
 const TimePickerInput = ({ value, onChange }) => {
   return (
-    <TextField
-      id="time"
-      label="Select Time"
-      type="time"
-      value={value}
-      onChange={onChange}
-      InputLabelProps={{
-        shrink: true,
-      }}
-      inputProps={{
-        step: 300, // 5 minutes increment
-      }}
-    />
+    <div>
+      <FormLabel htmlFor="time">Select Time</FormLabel>
+      <Input
+        id="time"
+        type="time"
+        value={value}
+        onChange={onChange}
+        step={300} // 5 minutes increment
+      />
+    </div>
   );
 };
 

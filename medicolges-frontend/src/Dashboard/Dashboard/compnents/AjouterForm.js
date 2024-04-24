@@ -6,38 +6,45 @@ import Layout from "../../../Dashboard/SuperAdminLayout/Layout";
 import "../../Dashboard/Dashboard.css";
 import TimePickerInput from "../compnents/Form/TimePickerInput";
 
-import { AppBar } from "@material-ui/core";
 import useStyles from "../../../styless";
 import { useDispatch } from "react-redux";
-import Dashboard from "../Dashboard"; // Import the Dashboard component
-import PhoneInput from "react-phone-input-2";
+ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
-import { putForm } from "../compnents/api/index"
-
 import {
-  CardActions,
-  CardContent,
-  CardMedia,
-  Button,
-  Typography,
-  TextField,
-  FormControl,
-  FormLabel,
-  FormGroup,
-  FormControlLabel,
-  RadioGroup,
   Radio,
-  Checkbox,
-  InputLabel,
-  Select,
   MenuItem,
-} from "@material-ui/core/";
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Checkbox, 
+  FormLabel,
+  Input,
+  FormControl,
+  Switch,
+  Stack,
+  Box,
+  IconButton,
+  Textarea,
+  Select,
+  Button,
+  Text,
+  Icon ,
+  Menu,
+  MenuButton,
+  MenuList,
+  RadioGroup,
+  CardContent,
+ 
+} from '@chakra-ui/react'
+ 
 import { useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
-import IconButton from "../../../components/Button/IconButton";
-import { FaAd, FaAngleDown, FaArchive, FaSave } from "react-icons/fa";
-import { addForm ,sendResponse} from "../compnents/api/index";
-import Switch from "@mui/material/Switch";
+import { FaSave } from "react-icons/fa";
+import { sendResponse} from "../compnents/api/index";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
   //image
@@ -416,32 +423,19 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
     return emailRegex.test(value);
   };
   const renderInputField = (question) => {
-    console.log("im here");
     switch (question.questionType) {
-      // case "date":
-      //   return (
-      //     <TextField
-      //       name="dateAnswer"
-      //       type="date"
-      //       variant="outlined"
-      //       fullWidth
-      //     />
-      //   );
       case "date":
         return (
-          <TextField
+          <Input
             name="dateAnswer"
             type="date"
-            variant="outlined"
             value={question.responseValue}
             onChange={(e) => {
               handleResponse(question.id, e.target.value, "date");
             }}
-            label={question.questionType === "date"}
+            variant="outline"
             fullWidth
-            required
-
-    />
+          />
         );
       case "telephone":
         return (
@@ -458,221 +452,196 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
         );
       case "toggle":
         return (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={question.responseValue === "true"} // Utilisez responseValue pour indiquer si le toggle est activé ou désactivé
-                  onChange={(e,value) => {
-                    const checked = e.target.checked ? "true" : "false"; // Convertit le booléen en chaîne
-                    console.log("aaaaaaaaaaaaaaaa",handleToggleChange)
-                    console.log("bbb",handleResponse)
-                    console.log("ccc",question.id)
-                    handleToggleChange(question.id, checked); // Mettez à jour la valeur de la réponse avec l'état du toggle
-                    handleResponse(question.id, checked ,value, "toggle"); // Met à jour la valeur de réponse dans le state
-
-                  }}
-                />
+          <FormControl display="flex" alignItems="center">
+          <Switch
+            isChecked={question.responseValue} // Use responseValue to indicate whether the toggle is checked or not
+            onChange={(e) => {
+              handleToggleChange(question.id, e.target.checked); // Update the response value with the toggle state
+            }}
+          />
+          <FormLabel htmlFor={`toggle-${question.id}`}>Reponse</FormLabel>
+        </FormControl>
+        );
+      case "paragraph":
+        return (
+          <FormControl>
+            <FormLabel htmlFor={`paragraphAnswer-${question.id}`}>
+              {question.questionType === "paragraph" && "Your Paragraph Answer"}
+            </FormLabel>
+            <Textarea
+              name="paragraphAnswer"
+              size="md"
+              variant="filled"
+              value={question.responseValue}
+              onChange={(e) => {
+                handleResponse(question.id, e.target.value, "paragraph");
+              }}
+              placeholder={
+                question.questionType === "paragraph" &&
+                "Enter your paragraph answer here"
               }
-              label="Reponse"
+              resize="vertical"
             />
-          </div>
+        </FormControl>
         );
-      case "email":
+      // case "telephone":
+      //   return (
+      //     <PhoneInputWithFlag
+      //       label="your number phone"
+      //       value={question.responseValue}
+      //       onChange={(e) => {
+      //         handleResponse(question.id, e.target.value, "telephone");
+      //       }}
+      //     />
+      //   );
+      case "time":
         return (
-          <TextField
-            type="email"
-            label="Email"
-            placeholder="Enter email"
-            variant="outlined"
+          <TimePickerInput
             value={question.responseValue}
-            onChange={(e) => {
-              handleResponse(question.id, e.target.value, "email");
-            }}
-            fullWidth
-            error={question.responseValue && !isValidEmail(question.responseValue)} // Example validation function
-          helperText={question.responseValue && !isValidEmail(question.responseValue) ? 'Invalid email format' : ''}
-  
-          />
-        );
-      case "number":
-        return (
-          <TextField
-            name="numberAnswer"
-            type="number"
-            variant="outlined"
-            value={question.responseValue}
-            onChange={(e) => {
-              handleResponse(question.id, e.target.value, "number");
-            }}
-            label={
-              question.questionType === "number" ? "Your Number Answer" : ""
+            onChange={(e) =>
+              handleResponse(question.id, e.target.value, "time")
             }
-            fullWidth
           />
+        );
+      case "listederoulate":
+        return (
+          <>
+           <FormControl>
+              <FormLabel htmlFor={`selectChoicesInput-${question.id}`}>
+                {question.questionType === "multipleChoice" && "Enter Option"}
+              </FormLabel>
+              <Input
+                type="text"
+                id={`selectChoicesInput-${question.id}`}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    setFormData((prev) => ({
+                      ...prev,
+                      questions: prev.questions.map((obj) => {
+                        if (obj.id === question.id) {
+                          return {
+                            ...obj,
+                            responseValue: {
+                              ...obj.responseValue,
+                              options: [...obj.responseValue.options, e.target.value],
+                            },
+                          };
+                        }
+                        return obj;
+                      }),
+                    }));
+                    e.target.value = ""; // Clear the input field after adding the option
+                  }
+                }}
+                fullWidth
+              />
+            </FormControl>
+                    {question.responseValue ? (
+                    <Select
+                      placeholder="Select Option"
+                      value={question.responseValue}
+                      onChange={(e) => {
+                        // Update the selected option value
+                       }}
+                      fullWidth
+                    >
+                      {question.responseValue.options.map((item, index) => (
+                        <option key={index} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </Select>
+                  ) : null}
+          </>
         );
       case "gender":
         return (
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel id={`dropdown-label-${question.id}`}>Genre</InputLabel>
+          <FormControl variant="outline" width="100%">
+            <FormLabel id={`dropdown-label-${question.id}`}>Genre</FormLabel>
             <Select
-              labelId={`dropdown-label-${question.id}`}
-              id={`dropdown-${question.id}`}
+              aria-labelledby={`dropdown-label-${question.id}`}
               value={question.responseValue}
               onChange={(e) => {
                 handleResponse(question.id, e.target.value, "gender");
               }}
-              label="Genre"
+              placeholder="Genre"
             >
               <MenuItem value="Homme">Homme</MenuItem>
               <MenuItem value="Femme">Femme</MenuItem>
             </Select>
           </FormControl>
         );
-      case "paragraph":
-        return (
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <TextField
-            name="paragraphAnswer"
-            multiline
-            rows={4}
-            variant="outlined"
-            value={question.responseValue}
-            onChange={(e) => {
-              handleResponse(question.id, e.target.value, "paragraph");
-              //ajouter
-            // Ajouter la validation ici
-          if (e.target.value.length > 0 && e.target.value.length < 20) {
-            setTextError('Votre réponse doit contenir au moins 20 caractères.');
-          } else {
-            setTextError('');
-          }
-              
-            }}
-            label={
-              question.questionType === "paragraph"
-                ? "Your Paragraph Answer"
-                : ""
-            }
-            fullWidth
-            />
-
-            {error && (
-              <Typography variant="caption" color="error" style={{marginRight: '1172px', marginTop: '8px' }}>
-                {textError}
-              </Typography>
-           )}
-           </div>
-        );
       case "text":
         return (
-          <div>
-          <TextField
+          <Textarea
             name="textAnswer"
-            rows={4}
-            variant="outlined"
+            size="md"
+            resize="none"
             value={question.responseValue}
             onChange={(e) => {
               handleResponse(question.id, e.target.value, "text");
-              if (e.target.value.length > 0 && e.target.value.length < 8) {
-                setError('Votre réponse doit contenir au moins 8 caractères.');
-              } else {
-                setError('');
-              }
             }}
-            label={question.questionType === "text" ? "Your Text Answer" : ""}
+            placeholder={question.questionType === "text" ? "Your Text Answer" : ""}
             fullWidth
-            required  // Rendre le champ obligatoire
-         
           />
-          {error && (
-  <Typography variant="caption" color="error" style={{  marginTop: '8px', marginRight: '1172px' }}>
-    {error}
-  </Typography>
-)}
-</div>
+        );
+      case "number":
+        return (
+          <Input
+            name="numberAnswer"
+            type="number"
+            variant="outline"
+            value={question.responseValue}
+            onChange={(e) => {
+              handleResponse(question.id, e.target.value, "number");
+            }}
+            placeholder={question.questionType === "number" ? "Your Number Answer" : ""}
+            fullWidth
+          />
         );
       case "file":
         return (
-          <div>
-            <input
-              type="file"
-              accept=".pdf, .mp4, .avi, .mov, .wmv, .flv, .mkv, .jpg, .png "
-              onChange={(event) =>
-                handleResponse(question.id, event.target.files[0], "file")
-              }
-
-            />
-      {image && <img src={image}  className="w-40 h-40" style={{ marginLeft: '557px', marginTop: '19px' }} alt="Uploaded" />}
-
-          </div>
-        );
-      case "time":
-        return (
-          <div style={{ marginRight: "1400px", color: "black" }}>
-            {" "}
-            {/* Décalage à gauche */}
-            <TimePickerInput
-              value={question.responseValue}
-              style={{ width: "100%", maxWidth: "400px" }}
-              onChange={(e) =>
-                handleResponse(question.id, e.target.value, "time")
-              }
-              fullWidth
-              variant="outlined"
-            />
-          </div>
+          <input
+            type="file"
+            onChange={(event) =>
+              handleResponse(question.id, event.target.files[0], "file")
+            } // Utilisez 'event' au lieu de 'e'
+          />
         );
       case "dropdown":
         return (
-          <TextField
-            name="dropdownAnswer"
-            select
-            variant="outlined"
-            label="Your Dropdown Answer"
+          <FormControl variant="outlined" fullWidth>
+          <Select
+            variant="outline"
+            value={question.responseValue}
+            onChange={(e) => {
+              handleResponse(question.id, e.target.value, "dropdown");
+            }}
+            placeholder={question.question}
+            id={`dropdown-${question.id}`}
+            size="md"
             fullWidth
-          />
+          >
+            {/* Put your dropdown options here */}
+          </Select>
+          </FormControl>
         );
-      // case "multipleChoice":
-      //   return (
-      //     <FormControl component="fieldset">
-      //       <FormGroup>
-      //         {question.responseValue.options.map((option, index) => (
-      //           <div
-      //             key={index}
-      //             style={{
-      //               display: "flex",
-      //               alignItems: "center",
-      //               marginTop: "10px",
-      //             }}
-      //           >
-      //             <FormControlLabel
-      //               control={<Radio />}
-      //               checked={multipleChoiceAnswers[question.id] === option}
-      //               onChange={() =>
-      //                 handleMultipleChoiceResponse(question.id, option)
-      //               }
-      //             />
-      //             <TextField
-      //               disabled={!canEditQuestions}
-      //               variant="outlined"
-      //               value={option}
-      //               onChange={(e) =>
-      //                 handleOptionInputChange(
-      //                   question.id,
-      //                   index,
-      //                   e.target.value
-      //                 )
-      //               }
-      //               fullWidth
-      //               style={{ width: "1258px" }}
-      //             />
-      //             {/* Afficher la réponse de l'utilisateur pour cette option */}
-      //           </div>
-      //         ))}
-      //       </FormGroup>
-      //     </FormControl>
-      //   );
+      case "dropdown":
+        return (
+          <Input
+          name="dropdownAnswer"
+          variant="outline"
+          value={question.responseValue}
+          onChange={(e) => {
+            handleResponse(question.id, e.target.value, "file");
+          }}
+          placeholder={
+            question.questionType === "dropdown" ? "Your Dropdown Answer" : ""
+          }
+          fullWidth
+        />
+        );
       case "multipleChoice":
         console.log(("rrrrrrrrrrrrr", question));
         return (
@@ -686,66 +655,54 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
                   marginBottom: "10px",
                 }}
               >
-                <FormControlLabel
-                  value={
-                    formData.questions.find((q) => q.id == question.id)
-                      ?.responseValue.options[index]
-                  }
-                  control={<Radio />}
-                  checked={
-                    formData.questions.find((q) => q.id == question.id)
-                      .responseValue.selectedOption ==
-                      formData.questions.find((q) => q.id == question.id)
-                        .responseValue.options[index] &&
-                    formData.questions.find((q) => q.id == question.id)
-                      .responseValue.selectedOption != ""
-                  }
+               <FormControl>
+                  <RadioGroup
+                    value={formData.questions.find((q) => q.id === question.id)?.responseValue.selectedOption}
+                    onChange={(selectedOption) => {
+                      setFormData((prev) => ({
+                        ...prev,
+                        questions: prev.questions.map((obj) => {
+                          if (obj.id === question.id) {
+                            return {
+                              ...obj,
+                              responseValue: {
+                                ...obj.responseValue,
+                                selectedOption,
+                              },
+                            };
+                          }
+                          return obj;
+                        }),
+                      }));
+                    }}
+                  >
+                  
+
+                          {formData.questions.find((q) => q.id === question.id)?.responseValue.options.map((option, index) => (
+                            <Radio key={index} value={option}>
+                              {option}
+                            </Radio>
+                          ))}
+                  
+                  </RadioGroup>
+                </FormControl>
+                <Input
+                  variant="outline"
+                  size="sm"
+                  value={formData.questions.find((q) => q.id === question.id)?.responseValue.options[index]}
                   onChange={(e) => {
-                    console.log(e);
                     setFormData((prev) => ({
                       ...prev,
-                      ["questions"]: prev.questions.map((obj) => {
+                      questions: prev.questions.map((obj) => {
                         if (obj.id === question.id) {
-                          // Update the properties for the object with id 2
                           return {
                             ...obj,
                             responseValue: {
                               ...obj.responseValue,
-                              ["selectedOption"]: e.target.value,
+                              options: obj.responseValue.options.map((x, i) => (i === index ? e.target.value : x)),
                             },
-                          }; // Add or update other properties as needed
+                          };
                         }
-                        // If the id doesn't match, return the original object
-                        return obj;
-                      }),
-                    }));
-                  }}
-                />
-                <TextField
-                  disabled={!canEditQuestions}
-                  variant="outlined"
-                  size="small"
-                  value={
-                    formData.questions.find((q) => q.id == question.id)
-                      .responseValue.options[index]
-                  }
-                  onChange={(e) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      ["questions"]: prev.questions.map((obj) => {
-                        if (obj.id === question.id) {
-                          // Update the properties for the object with id 2
-                          return {
-                            ...obj,
-                            responseValue: {
-                              ...obj.responseValue,
-                              ["options"]: obj.responseValue.options.map(
-                                (x, i) => (i == index ? e.target.value : x)
-                              ),
-                            },
-                          }; // Add or update other properties as needed
-                        }
-                        // If the id doesn't match, return the original object
                         return obj;
                       }),
                     }));
@@ -755,114 +712,110 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
             ))}
           </div>
         );
+      ///cmobox
       case "combobox":
         return (
           <div>
             {[...Array(question.optionsCount)].map((item, index) => (
               <div key={index}>
-                {/* <TextField
-                  name={`input_${index}`} 
-                  label={` ${question.question}`}
-                  fullWidth
-                  value={
-                    question.question
-                  }
-                  onChange={(e) => {
+                        <Input
+                  name={`input_${index}`} // Use a unique name for each input
+                  placeholder={`Input ${index + 1}`}
+                  value={formData.questions.find((q) => q.id === question.id)?.responseValue.checkboxes[index]}
+                  onChange={(e, index) => {
                     setFormData((prev) => ({
                       ...prev,
-                      ["questions"]: prev.questions.map((obj) => {
+                      questions: prev.questions.map((obj) => {
                         if (obj.id === question.id) {
-                          // Update the properties for the object with id 2
                           return {
                             ...obj,
                             responseValue: {
                               ...obj.responseValue,
-                              ["checkboxes"]: obj.responseValue.checkboxes.map(
-                                (x, i) => (i == index ? e.target.value : x)
-                              ),
+                              checkboxes: obj.responseValue.checkboxes.map((x, i) => (i === index ? e.target.value : x)),
                             },
-                          }; // Add or update other properties as needed
+                          };
                         }
-                        // If the id doesn't match, return the original object
                         return obj;
                       }),
                     }));
                   }}
-                  disabled
-                  
-                /> */}
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={question.responseValue.checked.some(
-                        (x) => x == question.responseValue.checkboxes[index]
-                      )}
-                      onChange={(event) => {
-                        handleResponse(
-                          question.id,
-                          question.responseValue.checkboxes[index],
-                          "combobox"
-                        );
-                      }}
-                    />
-                  }
-                  label={` ${question.responseValue.checkboxes[index]}`} // Mettez à jour le label en conséquence
+                  // Add other necessary properties for each input here
                 />
+               <FormControl>
+                <FormLabel>{`Checkbox ${index + 1}`}</FormLabel>
+                <Checkbox />
+              </FormControl>
               </div>
             ))}
           </div>
         );
-      case "listederoulate":
+      // case "email":
+      //   const handleChangeEmail = (e) => {
+      //     const { value } = e.target;
+      //     if (!value.includes("@")) {
+      //       handleResponse(question.id, value, "email");
+      //     }
+      //   };
+
+      //   const handleKeyPressEmail = (e) => {
+      //     if (e.key === '@') {
+      //       e.preventDefault(); // Empêche l'ajout du caractère "@" dans le champ d'e-mail
+      //     }
+      //   };
+
+      //   const handleChangeDomain = (e) => {
+      //     setSelectedDomain(e.target.value);
+      //   };
+
+      //   return (
+      //     <div style={{ display: 'flex', alignItems: 'center' }}>
+      //       <TextField
+      //         type="email"
+      //         label="Email"
+      //         placeholder="Enter email"
+      //         variant="outlined"
+      //         value={question.responseValue}
+      //         onChange={(e) => {
+      //           handleResponse(question.id, e.target.value, "email");
+      //         }}
+      //         onKeyPress={handleKeyPressEmail}
+      //         fullWidth
+      //         inputProps={{
+      //           maxLength: 50 // Limiter la longueur maximale de l'e-mail si nécessaire
+      //         }}
+      //       />
+      //       <TextField
+      //         select
+      //         value={selectedDomain}
+      //         onChange={(e) => {
+      //           setSelectedDomain(e.target.value);
+      //           handleResponse(question.id, e.target.value, "domain");
+      //         }}
+      //         // onChange={handleChangeDomain}
+      //         variant="outlined"
+      //         style={{ minWidth: '100px', marginLeft: '10px' }}
+      //       >
+      //         {allowedDomains.map((domain) => (
+      //           <MenuItem key={domain} value={domain}>
+      //             {domain}
+      //           </MenuItem>
+      //         ))}
+      //       </TextField>
+      //     </div>
+      //   );
+      case "email":
         return (
-          <>
-            {/* <TextField
-                // label="Enter Option"
-                id="selectChoicesInput"
-                onKeyDown={(e) => {
-                  if (e.key == "Enter") {
-                    e.preventDefault();
-                    setFormData((prev) => ({
-                      ...prev,
-                      ["questions"]: prev.questions.map((obj) => {
-                        if (obj.id === question.id) {
-                          // Update the properties for the object with id 2
-                          return {
-                            ...obj,
-                            responseValue: {
-                              ...obj.responseValue,
-                              ["options"]: [
-                                ...obj.responseValue.options,
-                                e.target.value,
-                              ],
-                            },
-                          }; // Add or update other properties as needed
-                        }
-                        // If the id doesn't match, return the original object
-                        return obj;
-                      }),
-                    }));
-                    document.getElementById('selectChoicesInput').value = ''
-                  }
-                }}
-                fullWidth
-              /> */}
-            {question.responseValue ? (
-              <Select
-                label="Select Option"
-                onChange={(e) => {
-                  handleResponse(question.id, e.target.value, "listederoulate");
-                }}
-                fullWidth
-              >
-                {question.responseValue &&
-                  question.responseValue.options.map((item, index) => (
-                    <MenuItem key={index} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-              </Select>
-            ) : null}
-          </>
+          <FormControl>
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              placeholder="Enter email"
+              value={question.responseValue}
+              onChange={(e) => {
+                handleResponse(question.id, e.target.value, "email");
+              }}
+            />
+        </FormControl>
         );
       default:
         return null;
@@ -883,30 +836,30 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
             <hr />
             <Row>
               <Col xs={12} md={12} className="text-center">
-                <AppBar
-                  className={classes.appBar}
-                  position="static"
-                  color="inherit"
-                  style={{
-                    height: "450px",
-                    backgroundImage: `url(${process.env.PUBLIC_URL}/images/Background/background.png)`,
-                    backgroundRepeat: "no-repeat",
-                    backgroundSize: "cover",
-                  }}
+              <Box
+                className={classes.appBar}
+                position="static"
+                color="inherit"
+                height="450px"
+                backgroundImage={`url(${process.env.PUBLIC_URL}/images/Background/background.png)`}
+                backgroundRepeat="no-repeat"
+                backgroundSize="cover"
+              >
+                <Text
+                  as="h1"
+                  fontSize="90px"
+                  color="black"
+                  fontWeight={900}
                 >
-                  <Title
-                    secondTitle={"Form Generation"}
-                    fontSize={"90px"}
-                    color={"black"}
-                    fontWeight={900}
-                  />
-                </AppBar>
+                  Form Generation
+                </Text>
+              </Box>
               </Col>
               <Col xs={12} md={12} className="text-center">
                 <div>
                   {formData && (
                     <>
-                      <CardContent
+                      <Card
                         style={{
                           display: "flex",
                           alignItems: "center",
@@ -917,38 +870,33 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
                         <div
                           style={{ marginLeft: "18px", marginRight: "10px" }}
                         >
-                          <Title
-                            secondTitle={"Name of the questionnaire:"}
-                            fontSize={"18px"} // Taille de police identique
-                            fontWeight={600} // Poids de police identique
-                            className={"mb-2"}
+                          <Text
+                            fontSize="18px"
+                            fontWeight="600"
+                            marginBottom="2"
                             style={{
                               marginBottom: "0px",
                               marginRight: "7px",
                               fontFamily: "Arial, sans-serif",
-                            }} // Police de caractères identique
-                          />
+                            }}
+                          >
+                            Name of the questionnaire:
+                          </Text>
                         </div>
                         <div>
-                          {formData && (
-                            <Typography
-                              className={classes.title}
-                              gutterBottom
-                              variant="h5"
-                              component="h2"
-                              style={{
-                                marginBottom: "7px",
-                                fontSize: "18px",
-                                fontFamily: "Arial, sans-serif",
-                              }} // Taille de police et police de caractères identiques
+                        {formData && (
+                            <Text
+                              fontSize="18px"
+                              marginBottom="7px"
+                              fontFamily="Arial, sans-serif"
                             >
                               {formData.name}
                               {formData.id}
-                            </Typography>
+                            </Text>
                           )}
                         </div>
-                      </CardContent>
-                      <CardContent>
+                      </Card>
+                      <Card>
                         {formData.questions &&
                           Array.isArray(formData.questions) &&
                           formData.questions.map((question, index) => (
@@ -960,26 +908,21 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
                                   paddingBottom: "8px",
                                 }}
                               >
-                                <Typography
-                                  variant="body1"
-                                  style={{
-                                    fontSize: "18px", // Taille de police identique
-                                    fontWeight: 600, // Poids de police identique
-                                    fontFamily: "Arial, sans-serif", // Police de caractères identique
-                                    paddingBottom: "8px", // Espacement en bas identique
-                                  }}
+                                <Text
+                                  fontSize="18px" // Taille de police identique
+                                  fontWeight="600" // Poids de police identique
+                                  fontFamily="Arial, sans-serif" // Police de caractères identique
+                                  paddingBottom="8px" // Espacement en bas identique
                                 >
                                   Question {index + 1}: {question.question}
-                                </Typography>
-                                {/* <Typography variant="body1">
-                                                            Question Type: {question.questionType}
-                                                        </Typography> */}
+                                </Text>
+                        
                               </div>
                               {/* Render input field based on question type */}
                               {renderInputField(question)}
                             </div>
                           ))}
-                      </CardContent>
+                      </Card>
                     </>
                   )}
                 </div>

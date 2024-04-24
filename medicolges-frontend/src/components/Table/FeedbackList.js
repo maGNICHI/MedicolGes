@@ -1,22 +1,13 @@
 import React, { useEffect, useState } from "react";
-import {
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-  TablePagination,
-  Paper,
-  Checkbox,
-} from "@mui/material";
+import { Table, Button, Modal } from "react-bootstrap";
 import { FaInfoCircle, FaTrash } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import Title from "../Title/Title";
 import axios from "axios";
-import { Button, Modal } from "react-bootstrap";
+import Pagination from "react-bootstrap/Pagination"; // Import Pagination from react-bootstrap
 
 const FeedbackList = () => {
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [feedback, setFeedback] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -25,8 +16,8 @@ const FeedbackList = () => {
   const handleCloseDeleteModal = () => setShowDeleteModal(false);
 
   const handleShowDeleteModal = (feedbackId) => {
-    setFeedbackToDelete(feedbackId); // Set the ID of the feedback to delete
-    setShowDeleteModal(true); // Show the delete modal
+    setFeedbackToDelete(feedbackId);
+    setShowDeleteModal(true);
   };
 
   const handleDelete = async () => {
@@ -34,6 +25,7 @@ const FeedbackList = () => {
       await axios.delete(
         `http://localhost:5000/api/feedback/${feedbackToDelete}`
       );
+      getFeedback();
       setFeedback(feedback.filter((item) => item.id !== feedbackToDelete));
       handleCloseDeleteModal();
     } catch (error) {
@@ -50,90 +42,83 @@ const FeedbackList = () => {
     }
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
+  const handleChangePage = (pageNumber) => {
+    setPage(pageNumber);
   };
 
-  const handleChangeRowsPerPage = (event) => {
+  const handlePerPageChange = (event) => {
     setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
   };
 
   useEffect(() => {
     getFeedback();
-  }, []);
+  }, [page, rowsPerPage]);
 
   return (
-    <Paper>
-      <div style={{ overflowX: "auto", maxWidth: "200px", minWidth: "100%" }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell></TableCell>
-              <TableCell>
-                <Title fontWeight={600} title={"Username"} />
-              </TableCell>
-              <TableCell>
+    <>
+      <div style={{ overflowX: "auto" }}>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>
                 <Title fontWeight={600} title={"Title"} />
-              </TableCell>
-              <TableCell>
+              </th>
+              <th>
                 <Title fontWeight={600} title={"Description"} />
-              </TableCell>
-              <TableCell>
+              </th>
+              <th>
                 <Title fontWeight={600} title={"Rating"} />
-              </TableCell>
-              <TableCell>
-                <Title fontWeight={600} title={"Project"} />
-              </TableCell>
-              <TableCell>
+              </th>
+              <th>
                 <Title fontWeight={600} title={"Action"} />
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
             {feedback &&
               feedback
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .slice((page - 1) * rowsPerPage, page * rowsPerPage)
                 .map(
-                  (row, index) =>
+                  (row) =>
                     row.isDeleted === false && (
-                      <TableRow key={index}>
-                        <TableCell>
-                          <Checkbox />
-                        </TableCell>
-                        <TableCell></TableCell>
-                        <TableCell>{row.title}</TableCell>
-                        <TableCell>{row.description}</TableCell>
-                        <TableCell>{row.rating}</TableCell>
-                        <TableCell></TableCell>
-                        <TableCell>
-                          <div className="flex gap-3">
-                            <NavLink>
-                              <FaTrash
-                                color="#0236be"
-                                onClick={() => handleShowDeleteModal(row._id)}
-                              />
-                            </NavLink>
-                            <NavLink>
+                      <tr key={row.id}>
+                        <td>{row.title}</td>
+                        <td>{row.description}</td>
+                        <td>{row.rating}</td>
+                        <td>
+                          <div style={{ display: "flex" }}>
+                            <NavLink to={`/feedback/${row.id}`}>
                               <FaInfoCircle color="#0236be" />
                             </NavLink>
+                            <FaTrash
+                              color="#0236be"
+                              onClick={() => handleShowDeleteModal(row._id)}
+                              style={{ cursor: "pointer", marginLeft: "10px" }}
+                            />
                           </div>
-                        </TableCell>
-                      </TableRow>
+                        </td>
+                      </tr>
                     )
                 )}
-          </TableBody>
+          </tbody>
         </Table>
       </div>
-      <TablePagination
-        rowsPerPageOptions={[5, 10, 25]}
-        component="div"
-        count={feedback ? feedback.length : 0}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      <div className="d-flex justify-content-center mt-3">
+        <Pagination
+          size="lg"
+          className="justify-content-center"
+          prev
+          next
+          first
+          last
+          ellipsis
+          boundaryLinks
+          maxButtons={5}
+          activePage={page}
+          items={Math.ceil(feedback.length / rowsPerPage)}
+          onSelect={handleChangePage}
+        />
+      </div>
       {/* Delete confirmation modal */}
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>
         <Modal.Header closeButton>
@@ -149,7 +134,7 @@ const FeedbackList = () => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </Paper>
+    </>
   );
 };
 

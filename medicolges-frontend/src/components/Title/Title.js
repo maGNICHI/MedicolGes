@@ -1,5 +1,5 @@
 import React from "react";
-import { styled } from '@mui/system'; // Import styled from @mui/system
+import styled from '@emotion/styled';
 import classNames from "classnames";
 
 // Create a styled component with the desired styles

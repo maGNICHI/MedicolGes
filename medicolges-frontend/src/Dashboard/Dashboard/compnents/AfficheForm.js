@@ -4,18 +4,24 @@ import { Card, Container, Modal, Button } from "react-bootstrap";
 import Layout from "../../../Dashboard/SuperAdminLayout/Layout";
 import "../../Dashboard/Dashboard.css";
 import { useNavigate } from "react-router-dom";
-import {} from "@material-ui/core/";
-import { Grid, CircularProgress } from "@material-ui/core";
+import { Grid, CircularProgress } from '@chakra-ui/react'
+
 import { fetchForm ,deleteForm} from "./api";
-import FormCard from "./FormCard";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
-import { IconButton, TableHead } from "@mui/material";
+ 
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tfoot,
+  Tr,
+  Th,
+  Td,
+  TableCaption,
+  TableContainer,
+} from '@chakra-ui/react'
 import { FaEye, FaTrash, FaEdit, FaLink } from "react-icons/fa";
 import { faRandom } from "@fortawesome/free-solid-svg-icons";
-import { Title } from "@material-ui/icons";
+import { Heading } from "@chakra-ui/react";
 import { fetchFormById } from "../compnents/api/index";
 
 function AfficheForm({ setCurrentId }) {
@@ -131,23 +137,23 @@ const [selectedFormId, setSelectedFormId] = useState(null); // État pour stocke
             borderRadius: "20px",
           }}
         >
-          <Title title={"Create Form"} fontWeight={600} fontSize={"24px"} />
+        <Heading fontWeight={600} fontSize="24px">Create Form</Heading>
           <hr />
           {laoding ? (
-            <CircularProgress />
+            <CircularProgress value={30} size='120px'  />
           ) : (
             <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Nom </TableCell>
-                  <TableCell>Actions </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
+              <Thead>
+                <Tr>
+                  <Th>Nom </Th>
+                  <Th>Actions </Th>
+                </Tr>
+              </Thead>
+              <Tbody>
                 {forms.map((form, index) => (
-                  <TableRow key={index}>
-                    <TableCell>{form.name}</TableCell>
-                    <TableCell>
+                  <Tr key={index}>
+                    <Td>{form.name}</Td>
+                    <Td>
                       <div style={{ display: "flex", alignItems: "center" }}>
                         <FaEdit
                           onClick={() => {
@@ -191,10 +197,10 @@ const [selectedFormId, setSelectedFormId] = useState(null); // État pour stocke
                       style={{ fontSize: "23px", cursor: "pointer" }}
                     /> */}
                       </div>
-                    </TableCell>
-                  </TableRow>
+                    </Td>
+                  </Tr>
                 ))}
-              </TableBody>
+              </Tbody>
             </Table>
           )}
         </Card>

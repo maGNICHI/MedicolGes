@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar } from "@chakra-ui/avatar";
-import { Box, Text } from "@chakra-ui/layout";
+import { Box, Text, Stack } from "@chakra-ui/layout";
 
 const UserListItem = ({user, handleFunction }) => { //user !notLoggedIn //selected to chat userId
 
@@ -14,10 +14,10 @@ const UserListItem = ({user, handleFunction }) => { //user !notLoggedIn //select
         color: "white",
       }}
       w="100%"
-      d="flex"
+      display="flex"
       alignItems="center"
       color="black"
-      px={3}
+      px={2}
       py={2}
       mb={2}
       borderRadius="lg"
@@ -30,9 +30,12 @@ const UserListItem = ({user, handleFunction }) => { //user !notLoggedIn //select
         name={user.name}
         src={user.pic}
       />
-      <Box>
-        <Text>{user.username}</Text>
-        <Text fontSize="xs"> <b>Email : </b> {user.email} </Text>
+      <Box   >
+    
+        <Text m={0} >{user.username}</Text>
+        <Text   mb={1} fontSize="xs"> <b>Email : </b> {user.email} </Text>
+   
+      
       </Box>
     </Box>
   );

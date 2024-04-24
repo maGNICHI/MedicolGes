@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./post.css";
 
-const CommentForm = ({ postId, onCommentAdded }) => {
+const CommentForm = ({ postId, onCommentAdded, setPosts}) => {
   const userData = JSON.parse(localStorage.getItem("userInfo"))
   const [comment, setComment] = useState({ text: "", commenterId: userData._id });
   const [userPic, setUserPic] = useState(""); // State to store user's profile picture
@@ -27,6 +27,12 @@ const CommentForm = ({ postId, onCommentAdded }) => {
         `http://localhost:5000/api/posts/comment-post/${postId}`,
         { ...comment, username } // Include username in the comment data sent to the backend
       );
+      try {
+        const response = await axios.get("http://localhost:5000/api/posts");
+        setPosts(response.data);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      } 
       setComment({ text: "" });
       // Trigger the parent component to reload comments after adding a comment
       onCommentAdded();
@@ -36,17 +42,17 @@ const CommentForm = ({ postId, onCommentAdded }) => {
   };
 
   return (
-    <div className="bg-white border border-slate-100 grid grid-cols-3 gap-2 rounded-xl p-2 text-sm">
+    <div className="bg-white border border-slate-100 grid grid-cols-3 gap-2 d-flex rounded-xl p-2 text-sm">
      
       {/* Display user's profile picture */}
       <img className="postProfileImg grid grid-cols-1" src={userPic} alt="User Profile" />
-      <textarea
+      <input
         placeholder="Your comment..."
         className="bg-slate-100 text-slate-600  placeholder:text-slate-600 placeholder:opacity-50 border border-slate-200 col-span-4 resize-none outline-none rounded-lg p-2 duration-300 focus:border-slate-600 mr-12"
         value={comment.text}
         onChange={handleChange}
         name="text"
-      ></textarea>
+      ></input>
 
       <button className="shareButton " onClick={handleCommentSubmit}>
        Comment

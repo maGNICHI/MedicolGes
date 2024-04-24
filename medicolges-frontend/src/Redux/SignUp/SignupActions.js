@@ -7,7 +7,8 @@ export const REGISTER_USER_FAIL = "REGISTER_USER_FAIL";
 export const registerUser = (userData) => async (dispatch) => {
   try {
     dispatch({ type: REGISTER_USER_REQUEST });
-
+    
+    console.log("🚀 ~ registerUser ~ userData:", userData)
     const config = {
       headers: {
         "Content-Type": "multipart/form-data",

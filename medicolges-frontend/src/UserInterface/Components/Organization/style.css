@@ -98,4 +98,14 @@
     right: -25px;
   }
   
-  
+  .btn-create{
+    font-family: Poppins; 
+    font-style: normal; 
+    text-transform: none; 
+    background: linear-gradient(-45deg, rgb(25, 144, 170) 0%, rgb(138, 194, 187) 100%); 
+    color: white; 
+    font-size: 16px; 
+    font-weight: 600; 
+    padding: 8px 16px; 
+    border-radius: 20px; 
+  }

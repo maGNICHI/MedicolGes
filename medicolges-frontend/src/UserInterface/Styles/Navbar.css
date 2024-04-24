@@ -2,6 +2,7 @@ body {
     background-color: white !important;
     margin: 0; /* Remove default body margin */
     padding: 0; /* Remove default body padding */
+    z-index: 3;
 }
 
 .navbar-section {
@@ -156,6 +157,7 @@ body {
   }
   
   .dropdown ul {
+    padding: 0;
     display: none;
     position: absolute;
     top: 100%;

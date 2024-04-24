@@ -4,7 +4,8 @@ import { Card, Container, Row, Col, Pagination, Form } from "react-bootstrap";
 import { FaFacebook, FaTwitter, FaInstagram, FaSearch, FaPlus } from "react-icons/fa";
 import "./style.css";
 import Navbar from "../Navbar";
-import IconButton from "@material-ui/core/IconButton";
+import { useNavigate } from "react-router-dom";
+import { IconButton } from "@chakra-ui/react";
 
 function OrganizationCard({ organization }) {
   return (
@@ -61,6 +62,7 @@ function OrganizationList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
   const organizationsPerPage = 3;
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchOrganizations() {
@@ -133,7 +135,7 @@ function OrganizationList() {
                   padding: "8px 16px",
                   borderRadius: "20px",
                 }}
-                onClick={() => {}}
+                onClick={() => {navigate('/organizationFront')}}
                 startIcon={<FaPlus />}
               >
                 Add New Organization

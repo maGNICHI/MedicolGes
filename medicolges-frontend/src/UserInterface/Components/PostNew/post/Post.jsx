@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { MoreVert } from "@material-ui/icons";
+ import {   FiMoreVertical  as MoreVert} from 'react-icons/fi';
+
 import CommentList from "./CommentList";
 import CommentForm from "./CommentForm";
 import "./post.css";
 import likeIcon from "./like.png";
+import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
 
-export default function Post({ post }) {
+export default function Post({ post, setPosts }) {
+  console.log("🚀 ~ Post ~ post:", post)
   const [like, setLike] = useState(post.likers.length);
   const [isLiked, setIsLiked] = useState(
-    post.likes ? post.likes.includes(localStorage.getItem("userId")) : false
+    post.likers ? post.likers.includes(JSON.parse(localStorage.getItem("userInfo"))._id) : false
   );
   const [showComments, setShowComments] = useState(false);
   const [comments, setComments] = useState([]);
@@ -34,7 +37,8 @@ export default function Post({ post }) {
 
   const likeHandler = async () => {
     try {
-      const userId = localStorage.getItem("userId");
+      const userId =JSON.parse(localStorage.getItem("userInfo"))._id ;
+      console.log("🚀 ~ likeHandler ~ localStorage.getItem(userInfo):", localStorage.getItem("userInfo"))
       if (!userId) {
         console.error("User ID not found in local storage");
         return;
@@ -47,10 +51,12 @@ export default function Post({ post }) {
       await axios.patch(url, {}, { headers: { "user-id": userId } });
 
       // Toggle like state
+      // setLike((prevLike) => (isLiked ? prevLike - 1 : prevLike + 1));
       setIsLiked(!isLiked);
 
+     const response = await axios.get("http://localhost:5000/api/posts");
+        setPosts(response.data);
       // Update like count
-      setLike((prevLike) => (isLiked ? prevLike - 1 : prevLike + 1));
     } catch (error) {
       console.error("Error toggling like:", error);
     }
@@ -108,7 +114,7 @@ export default function Post({ post }) {
   };
 
   return (
-    <div className="post">
+    <div className="post" style={{padding:"8px 10px"}}>
       <div className="postWrapper">
         <div className="postTop">
           <div className="postTopLeft">
@@ -158,14 +164,10 @@ export default function Post({ post }) {
         </div>
         <div className="postBottom">
           <div className="postBottomLeft">
-            <img
-              className="likeIcon"
-              src={likeIcon}
-              onClick={likeHandler}
-              alt=""
-            />
+          {!isLiked ? <FaThumbsUp  onClick={likeHandler} style={{ marginRight: '5px', color:"blue" }} /> :<FaThumbsDown  onClick={likeHandler} style={{ marginRight: '5px', color:"red" }}/>}
+
             <span className="postLikeCounter">
-              {like} likers
+               {post.likers.length} likers
             </span>
           </div>
           <div className="postBottomRight">
@@ -179,10 +181,14 @@ export default function Post({ post }) {
             <CommentForm
               postId={post._id}
               onCommentAdded={handleCommentAdded}
+              post={post}
+              setPosts={setPosts}
             />
             <CommentList
               postId={post._id}
               comments={comments}
+              post={post}
+              setPosts={setPosts}
               onDeleteComment={handleCommentDeleted}
               onUpdateComment={handleCommentUpdated}
             />

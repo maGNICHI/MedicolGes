@@ -9,7 +9,6 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./Redux/Store";
-import { createTheme, ThemeProvider } from "@mui/material";
 import Chat from "./Chat/Chat";
 import { FaRobot } from "react-icons/fa";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; 
@@ -23,20 +22,13 @@ const Root = () => {
     setShowChat((prevShowChat) => !prevShowChat);
   };
 
-  const theme = createTheme({
-    palette: {
-      background: {
-        paper: "#f0f0f0", // Define the background color for Paper component
-      },
-    },
-  });
+  
 
   return (
     <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter forceRefresh={true}>
-          <ThemeProvider theme={theme}>
-            <ChatProvider>
+             <ChatProvider>
               <ChakraProvider>
                 <QueryClientProvider client={queryClient}>
                   <div className="app-container position-absolute left-1">
@@ -55,8 +47,7 @@ const Root = () => {
                 </QueryClientProvider>
               </ChakraProvider>
             </ChatProvider>
-          </ThemeProvider>
-        </BrowserRouter>
+         </BrowserRouter>
       </Provider>
     </React.StrictMode>
   );

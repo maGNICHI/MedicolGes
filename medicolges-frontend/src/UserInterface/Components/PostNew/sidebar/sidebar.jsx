@@ -3,32 +3,22 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "./sidebar.css";
 import {
-  RssFeed,
-  Chat,
-  PlayCircleFilledOutlined,
-  Group,
-  Bookmark,
-  HelpOutline,
-  WorkOutline,
-  Event,
-  School,
-} from "@material-ui/icons";
+  RiRssLine  as RssFeed,
+  RiChatSmile3Line as Chat,
+  RiPlayCircleFill as PlayCircleFilledOutlined,
+  RiGroupLine as Group,
+  RiBookmarkLine as Bookmark,
+  RiInformationLine as HelpOutline,
+  RiBriefcaseLine as WorkOutline,
+  RiCalendarEventLine as Event,
+  RiSchoolLine as School,
+} from 'react-icons/ri';
+
 
 export default function Sidebar() {
-  const [users, setUsers] = useState([]);
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/api/users");
-        setUsers(response.data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-
-    fetchUsers();
-  }, []);
+  const user =  JSON.parse(localStorage.getItem("userInfo")) ;
+  console.log("🚀 ~ Sidebar ~ user:", user)
+ 
 
   return (
     <div className="sidebar1">
@@ -36,56 +26,48 @@ export default function Sidebar() {
         <ul className="sidebar1List">
           <li className="sidebar1ListItem">
               <Link to="/feed" className="sidebar1Link"></Link>
-            <RssFeed className="sidebar1Icon" />
-            <span className="sidebar1ListItemText">Feed</span>
+            <span className="sidebar1ListItemText">
+            <div className="d-flex justify-content-center mb-4">
+                  <div
+                    className="rounded-circle ms-5 overflow-hidden"
+                    style={{
+                      width: "100px",
+                      height: "100px",
+                      border: "1px solid #ced4da",
+                      cursor: "pointer",
+                      position: "relative",
+                    }}
+                  >
+                    <img
+                      src={user.pic}
+                      alt={user.username}
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "cover",
+                      }}
+                    />
+                    
+                  </div>
+                </div>
+            </span>
           </li>
           <li className="sidebar1ListItem">
-            <Chat className="sidebar1Icon" />
-            <span className="sidebar1ListItemText">recent posts</span>
+            <span className="sidebar1ListItemText"><span class="username">Username: </span> {user.username}</span>
           </li>
           <li className="sidebar1ListItem">
-            <PlayCircleFilledOutlined className="sidebar1Icon" />
-            <span className="sidebar1ListItemText">Videos</span>
+            <span className="sidebar1ListItemText"><span class="username">First Name: </span>{user.firstName}  </span>
           </li>
           <li className="sidebar1ListItem">
-            <Group className="sidebar1Icon" />
-            <span className="sidebar1ListItemText">Groups</span>
+            <span className="sidebar1ListItemText"><span class="username">Last Name:</span> {user.lastName} </span>
           </li>
           <li className="sidebar1ListItem">
-            <Bookmark className="sidebar1Icon" />
-            <span className="sidebar1ListItemText">Bookmarks</span>
+            <span className="sidebar1ListItemText"><span class="username">Email: </span>{user.email}</span>
           </li>
-          <li className="sidebar1ListItem">
-            <HelpOutline className="sidebar1Icon" />
-            <span className="sidebar1ListItemText">Questions</span>
-          </li>
-          <li className="sidebar1ListItem">
-            <WorkOutline className="sidebar1Icon" />
-            <span className="sidebar1ListItemText">Jobs</span>
-          </li>
-          <li className="sidebar1ListItem">
-            <Event className="sidebar1Icon" />
-            <span className="sidebar1ListItemText">Events</span>
-          </li>
-          <li className="sidebar1ListItem">
-            <School className="sidebar1Icon" />
-            <span className="sidebar1ListItemText">Courses</span>
-          </li>
+        
         </ul>
-        <button className="sidebar1Button">Show More</button>
-        <hr className="sidebar1Hr" />
-        {/* <ul className="sidebar1FriendList">
-          {users.map((user) => (
-            <li key={user._id} className="sidebar1Friend">
-              <img
-                className="sidebar1FriendImg"
-                src={user.profilePicture}
-                alt={user.username}
-              />
-              <span className="sidebar1FriendName">{user.username}</span>
-            </li>
-          ))}
-        </ul> */}
+       
+       
       </div>
     </div>
   );

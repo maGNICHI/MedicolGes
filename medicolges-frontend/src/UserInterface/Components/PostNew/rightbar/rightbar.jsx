@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./sidebar.css";
+import {Divider} from "@chakra-ui/react";
 
 export default function Sidebar() {
   const [users, setUsers] = useState([]);
@@ -26,8 +27,11 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <div className="sidebar1">
-      <h3>Users :</h3>
+    <div className="sidebar1" style={{padding:20}}>
+     <div className="eight">
+       <h3 className="title-user">Users </h3>
+     </div>
+      <Divider orientation='horizontal' />
       <ul className="sidebar1FriendList">
         {users.map((user) => (
           user.isDeleted ===false &&(

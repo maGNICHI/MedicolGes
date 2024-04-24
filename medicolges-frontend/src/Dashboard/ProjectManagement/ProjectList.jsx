@@ -4,15 +4,16 @@ import { Col, Container, Row } from "react-bootstrap";
 import Title from "../../components/Title/Title";
 import IconButton from "../../components/Button/IconButton";
 import { FaPlus } from "react-icons/fa";
-import ProjectCard from "../../components/Cards/ProjectCard";
 import axios from "axios";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import "../Dashboard.css";
+import ProjectCard from "./ProjectCard";
 
 export default function ProjectList() {
   const [selectedName, setSelectedName] = useState("Project Management");
   const [projects, setProjects] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate();
   const projectsPerPage = 6;
 
   const getProjects = async () => {
@@ -51,12 +52,14 @@ export default function ProjectList() {
     setCurrentPage(pageNumber);
   };
 
+  const handleShowAddModal = () => navigate("/addProject");
+
   return (
     <Layout
       selectedName={selectedName}
       style={{height: "100%" }}
-    >
-      <Container fluid className="mt-4" style={{ height: "100%" }}>
+     >
+      <Container fluid className="mt-4 card shadow-lg p-3 " style={{ height: "100%" }}>
         {/* Adjust the height accordingly */}
         <Row className="align-items-center" style={{ padding: "20px" }}>
           <Col xs={12} md={10}>
@@ -66,37 +69,34 @@ export default function ProjectList() {
               fontSize={"24px"}
             />
           </Col>
-          <Col xs={12} md={2} className="text-md-end mt-3 mt-md-0">
-            <NavLink style={{ textDecoration: "none" }} to="/addProject">
-              <IconButton
-                className="h-100 border-0"
-                style={{
-                  background:
-                    "linear-gradient(45deg, rgb(4, 159, 187) 0%, rgb(80, 246, 255) 100%)",
-                  color: "white",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  padding: "8px 16px",
-                  borderRadius: "20px",
-                }}
-                startIcon={<FaPlus />}
-              >
-                <Title title={"Add project"} />
-              </IconButton>
-            </NavLink>
-          </Col>
+           
         </Row>
         <Row>
+                <table class="table">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Description</th>
+                    <th scope="col">Rating</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
           {currentProjects.map(
             (item) =>
               item.isDeleted === false && (
-                <Col key={item._id} xs={12} md={4} className="mb-3">
-                  <ProjectCard project={item} />
-                </Col>
+                   <ProjectCard key={item._id} project={item} />
+         
+                
+                   
+                
+                
               )
-          )}
+            )}
+            </tbody>
+          </table>
         </Row>
-        <div className="pagination-container">
+        <div className="pagination-container d-flex justify-content-center">
           <ul className="pagination">
             {pageNumbers.map((number) => (
               <li

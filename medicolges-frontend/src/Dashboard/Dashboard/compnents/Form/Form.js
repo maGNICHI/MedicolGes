@@ -1,59 +1,55 @@
 import React, { useState } from "react";
-import FileBase from "react-file-base64";
+ 
+import {MdAccessTime, MdDateRange, MdDescription, MdTextFields, MdInsertDriveFile, MdFormatListBulleted, MdRadioButtonChecked, MdPeople, MdCheckBox, MdPhone, MdEmail, MdInsertInvitation, MdToggleOn } from "react-icons/md";
 
+ 
 import {
-  TextField,
-  Button,
-  Typography,
-  Paper,
-  Modal,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  RadioGroup,
   Radio,
-  FormControlLabel,
-  Container,
-  Grid,
-  Checkbox,
+  MenuItem,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
+  Checkbox, 
+  FormLabel,
   Input,
-} from "@material-ui/core";
+  FormControl,
+  Switch,
+  Stack,
+  Box,
+  IconButton,
+  Textarea,
+  Select,
+  Button,
+  Text,
+  Icon ,
+  Menu,
+  MenuButton,
+  MenuList,
+  RadioGroup,
+  Heading,
+} from '@chakra-ui/react'
 import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import InsertInvitationIcon from "@material-ui/icons/InsertInvitation";
+import { FaTrash as DeleteIcon, FaPlus as AddIcon, FaBars as HamburgerIcon, FaSave as SaveIcon, FaChevronDown as ChevronDownIcon } from 'react-icons/fa';
 
 import useStyles from "./styles";
 //import { createForm } from '../../api'
-import DeleteIcon from "@material-ui/icons/Delete";
-import { useEffect } from "react";
+ import { useEffect } from "react";
 import { addForm } from "../api/index";
-import Title from "../../../../components/Title/Title";
-import { Row } from "react-bootstrap";
-import IconButton from "../../../../components/Button/IconButton";
-import { FaBars, FaPlus, FaSave, FaTrash, FaEdit  } from "react-icons/fa";
-import AjouterForm from "../AjouterForm";
-// import { TimePicker } from "@material-ui/lab";
-import TimePickerInput from "../Form/TimePickerInput"; // Importer le composant TimePickerInput
-import DateRangeIcon from "@material-ui/icons/DateRange";
-import TextFieldsIcon from "@material-ui/icons/TextFields";
-import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
-import CheckBoxIcon from "@material-ui/icons/CheckBox";
-import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked";
-import FormatListBulletedIcon from "@material-ui/icons/FormatListBulleted";
-import AccessTimeIcon from "@material-ui/icons/AccessTime";
-import PeopleIcon from "@material-ui/icons/People";
-import DescriptionIcon from "@material-ui/icons/Description";
-import PhoneIcon from "@material-ui/icons/Phone";
-import EmailIcon from "@material-ui/icons/Email";
-import PhoneField from "./PhoneField"; // Assuming PhoneField is defined in a separate file
-import ToggleOnIcon from "@mui/icons-material/ToggleOn";
-import Switch from "@mui/material/Switch";
-
+ import {  Container, Row } from "react-bootstrap";
+ import { FaBars, FaPlus, FaSave, FaTrash, FaEdit  } from "react-icons/fa";
+ import TimePickerInput from "../Form/TimePickerInput"; // Importer le composant TimePickerInput
+ 
+  
 import {putForm} from "../api/index";
-
+ 
 const Form = () => {
   const [darkMode, setDarkMode] = useState(false);
 
@@ -248,7 +244,7 @@ const Form = () => {
     setNumberOfInputs(value);
     setCheckboxStates([...Array(value)].fill(false));
   };
-  const handleQuestionTypeChange = (e) => {
+  const handleMenuItemClick = (e) => {
     setSelectedQuestionType(e.target.value);
     //ajouter
     if (e.target.value === "multipleChoice") {
@@ -331,9 +327,9 @@ const Form = () => {
       // Mise à jour des questions avec la couleur de police coleur
       const updatedQuestions = { ...questions };
       updatedQuestions[selectedQuestionType] = (
-        <Typography style={{ color: questionColors[selectedQuestionType] }}>
-          {questions[selectedQuestionType]}
-        </Typography>
+        <Text color={questionColors[selectedQuestionType]}>
+        {questions[selectedQuestionType]}
+      </Text>
       );
       console.log("Updated questions:", updatedQuestions);
 
@@ -349,6 +345,7 @@ const Form = () => {
       handleCloseModal();
       setShowNumberOfInputs(false);
     }
+    
   };
 
   const createForm = () => {
@@ -603,15 +600,14 @@ const Form = () => {
     switch (question.questionType) {
       case "date":
         return (
-          <TextField
+          <Input
             name="dateAnswer"
             type="date"
-            variant="outlined"
             value={question.responseValue}
             onChange={(e) => {
               handleResponse(question.id, e.target.value, "date");
             }}
-            label={question.questionType === "date"}
+            variant="outline"
             fullWidth
           />
         );
@@ -630,38 +626,37 @@ const Form = () => {
         );
       case "toggle":
         return (
-          <div style={{ display: "flex", alignItems: "center" }}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={question.responseValue} // Utilisez responseValue pour indiquer si le toggle est activé ou désactivé
-                  onChange={(e) => {
-                    handleToggleChange(question.id, e.target.checked); // Mettez à jour la valeur de la réponse avec l'état du toggle
-                  }}
-                />
-              }
-              label="Reponse"
-            />
-          </div>
+          <FormControl display="flex" alignItems="center">
+          <Switch
+            isChecked={question.responseValue} // Use responseValue to indicate whether the toggle is checked or not
+            onChange={(e) => {
+              handleToggleChange(question.id, e.target.checked); // Update the response value with the toggle state
+            }}
+          />
+          <FormLabel htmlFor={`toggle-${question.id}`}>Reponse</FormLabel>
+        </FormControl>
         );
       case "paragraph":
         return (
-          <TextField
-            name="paragraphAnswer"
-            multiline
-            rows={4}
-            variant="outlined"
-            value={question.responseValue}
-            onChange={(e) => {
-              handleResponse(question.id, e.target.value, "paragraph");
-            }}
-            label={
-              question.questionType === "paragraph"
-                ? "Your Paragraph Answer"
-                : ""
-            }
-            fullWidth
-          />
+          <FormControl>
+            <FormLabel htmlFor={`paragraphAnswer-${question.id}`}>
+              {question.questionType === "paragraph" && "Your Paragraph Answer"}
+            </FormLabel>
+            <Textarea
+              name="paragraphAnswer"
+              size="md"
+              variant="filled"
+              value={question.responseValue}
+              onChange={(e) => {
+                handleResponse(question.id, e.target.value, "paragraph");
+              }}
+              placeholder={
+                question.questionType === "paragraph" &&
+                "Enter your paragraph answer here"
+              }
+              resize="vertical"
+            />
+        </FormControl>
         );
       // case "telephone":
       //   return (
@@ -685,94 +680,98 @@ const Form = () => {
       case "listederoulate":
         return (
           <>
-            <TextField
-              label="Enter Option"
-              id="selectChoicesInput"
-              onKeyDown={(e) => {
-                if (e.key == "Enter") {
-                  e.preventDefault();
-                  setFormData((prev) => ({
-                    ...prev,
-                    ["questions"]: prev.questions.map((obj) => {
-                      if (obj.id === question.id) {
-                        // Update the properties for the object with id 2
-                        return {
-                          ...obj,
-                          responseValue: {
-                            ...obj.responseValue,
-                            ["options"]: [
-                              ...obj.responseValue.options,
-                              e.target.value,
-                            ],
-                          },
-                        }; // Add or update other properties as needed
-                      }
-                      // If the id doesn't match, return the original object
-                      return obj;
-                    }),
-                  }));
-                  document.getElementById("selectChoicesInput").value = "";
-                }
-              }}
-              fullWidth
-            />
-            {question.responseValue ? (
-              <Select label="Select Option" fullWidth>
-                {question.responseValue &&
-                  question.responseValue.options.map((item, index) => (
-                    <MenuItem key={index} value={item}>
-                      {item}
-                    </MenuItem>
-                  ))}
-              </Select>
-            ) : null}
+           <FormControl>
+              <FormLabel htmlFor={`selectChoicesInput-${question.id}`}>
+                {question.questionType === "multipleChoice" && "Enter Option"}
+              </FormLabel>
+              <Input
+                type="text"
+                id={`selectChoicesInput-${question.id}`}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    setFormData((prev) => ({
+                      ...prev,
+                      questions: prev.questions.map((obj) => {
+                        if (obj.id === question.id) {
+                          return {
+                            ...obj,
+                            responseValue: {
+                              ...obj.responseValue,
+                              options: [...obj.responseValue.options, e.target.value],
+                            },
+                          };
+                        }
+                        return obj;
+                      }),
+                    }));
+                    e.target.value = ""; // Clear the input field after adding the option
+                  }
+                }}
+                fullWidth
+              />
+            </FormControl>
+                    {question.responseValue ? (
+                    <Select
+                      placeholder="Select Option"
+                      value={question.responseValue}
+                      onChange={(e) => {
+                        // Update the selected option value
+                        handleOptionChange(question.id, e.target.value);
+                      }}
+                      fullWidth
+                    >
+                      {question.responseValue.options.map((item, index) => (
+                        <option key={index} value={item}>
+                          {item}
+                        </option>
+                      ))}
+                    </Select>
+                  ) : null}
           </>
         );
       case "gender":
         return (
-          <FormControl variant="outlined" fullWidth>
-            <InputLabel id={`dropdown-label-${question.id}`}>Genre</InputLabel>
+          <FormControl variant="outline" width="100%">
+            <FormLabel id={`dropdown-label-${question.id}`}>Genre</FormLabel>
             <Select
-              labelId={`dropdown-label-${question.id}`}
-              id={`dropdown-${question.id}`}
+              aria-labelledby={`dropdown-label-${question.id}`}
               value={question.responseValue}
               onChange={(e) => {
                 handleResponse(question.id, e.target.value, "gender");
               }}
-              label="Genre"
+              placeholder="Genre"
             >
-              <MenuItem value="Homme">Homme</MenuItem>
-              <MenuItem value="Femme">Femme</MenuItem>
+              <option value="Homme">Homme</option>
+              <option value="Femme">Femme</option>
             </Select>
           </FormControl>
         );
       case "text":
         return (
-          <TextField
+          <Textarea
             name="textAnswer"
-            rows={4}
-            variant="outlined"
+            size="md"
+            resize="none"
             value={question.responseValue}
             onChange={(e) => {
               handleResponse(question.id, e.target.value, "text");
             }}
-            label={question.questionType === "text" ? "Your Text Answer" : ""}
+            placeholder={question.questionType === "text" ? "Your Text Answer" : ""}
             fullWidth
           />
         );
       case "number":
         return (
-          <TextField
+          <Input
             name="numberAnswer"
             type="number"
-            variant="outlined"
+            variant="outline"
             value={question.responseValue}
             onChange={(e) => {
               handleResponse(question.id, e.target.value, "number");
             }}
-            label={
-              question.questionType === "number" ? "Your Number Answer" : ""
-            }
+            placeholder={question.questionType === "number" ? "Your Number Answer" : ""}
             fullWidth
           />
         );
@@ -788,163 +787,152 @@ const Form = () => {
       case "dropdown":
         return (
           <FormControl variant="outlined" fullWidth>
-            <InputLabel id={`dropdown-label-${question.id}`}>
-              {question.question}
-            </InputLabel>
-            <Select
-              labelId={`dropdown-label-${question.id}`}
-              id={`dropdown-${question.id}`}
-              value={question.responseValue}
-              onChange={(e) => {
-                handleResponse(question.id, e.target.value, "dropdown");
-              }}
-              label={question.question}
-            >
-              {/* Mettez ici les options de votre liste déroulante */}
-            </Select>
+          <Select
+            variant="outline"
+            value={question.responseValue}
+            onChange={(e) => {
+              handleResponse(question.id, e.target.value, "dropdown");
+            }}
+            placeholder={question.question}
+            id={`dropdown-${question.id}`}
+            size="md"
+            fullWidth
+          >
+            {/* Put your dropdown options here */}
+          </Select>
           </FormControl>
         );
       case "dropdown":
         return (
-          <TextField
-            name="dropdownAnswer"
-            select
-            variant="outlined"
-            value={question.responseValue}
-            onChange={(e) => {
-              handleResponse(question.id, e.target.value, "file");
-            }}
-            label={
-              question.questionType === "dropdown" ? "Your Dropdown Answer" : ""
-            }
-            fullWidth
-          />
+          <Input
+          name="dropdownAnswer"
+          variant="outline"
+          value={question.responseValue}
+          onChange={(e) => {
+            handleResponse(question.id, e.target.value, "file");
+          }}
+          placeholder={
+            question.questionType === "dropdown" ? "Your Dropdown Answer" : ""
+          }
+          fullWidth
+        />
         );
       case "multipleChoice":
         console.log(("rrrrrrrrrrrrr", question));
         return (
           <div>
-            {[...Array(question.optionsCount)].map((item, index) => (
-              <div
-                key={index}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "10px",
+          {[...Array(question.optionsCount)].map((item, index) => (
+            <Stack key={index} direction="row" alignItems="center" marginBottom="10px">
+              <RadioGroup
+                value={formData?.questions.find((q) => q.id === question.id)?.responseValue.options[index]}
+                onChange={(e) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    ["questions"]: prev.questions.map((obj) => {
+                      if (obj.id === question.id) {
+                        return {
+                          ...obj,
+                          responseValue: {
+                            ...obj.responseValue,
+                            ["selectedOption"]: e.target.value,
+                          },
+                        };
+                      }
+                      return obj;
+                    }),
+                  }));
                 }}
               >
-                <FormControlLabel
-                  value={
-                    formData.questions.find((q) => q.id == question.id)
-                      ?.responseValue.options[index]
-                  }
-                  control={<Radio />}
-                  checked={
-                    formData.questions.find((q) => q.id == question.id)
-                      .responseValue.selectedOption ==
-                      formData.questions.find((q) => q.id == question.id)
-                        .responseValue.options[index] &&
-                    formData.questions.find((q) => q.id == question.id)
-                      .responseValue.selectedOption != ""
-                  }
-                  onChange={(e) => {
-                    console.log(e);
-                    setFormData((prev) => ({
-                      ...prev,
-                      ["questions"]: prev.questions.map((obj) => {
-                        if (obj.id === question.id) {
-                          // Update the properties for the object with id 2
-                          return {
-                            ...obj,
-                            responseValue: {
-                              ...obj.responseValue,
-                              ["selectedOption"]: e.target.value,
-                            },
-                          }; // Add or update other properties as needed
-                        }
-                        // If the id doesn't match, return the original object
-                        return obj;
-                      }),
-                    }));
-                  }}
-                />
-                <TextField
-                  variant="outlined"
-                  size="small"
-                  value={
-                    formData.questions.find((q) => q.id == question.id)
-                      .responseValue.options[index]
-                  }
-                  onChange={(e) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      ["questions"]: prev.questions.map((obj) => {
-                        if (obj.id === question.id) {
-                          // Update the properties for the object with id 2
-                          return {
-                            ...obj,
-                            responseValue: {
-                              ...obj.responseValue,
-                              ["options"]: obj.responseValue.options.map(
-                                (x, i) => (i == index ? e.target.value : x)
-                              ),
-                            },
-                          }; // Add or update other properties as needed
-                        }
-                        // If the id doesn't match, return the original object
-                        return obj;
-                      }),
-                    }));
-                  }}
-                />
-              </div>
-            ))}
-          </div>
+                <Radio colorScheme="blue" />
+              </RadioGroup>
+              <Input
+                variant="outline"
+                size="sm"
+                value={formData?.questions.find((q) => q.id === question.id)?.responseValue.options[index]}
+                onChange={(e) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    ["questions"]: prev.questions.map((obj) => {
+                      if (obj.id === question.id) {
+                        return {
+                          ...obj,
+                          responseValue: {
+                            ...obj.responseValue,
+                            ["options"]: obj.responseValue.options.map(
+                              (x, i) => (i === index ? e.target.value : x)
+                            ),
+                          },
+                        };
+                      }
+                      return obj;
+                    }),
+                  }));
+                }}
+              />
+            </Stack>
+          ))}
+        </div>
         );
       ///cmobox
       case "combobox":
         return (
-          <div>
-            {[...Array(question.optionsCount)].map((item, index) => (
-              <div key={index}>
-                <TextField
-                  name={`input_${index}`} // Utilisez un nom unique pour chaque input
-                  label={`Input ${index + 1}`}
-                  fullWidth
-                  value={
-                    formData.questions.find((q) => q.id == question.id)
-                      .responseValue.checkboxes[index]
-                  }
-                  onChange={(e) => {
-                    setFormData((prev) => ({
-                      ...prev,
-                      ["questions"]: prev.questions.map((obj) => {
-                        if (obj.id === question.id) {
-                          // Update the properties for the object with id 2
-                          return {
-                            ...obj,
-                            responseValue: {
-                              ...obj.responseValue,
-                              ["checkboxes"]: obj.responseValue.checkboxes.map(
-                                (x, i) => (i == index ? e.target.value : x)
-                              ),
-                            },
-                          }; // Add or update other properties as needed
-                        }
-                        // If the id doesn't match, return the original object
-                        return obj;
-                      }),
-                    }));
-                  }}
-                  // Ajoutez ici les autres propriétés nécessaires pour chaque input
-                />
-                <FormControlLabel
-                  control={<Checkbox />}
-                  label={`Checkbox ${index + 1}`} // Mettez à jour le label en conséquence
-                />
-              </div>
-            ))}
-          </div>
+          <Stack spacing={4}>
+          {[...Array(question.optionsCount)].map((item, index) => (
+            <div key={index}>
+              <Input
+                name={`input_${index}`} // Utilize a unique name for each input
+                placeholder={`Input ${index + 1}`}
+                value={
+                  formData?.questions.find((q) => q.id === question.id)?.responseValue.checkboxes[index]
+                }
+                onChange={(e) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    ["questions"]: prev.questions.map((obj) => {
+                      if (obj.id === question.id) {
+                        return {
+                          ...obj,
+                          responseValue: {
+                            ...obj.responseValue,
+                            ["checkboxes"]: obj.responseValue.checkboxes.map(
+                              (x, i) => (i === index ? e.target.value : x)
+                            ),
+                          },
+                        };
+                      }
+                      return obj;
+                    }),
+                  }));
+                }}
+                // Add any other necessary properties for each input here
+              />
+              <Checkbox
+               
+                onChange={(e) => {
+                  setFormData((prev) => ({
+                    ...prev,
+                    ["questions"]: prev.questions.map((obj) => {
+                      if (obj.id === question.id) {
+                        return {
+                          ...obj,
+                          responseValue: {
+                            ...obj.responseValue,
+                            ["options"]: obj.responseValue.options.map(
+                              (x, i) => (i === index ? e.target.checked : x)
+                            ),
+                          },
+                        };
+                      }
+                      return obj;
+                    }),
+                  }));
+                }}
+              >
+                {`Checkbox ${index + 1}`} {/* Update the label accordingly */}
+              </Checkbox>
+            </div>
+          ))}
+        </Stack>
         );
       // case "email":
       //   const handleChangeEmail = (e) => {
@@ -1002,22 +990,23 @@ const Form = () => {
       //   );
       case "email":
         return (
-          <TextField
-            type="email"
-            label="Email"
-            placeholder="Enter email"
-            variant="outlined"
-            value={question.responseValue}
-            onChange={(e) => {
-              handleResponse(question.id, e.target.value, "email");
-            }}
-            fullWidth
-          />
+          <FormControl>
+            <FormLabel>Email</FormLabel>
+            <Input
+              type="email"
+              placeholder="Enter email"
+              value={question.responseValue}
+              onChange={(e) => {
+                handleResponse(question.id, e.target.value, "email");
+              }}
+            />
+        </FormControl>
         );
       default:
         return null;
     }
   };
+
 
   const handleDeleteQuestion = (id) => {
     const updatedQuestions = formData.questions.filter((q) => q.id !== id);
@@ -1060,13 +1049,12 @@ const Form = () => {
           flexDirection: "column",
         }}
       >
-        <Typography color={question.color} variant="body1">
-          Question {index + 1}: {question.question} ({question.questionType})
-        </Typography>
-        <Typography variant="body1">
-          Response: {question.responseValue}{" "}
-          {/* Afficher la valeur de la réponse */}
-        </Typography>
+     <Text color={question.color} fontSize="md">
+        Question {index + 1}: {question.question} ({question.questionType})
+      </Text>
+      <Text fontSize="md">
+        Response: {question.responseValue}
+      </Text>
         <div
           style={{
             display: "flex",
@@ -1087,7 +1075,13 @@ const Form = () => {
   };
   const sortedQuestions = formData.questions;
   return (
-    <Paper className={classes.paper}>
+    <Box  
+      p="4"
+      boxShadow="md"
+      borderRadius="md"
+      bg="white"
+      className={classes.paper}
+    >
       <form 
         autoComplete="off"
         noValidate
@@ -1099,22 +1093,23 @@ const Form = () => {
           <Row>
             
             {/* <div className="mb-4 col-12"> */}
-              <Title
-                secondTitle={"Name of the questionnaire"}
-                fontSize={"18px"}
-                fontWeight={600}
-                className={"mb-2"}
-              />
-              <TextField
+            <Heading
+              as="h2"
+              fontSize="18px"
+              fontWeight="semibold"
+              mb="2"
+            >
+              Name of the questionnaire
+            </Heading>
+              <Input
                 type="text"
                 placeholder="Enter Form Name"
-                className="rounded-pill"
+                variant="filled"
+                borderRadius="full"
                 name="Name"
                 value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
-                fullWidth // Ensures the input field takes the full width of its container
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                width="100%" // Ensures the input field takes the full width of its container
               />
            
           </Row>
@@ -1134,23 +1129,23 @@ const Form = () => {
                   marginBottom: "10px",
                 }}
               >
-                <Typography
-                  variant="body1"
-                  style={{ color: question.color, marginRight: "10px" }}
-                >
-                  Question {index + 1}: {question.question} (
-                  {question.questionType})
-                </Typography>
+               <Text
+                fontSize="md"
+                color={question.color}
+                marginRight="10px"
+              >
+                Question {index + 1}: {question.question} ({question.questionType})
+              </Text>
                 <DeleteIcon
                   color="info"
                   onClick={() => handleDeleteQuestion(index)}
                   style={{ cursor: "pointer", marginLeft: "10px" }}
                 />
                    <FaEdit // Utilisez EditIcon ici
-        color="info"
-        onClick={() => handleUpdateQuestion(index)} // Assurez-vous de définir cette fonction
-        style={{ cursor: "pointer", marginLeft: "10px" }}
-      />
+                      color="info"
+                      onClick={() => handleUpdateQuestion(index)} // Assurez-vous de définir cette fonction
+                      style={{ cursor: "pointer", marginLeft: "10px" }}
+                    />
               </div>
               {renderInputField(question)}
             </div>
@@ -1159,79 +1154,66 @@ const Form = () => {
           <div className="row text-center" style={{ marginRight: "-97px" }}>
            
             <div className="col-md-3 col-xs-12">
-              <IconButton
-                className="h-100 border-0"
-                style={{
-                  background: "#047db9",
-                  color: "white",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  padding: "8px 16px",
-                  borderRadius: "20px",
-                }}
-                startIcon={<FaPlus />}
-                onClick={handleOpenModal}
-                fullWidth // Add fullWidth prop to make button take full width
-              >
-                <Title title={"Add questions"} />{" "}
-                {/* Change the button label */}
-              </IconButton>
+            <Button
+              variant="solid"
+              colorScheme="blue"
+              borderRadius="20px"
+              fontSize="md"
+              fontWeight="semibold"
+              padding="8px 16px"
+              leftIcon={<AddIcon />}
+              onClick={handleOpenModal}
+              width="100%" // Add width="100%" to make the button take full width
+            >
+              Add questions
+            </Button>
             </div>
             <div className="col-md-3 col-xs-12">
-              <IconButton
-                className="h-100 border-0"
-                style={{
-                  background: "#328CBD", // Couleur verte
-                  color: "white",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  padding: "8px 16px",
-                  borderRadius: "20px",
-                }}
-                startIcon={<FaBars />}
-                onClick={affichage}
-                fullWidth // Add fullWidth prop to make button take full width
-              >
-                <Title title={"Affiche"} /> {/* Change the button label */}
-              </IconButton>
+            <Button
+              variant="solid"
+              colorScheme="green" // Change the color scheme to green
+              borderRadius="20px"
+              fontSize="16px"
+              fontWeight="semibold"
+              padding="8px 16px"
+              leftIcon={<HamburgerIcon />}
+              onClick={affichage}
+              width="100%" // Add width="100%" to make the button take full width
+            >
+              Affiche {/* Change the button label */}
+            </Button>
             </div>
             <div className="col-md-3 col-xs-12">
-              <IconButton
-                className="h-100 border-0"
-                style={{
-                  background: "#047db9",
-                  color: "white",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  padding: "8px 16px",
-                  borderRadius: "20px",
-                }}
-                startIcon={<FaSave />}
-                type="submit"
-                fullWidth // Add fullWidth prop to make button take full width
-              >
-                <Title title={"Submit"} /> {/* Change the button label */}
-              </IconButton>
+            <Button
+              variant="solid"
+              colorScheme="blue" // Change the color scheme to blue
+              borderRadius="20px"
+              fontSize="16px"
+              fontWeight="semibold"
+              padding="8px 16px"
+              leftIcon={<SaveIcon />}
+              type="submit"
+              width="100%" // Add width="100%" to make the button take full width
+            >
+              Submit {/* Change the button label */}
+            </Button>
             </div>
             
             <div className="col-md-3 col-xs-12 ">
-              <IconButton
-                className="h-100 border-0"
-                style={{
-                  background: "#bd6262",
-                  color: "white",
-                  fontSize: "16px",
-                  fontWeight: 600,
-                  padding: "8px 16px",
-                  borderRadius: "20px",
-                  marginleft:"56px",
-                }}
-                startIcon={<FaTrash />}
-                onClick={clear}
-                fullWidth // Add fullWidth prop to make button take full width
-              >
-                <Title title={"Clear"} /> {/* Change the button label */}
-              </IconButton>
+            <Button
+              variant="solid"
+              colorScheme="red" // Change the color scheme to red
+              borderRadius="20px"
+              fontSize="16px"
+              fontWeight="semibold"
+              padding="8px 16px"
+              marginLeft="56px" // Add marginLeft="56px"
+              leftIcon={<DeleteIcon />}
+              onClick={clear}
+              width="100%" // Add width="100%" to make the button take full width
+            >
+              Clear {/* Change the button label */}
+            </Button>
             </div>
           </div>
 
@@ -1268,26 +1250,26 @@ const Form = () => {
           }}
         >
           <div className="mb-4 col-12">
-            <Title
-              secondTitle={"Ask your question"}
-              fontSize={"18px"}
-              fontWeight={600}
-              className={"mb-2"}
-            />
-            <TextField
+          <Text
+            fontSize="18px"
+            fontWeight={600}
+            mb="2" // Use mb="2" for margin bottom
+          >
+            Ask your question
+          </Text>
+            <Input
               type="text"
               placeholder="Ask your question here"
-              className="rounded-pill"
-              name="question"
+              borderRadius="full" // Use borderRadius="full" for rounded appearance
               value={modalQuestion}
               onChange={(e) => setModalQuestion(e.target.value)}
-              fullWidth
-              style={{ width: "100%", marginBottom: "15px" }}
+              fullWidth // Not needed for Chakra UI, as Input component automatically takes full width
+              marginBottom="15px" // Use marginBottom="15px" for spacing
             />
           </div>
-          {/* <Typography variant="h6" style={{ marginBottom: "10px" }}>
+          {/* <Text  variant="h6" style={{ marginBottom: "10px" }}>
             Posez votre question
-          </Typography>
+          </Text>
           <TextField
             name="question"
             variant="outlined"
@@ -1296,123 +1278,97 @@ const Form = () => {
             value={modalQuestion}
             onChange={(e) => setModalQuestion(e.target.value)}
           /> */}
-          <FormControl
-            style={{ width: "100%", marginTop: "10px", marginBottom: "10px" }}
-          >
-            <InputLabel id="question-type-label">Question type</InputLabel>
-            <Select
-              labelId="question-type-label"
-              id="question-type"
-              value={selectedQuestionType}
-              onChange={handleQuestionTypeChange}
-            >
-              <MenuItem value="date">
-                <DateRangeIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />{" "}
-                Date
-              </MenuItem>
-              <MenuItem value="paragraph">
-                <DescriptionIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />
-                Paragraphe
-              </MenuItem>
-              <MenuItem value="text">
-                <TextFieldsIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />{" "}
-                Textarea
-              </MenuItem>
-              <MenuItem value="file">
-                {" "}
-                <InsertDriveFileIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />
-                File upload
-              </MenuItem>
-              <MenuItem value="listederoulate">
-                <FormatListBulletedIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />
-                Liste déroulante
-              </MenuItem>
-              <MenuItem value="multipleChoice">
-                {" "}
-                <RadioButtonCheckedIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />
-                Choix multiple
-              </MenuItem>
-              <MenuItem value="gender">
-                {" "}
-                <PeopleIcon style={{ marginRight: "10px", color: "black" }} />
-                Gender
-              </MenuItem>
-              <MenuItem value="time">
-                {" "}
-                <AccessTimeIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />{" "}
-                Time
-              </MenuItem>
-              <MenuItem value="combobox">
-                {" "}
-                <CheckBoxIcon style={{ marginRight: "10px", color: "black" }} />
-                Combobox
-              </MenuItem>
-              <MenuItem value="telephone">
-                <PhoneIcon style={{ marginRight: "10px", color: "black" }} />{" "}
-                phone
-              </MenuItem>
-              <MenuItem value="email">
-                <EmailIcon style={{ marginRight: "10px", color: "black" }} />{" "}
-                Email
-              </MenuItem>
-              <MenuItem value="number">
-                <InsertInvitationIcon
-                  style={{ marginRight: "10px", color: "black" }}
-                />{" "}
-                Number
-              </MenuItem>
-              <MenuItem value="toggle">
-                <ToggleOnIcon style={{ marginRight: "10px", color: "black" }} />{" "}
-                Toggle
-              </MenuItem>
-            </Select>
-            <Input
-              type="color"
-              onChange={(e) => {
-                console.log(e);
-                setInputColor(e.target.value);
-              }}
-              style={{ marginTop: "8px" }}
-            />
-          </FormControl>
+          <FormControl mb={4}>
+                <FormLabel>Question type:</FormLabel>
+ 
+                  <Menu>
+                    <MenuButton
+                      as={Button}
+                      rightIcon={<ChevronDownIcon />}
+                      aria-label='Options'
+                      variant='outline'
+                      id="question-type"
+                      value={selectedQuestionType}
+                       borderColor="gray.400"
+                      className="w-100"
 
-          <TextField
+                    >{selectedQuestionType || "Choisir question type"}</MenuButton>
+                    <MenuList>
+                    <MenuItem value="date" onClick={() => handleMenuItemClick("date")}>
+                        <Icon as={MdDateRange} mr="2" color="black" />
+                        Date
+                      </MenuItem>
+                      <MenuItem value="paragraph" onClick={() => handleMenuItemClick("paragraph")}>
+                        <Icon as={MdDescription} mr="2" color="black" />
+                        Paragraphe
+                      </MenuItem>
+                      <MenuItem value="text" onClick={() => handleMenuItemClick("text")}>
+                        <Icon as={MdTextFields} mr="2" color="black" />
+                        Textarea
+                      </MenuItem>
+                      <MenuItem value="file" onClick={() => handleMenuItemClick("file")}>
+                        <Icon as={MdInsertDriveFile} mr="2" color="black" />
+                        File upload
+                      </MenuItem>
+                      <MenuItem value="listederoulate" onClick={() => handleMenuItemClick("listederoulate")}>
+                        <Icon as={MdFormatListBulleted} mr="2" color="black" />
+                        Liste déroulante
+                      </MenuItem>
+                      <MenuItem value="multipleChoice" onClick={() => handleMenuItemClick("multipleChoice")}>
+                        <Icon as={MdRadioButtonChecked} mr="2" color="black" />
+                        Choix multiple
+                      </MenuItem>
+                      <MenuItem value="gender" onClick={() => handleMenuItemClick("gender")}>
+                        <Icon as={MdPeople} mr="2" color="black" />
+                        Gender
+                      </MenuItem>
+                      <MenuItem value="time" onClick={() => handleMenuItemClick("time")}>
+                        <Icon as={MdAccessTime} mr="2" color="black" />
+                        Time
+                      </MenuItem>
+                      <MenuItem value="combobox" onClick={() => handleMenuItemClick("combobox")}>
+                        <Icon as={MdCheckBox} mr="2" color="black" />
+                        Combobox
+                      </MenuItem>
+                      <MenuItem value="telephone" onClick={() => handleMenuItemClick("telephone")}>
+                        <Icon as={MdPhone} mr="2" color="black" />
+                        Phone
+                      </MenuItem>
+                      <MenuItem value="email" onClick={() => handleMenuItemClick("email")}>
+                        <Icon as={MdEmail} mr="2" color="black" />
+                        Email
+                      </MenuItem>
+                      <MenuItem value="number" onClick={() => handleMenuItemClick("number")}>
+                        <Icon as={MdInsertInvitation} mr="2" color="black" />
+                        Number
+                      </MenuItem>
+                      <MenuItem value="toggle" onClick={() => handleMenuItemClick("toggle")}>
+                        <Icon as={MdToggleOn} mr="2" color="black" />
+                        Toggle
+                      </MenuItem>
+                     </MenuList>
+                  </Menu>
+               </FormControl>
+               <Input
+                  name="numberOfOptions"
+                  type="number"
+                  value={numberOfOptions}
+                  onChange={(e) => setNumberOfOptions(Number(e.target.value))}
+                  variant="outline"
+                  // Add any additional props as needed
+                  // For example, you can add "fullWidth" to make the input take full width
+                />
+
+          <Input
             name="numberOfOptions"
-            variant="outlined"
+            variant="outline"
             label="Number of Options"
             type="number"
-            fullWidth
             value={numberOfOptions}
             onChange={(e) => {
               setNumberOfOptions(Number(e.target.value));
             }}
-            style={{ display: showNumberOfOptions ? "block" : "none" }}
-          />
-
-          <TextField
-            name="numberOfInputs"
-            type="number"
-            label="Number of Inputs"
-            value={numberOfInputs}
-            onChange={(e) => setNumberOfInputs(parseInt(e.target.value))}
-            fullWidth
-            style={{
-              display: selectedQuestionType === "combobox" ? "block" : "none",
-            }}
+            display={showNumberOfOptions ? "block" : "none"} // Use display prop for conditional rendering
           />
 
           <div></div>
@@ -1425,26 +1381,23 @@ const Form = () => {
             }}
           >
             <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={handleCloseModal}
-            >
-              Close Modal
-            </Button>
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={handleModalSubmit}
-              
-            >
-              OK
-            </Button>
+            colorScheme="blue"
+            size="sm"
+            onClick={handleCloseModal}
+          >
+            Close Modal
+          </Button>
+          <Button
+            colorScheme="blue"
+            size="sm"
+            onClick={handleModalSubmit}
+          >
+            OK
+          </Button>
           </div>
         </div>
       </Modal>
-    </Paper>
+    </Box>
   );
 };
 

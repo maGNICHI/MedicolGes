@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { AddIcon } from "@chakra-ui/icons";
 import { Box, Stack, Text } from "@chakra-ui/layout";
+import { Flex, Spacer } from '@chakra-ui/react'
+
 import { useToast } from "@chakra-ui/toast";
 import axios from "axios";
 import ChatContext from "../../Context/chat-context";
@@ -57,14 +59,13 @@ const MyChats = ({ fetchAgain }) => {
         px={3}
         fontSize={{ base: "28px", md: "30px" }}
         fontFamily="Work sans"
-        d="flex"
+        display="flex"
         justifyContent="space-between"
         alignItems="center"
       >
         My Chats
         <GroupChatModal>
           <Button
-            d="flex"
             fontSize={{ base: "17px", md: "10px", lg: "17px" }}
             rightIcon={<AddIcon />}
           >
@@ -83,8 +84,8 @@ const MyChats = ({ fetchAgain }) => {
         overflowY="auto"
       >
         {chats ? (
-          <Stack overflowY="scroll">
-            {chats.map((chat, i) => (
+    <Flex w="100%" h="500" overflowY="scroll" flexDirection="column" p="3">
+    {chats.map((chat, i) => (
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
@@ -92,6 +93,7 @@ const MyChats = ({ fetchAgain }) => {
                 color={selectedChat === chat ? "white" : "black"}
                 px={3}
                 py={2}
+                my="1"
                 borderRadius="lg"
                 key={chat._id}
               >
@@ -100,7 +102,7 @@ const MyChats = ({ fetchAgain }) => {
                 </Text>
               </Box>
             ))}
-          </Stack>
+          </Flex>
         ) : (
           <ChatLoading />
         )}

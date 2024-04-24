@@ -143,7 +143,7 @@ export default function ListProject() {
               )
             ))}
           </div>
-          <div className="pagination-container center">
+          <div className="pagination-container d-flex justify-content-center">
             <ul className="pagination">
               {pageNumbers.map((number) => (
                 <li

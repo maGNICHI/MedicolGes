@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../../Navbar";
 import Footer from "../../Footer";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { Col, Row } from "react-bootstrap";
 import { FaDatabase, FaShareAlt } from "react-icons/fa";
@@ -30,6 +30,7 @@ export default function ConsultProject({ onFollow }) {
   const [goUp, setGoUp] = useState(false);
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const [following, setFollowing] = useState(false);
+  const location = useLocation();
 
   console.log("followwwwwwww", following);
 
@@ -180,8 +181,8 @@ export default function ConsultProject({ onFollow }) {
               <span>"{projectData.name}" Project Details:</span>
             </h3>
           </div>
-          <div className="row pb-24 px-10">
-            <Col md={3} xs={12}>
+          <div className="row  ">
+            <Col className="card" md={3} xs={12}>
               <Row className="d-flex justify-content-center mt-5 mb-3">
                 <div
                   className="icon"
@@ -293,7 +294,7 @@ export default function ConsultProject({ onFollow }) {
                 </div>
               </Row>
             </Col>
-            <Col md={9} xs={12}>
+            <Col className="card" md={9} xs={12}>
               <nav className="navbar navbar-expand-lg d-flex justify-content-between">
                 {" "}
                 <ul className="navbar-nav">
@@ -342,11 +343,11 @@ export default function ConsultProject({ onFollow }) {
                       Feedback
                     </a>{" "}
                   </li>{" "}
-                  <li className="nav-item">
+                  {projectData.creator ===user._id &&( <li className="nav-item">
                     {" "}
                     <a
                       className="nav-link"
-                      href="#feedback"
+                      href="#Questionnaire"
                       onClick={() => {
                         setShowFeedback(false);
                         setShowDetails(false);
@@ -357,9 +358,10 @@ export default function ConsultProject({ onFollow }) {
                       {/* Update onClick to show feedback */}
                       Questionnaire Details
                     </a>{" "}
-                  </li>{" "}
+                  </li>
+                  )}
                 </ul>
-                {following ? (
+                {following   ? (
                   <IconButton
                     className="border-0 w-100"
                     style={{
@@ -398,6 +400,8 @@ export default function ConsultProject({ onFollow }) {
                 <Details
                   projectData={projectData}
                   organization={organizationId}
+                  setProjectData={setProjectData}
+
                 />
               ) : showPosts ? (
                 <Feed inproject={true} projectId={id} />

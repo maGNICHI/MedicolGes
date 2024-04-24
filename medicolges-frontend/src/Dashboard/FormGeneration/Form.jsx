@@ -3,12 +3,12 @@ import { Card, Col, Container, Row } from "react-bootstrap";
 import Title from "../../components/Title/Title";
 import Layout from "../SuperAdminLayout/Layout";
 import "../Dashboard/Dashboard.css";
-import { AppBar, T} from "@material-ui/core";
-import useStyles from "../../styless";
+ import useStyles from "../../styless";
 import { useDispatch } from "react-redux";
 import { getForms } from "../../actions/cards";
 import Form from "../Dashboard/compnents/Form/Form";
 import '../Dashboard.css'
+import { Box, Text } from "@chakra-ui/react";
 
 function Dashboard() {
   const [selectedName, setSelectedName] = useState("Form Generation");
@@ -35,8 +35,8 @@ function Dashboard() {
             <hr />
             <Row>
               <Col xs={12} md={12} className="text-center">
-                <AppBar
-                  className={classes.appBar}
+              <Box
+                  className={ classes.appBar}
                   position="static"
                   color="inherit"
                   style={{
@@ -46,13 +46,15 @@ function Dashboard() {
                     backgroundSize: "cover",
                   }}
                 >
-                  <Title
-                    secondTitle={"Form Generation"}
-                    fontSize={"90px"}
-                    color={"black"}
+                  <Text
+                    as="h1"
+                    fontSize="90px"
+                    color="black"
                     fontWeight={900}
-                  />
-                </AppBar>
+                  >
+                    Form Generation
+                  </Text>
+                </Box>
               </Col>
             </Row>
             <Row>

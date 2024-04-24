@@ -59,8 +59,8 @@ function CreateOrganization() {
     if (type === "other" && !otherType.trim()) {
       errors.otherType = "Other Type is required";
     }
-
     setErrors(errors);
+    console.log( Object.keys(errors).length );
     return Object.keys(errors).length === 0;
   };
 
@@ -68,6 +68,7 @@ function CreateOrganization() {
     e.preventDefault();
 
     if (validateForm()) {
+      console.log("🚀 ~ handleSubmit ~ validateForm:", validateForm())
       try {
         const formData = new FormData();
         formData.append("name", name);
@@ -99,7 +100,7 @@ function CreateOrganization() {
   return (
     <>
       <Navbar />
-      <Container fluid className="mt-4 h-screen">
+      <Container fluid className="mt-24 h-screen">
         <Row className="justify-content-center">
           <Col xs={12} md={8}>
             <Card className="card">
@@ -118,9 +119,9 @@ function CreateOrganization() {
                       </ul>
                     </Alert>
                   )}
-                  <Form.Group>
-                    <Form.Label>
-                      <FaUser /> Name:
+                  <Form.Group >
+                    <Form.Label className="d-flex align-items-center pt-3" >
+                      <FaUser className="me-2"/> Name:
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -138,8 +139,8 @@ function CreateOrganization() {
                     )}
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label>
-                      <FaMapMarkerAlt /> Address:
+                    <Form.Label className="d-flex align-items-center pt-3">
+                      <FaMapMarkerAlt className="me-2"/> Address:
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -157,8 +158,8 @@ function CreateOrganization() {
                     )}
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label>
-                      <FaPhone /> Phone Number:
+                    <Form.Label className="d-flex align-items-center pt-3">
+                      <FaPhone  className="me-2" /> Phone Number:
                     </Form.Label>
                     <Form.Control
                       type="text"
@@ -176,8 +177,8 @@ function CreateOrganization() {
                     )}
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label>
-                      <FaBuilding /> Category:
+                    <Form.Label className="d-flex align-items-center pt-3">
+                      <FaBuilding className="me-2"/> Category:
                     </Form.Label>
                     <Form.Control
                       as="select"
@@ -210,8 +211,8 @@ function CreateOrganization() {
                     )}
                   </Form.Group>
                   <Form.Group>
-                    <Form.Label>
-                      <FaIndustry /> Type:
+                    <Form.Label className="d-flex align-items-center pt-3">
+                      <FaIndustry className="me-2 "/> Type:
                     </Form.Label>
                     <Form.Control
                       as="select"
@@ -249,8 +250,8 @@ function CreateOrganization() {
                       </Form.Text>
                     )}
                   </Form.Group>
-                  <Form.Group>
-                    <Form.Label>
+                  <Form.Group >
+                    <Form.Label className="d-flex align-items-center pt-3">
                       Upload Images:{" "}
                       {/* Ajouter une étiquette pour les images */}
                     </Form.Label>
@@ -261,12 +262,16 @@ function CreateOrganization() {
                       multiple // Permettre la sélection de plusieurs fichiers
                     />
                   </Form.Group>
-                  <button
-                    class="bg-gradient-to-r from-indigo-500 to-blue-500 text-white font-bold py-2 px-4 rounded-md mt-4 hover:bg-indigo-600 hover:to-blue-600 transition ease-in-out duration-150"
-                    type="submit"
-                  >
-                    Create
-                  </button>
+                  <div className="d-flex">
+                  <div className="ms-auto">
+                    <button
+                    className="btn-create mt-3"
+                       type="submit"
+                    >
+                      Create
+                    </button>
+                  </div>
+                  </div>
                 </Form>
               </Card.Body>
             </Card>

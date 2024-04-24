@@ -27,10 +27,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.route("/").get(protect, allUsers);
+router.post("/login", authUser);
 router.get("/getCollaborative",UsersByRole);
 router.get("/getUserById/:userId", UsersById);
 router.route("/").post(upload.fields([{ name: 'pfp', maxCount: 1 }, { name: 'certification', maxCount: 1 }]), registerUser);
-router.post("/login", authUser);
 // GET user details by ID
 router.get('/:id', async (req, res) => {
   try {

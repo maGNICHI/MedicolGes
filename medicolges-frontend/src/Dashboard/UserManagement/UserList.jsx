@@ -1,16 +1,22 @@
 import React, { useState } from "react";
 import Layout from "../SuperAdminLayout/Layout";
-import { Card, Col, Container, Row } from "react-bootstrap";
+import { Button, Card, Col, Container, Row } from "react-bootstrap";
 import Title from "../../components/Title/Title";
 import IconButton from "../../components/Button/IconButton";
 import { FaPlus } from "react-icons/fa";
 import CheckTable from "../../components/Table/UserTable";
 import "../Dashboard/Dashboard.css"
 import '../Dashboard.css'
+import Modal from 'react-bootstrap/Modal';
+import { NavLink } from "react-router-dom";
+import AddUser from "../../components/Form/AddUser";
 
 export default function UserList() {
   const [selectedName, setSelectedName] = useState("User Management");
+  const [show, setShow] = useState(false);
 
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
     <Layout selectedName={selectedName}>
       <Container fluid className="mt-4 h-screen" style={{overflowY: "auto", maxHeight:"100%", zIndex:0}}>
@@ -26,7 +32,7 @@ export default function UserList() {
                 <IconButton
                   className="h-100 border-0"
                   style={{
-                    background: "#0ea9f991",
+                    background: "#007bff",
                     color: "white",
                     fontSize: "16px",
                     fontWeight: 600,
@@ -35,7 +41,7 @@ export default function UserList() {
                   }}
                   startIcon={<FaPlus />}
                 >
-                  <Title title={"Add user"} />
+                    <a  onClick={handleShow}>  Add User </a>
                 </IconButton>
               </Col>
             </Row>
@@ -45,6 +51,13 @@ export default function UserList() {
           </Card.Body>
         </Card>
       </Container>
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add User</Modal.Title>
+        </Modal.Header>
+                  <AddUser />
+     
+      </Modal>
     </Layout>
   );
 }

@@ -15,31 +15,37 @@ exports.readOrganization = async (req, res) => {
 };
 
 exports.createOrganization = async (req, res) => {
-  const { name, address, phoneNumber, category, type , lien } = req.body;
-
-  const newOrganization = new Organization({
-    name,
-    address,
-    phoneNumber,
-    category,
-    type,
-    lien,
-  });
-
-  const uploader = async (path) => await cloudinary.uploads(path, "Images");
-  const uploadedImages = [];
-
-  if (req.files && req.files.length > 0) {
-    for (const file of req.files) {
-      const { path } = file;
-      const newPath = await uploader(path);
-      uploadedImages.push(newPath.url); // Ajoutez seulement l'URL de l'image
-      fs.unlinkSync(path);
+  try {
+    const { name, address, phoneNumber, category, type , lien } = req.body;
+  
+    const newOrganization = new Organization({
+      name,
+      address,
+      phoneNumber,
+      category,
+      type,
+      lien,
+    });
+  
+    const uploader = async (path) => await cloudinary.uploads(path, "Images");
+    const uploadedImages = [];
+  
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const { path } = file;
+        const newPath = await uploader(path);
+        uploadedImages.push(newPath.url); // Ajoutez seulement l'URL de l'image
+        fs.unlinkSync(path);
+      }
+      newOrganization.image = uploadedImages;
     }
-    newOrganization.image = uploadedImages;
+  
+    const organization = await newOrganization.save();
+    res.status(201).send(organization)
+  } catch (error) {
+    console.log("🚀 ~ exports.createOrganization= ~ error:", error)
+    
   }
-
-  const organization = await newOrganization.save();
 };
 exports.updateOrganization = async (req, res) => {
   const organizationId = req.params.id;

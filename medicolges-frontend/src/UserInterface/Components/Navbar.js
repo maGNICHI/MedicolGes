@@ -62,44 +62,44 @@ function Navbar() {
           </Link>
         </li>
         <li>
-          <a href="/#info" className="navbar-links">
+          <Link to="/#info" className="navbar-links">
             Informations
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/#about" className="navbar-links">
+          <Link to="/#about" className="navbar-links">
             About Us
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/projects" className="navbar-links">
+          <Link to="/projects" className="navbar-links">
             Projects
-          </a>
+          </Link>
         </li>
         <li>
           <div className="dropdown" onClick={toggleDropdown}>
-            <p className="navbar-links">Organization</p>
+            <p className="navbar-links cursor-pointer">Organization</p>
             {dropdownOpen &&(
               <ul className="dropdown-content">
                 <li>
-                  <a href="/organizationFront">Create Organization</a>
+                  <Link to="/organizationFront">Create Organization</Link>
                 </li>
                 <li>
-                  <a href="/organizationShow">Show Organization</a>
+                  <Link to="/organizationShow">Show Organization</Link>
                 </li>
               </ul>
             )}
           </div>
         </li>
         <li>
-          <a href="/homeNew" className="navbar-links">
+          <Link to="/homeNew" className="navbar-links">
             Post
-          </a>
+          </Link>
         </li>
         <li>
-          <a href="/login" className="navbar-links">
+          <Link to="/login" className="navbar-links">
             Login
-          </a>
+          </Link>
         </li>
       </ul>
 
@@ -122,35 +122,35 @@ function Navbar() {
 
         <ul className="mobile-navbar-links pt-5">
           <li>
-            <a onClick={openNav} href="/">
+            <Link onClick={openNav} to="/">
               Home
-            </a>
+            </Link>
           </li>
           <li>
-            <a onClick={openNav} href="/#info">
+            <Link onClick={openNav} to="/#info">
               Information
-            </a>
+            </Link>
           </li>
           <li>
-            <a onClick={openNav} href="/#about">
+            <Link onClick={openNav} to="/#about">
               About Us
-            </a>
+            </Link>
           </li>
           <li>
-          <a href="/projects" onClick={openNav}>
+          <Link to="/projects" onClick={openNav}>
             Projects
-          </a>
+          </Link>
         </li>
           <li>
-            <a href="/organizationFront">Create Organization</a>
+            <Link href="/organizationFront">Create Organization</Link>
           </li>
           <li>
-            <a href="/organizationShow">Show Organization</a>
+            <Link href="/organizationShow">Show Organization</Link>
           </li>
           <li>
-            <a onClick={openNav} href="/homeNew">
+            <Link onClick={openNav} to="/homeNew">
               Posts
-            </a>
+            </Link>
           </li>
           <li>
             <a onClick={openNav} href="/chats">
@@ -158,9 +158,9 @@ function Navbar() {
             </a>
           </li>
           <li>
-            <a onClick={openNav} href="/login">
+            <Link onClick={openNav} to="/login">
               Login
-            </a>
+            </Link>
           </li>
         </ul>
       </div>

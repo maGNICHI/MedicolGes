@@ -66,10 +66,10 @@ export default function AddProject() {
               <span>Create New Project</span>
             </h3>
           </div>
-          <div className="row pb-24 px-10">
-            <Row className="justify-content-center mb-4">
-              <Col xs={10}>
-                <div className="d-flex justify-content-center stepper">
+          <div className=" row pb-24 px-10">
+            <Row className="card shadow pt-3 raduis ms-1 justify-content-center mb-4">
+              <Col xs={10 } className=" ">
+                <div className="  d-flex justify-content-center stepper">
                   {stepsConfig.map((step, index) => (
                     <div
                       key={step.name}

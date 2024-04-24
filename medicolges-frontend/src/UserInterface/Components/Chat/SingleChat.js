@@ -2,11 +2,11 @@ import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text } from "@chakra-ui/layout";
 import "./styles.css";
-import { IconButton, Spinner, useToast } from "@chakra-ui/react";
+import { IconButton, Spinner, background, useToast } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../../config/ChatLogics";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon, AttachmentIcon, Icon } from "@chakra-ui/icons";
 import ProfileModal from "./miscellaneous/ProfileModal";
 import ScrollableChat from "./ScrollableChat";
 import UpdateGroupChatModal from "./miscellaneous/UpdateGroupChatModal";
@@ -18,6 +18,7 @@ import { BsMicFill } from 'react-icons/bs';
 import SendAudioModal from "./miscellaneous/SendAudioModal";
 import io from "socket.io-client";
 import Robo from '../../Assets/robot.gif';
+import { Flex, Spacer } from '@chakra-ui/react'
 
 const ENDPOINT = "http://localhost:5000"; //development
 var socket, selectedChatCompare;
@@ -121,7 +122,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         });
       }
     }
-    if (event.key === "Enter") {
+    if (event.key === "Enter" || newMessage) {
       socket.emit("stop typing", selectedChat._id);
       if (!newMessage.trim() && !file) {
         return; // Si ni le message ni le fichier ne sont présents, on ne fait rien
@@ -330,7 +331,7 @@ const typingHandler = (e) => {
             px={2}
             w="100%"
             fontFamily="Work sans"
-            d="flex"
+            display="flex"
             justifyContent={{ base: "space-between" }}
             alignItems="center"
           >
@@ -360,7 +361,7 @@ const typingHandler = (e) => {
             d="flex"
             flexDir="column"
             justifyContent="flex-end"
-            p={6}
+            p={0}
             mt={6}
             bg="#E8E8E8"
             w="100%"
@@ -378,20 +379,24 @@ const typingHandler = (e) => {
                 margin="auto"
               />
             ) : (
+              <Flex w="100%" h="500" overflowY="scroll" flexDirection="column" p="3">
+
               <div className="messages">
                 <ScrollableChat messages={messages} />
               </div>
+              </Flex>
             )}
 
             <FormControl
-              onKeyDown={sendMessage}
+              onKeyDown={(event) => (event.key === "Enter" && sendMessage(event))}
               id="first-name"
               isRequired
               mt={3}
-              position="absolute"
-              bottom="0"
+              w="100%" 
+               bottom="0"
               left="0"
               right="0"
+ 
             >
               {istyping ? (
                 <div>
@@ -405,30 +410,42 @@ const typingHandler = (e) => {
               ) : (
                 <></>
               )}
-              <div style={{ display: "flex", justifyContent: "center", gap: "15px" }}>
+              <div className="pt-2 bg-white"  >
+                <div className="d-flex align-items-center" style={{   justifyContent: "center", gap: "15px", width:"90%"  }}>
 
-                <Input
-                  variant="filled"
-                  bg="#E0E0E0"
-                  placeholder="Enter a message.."
-                  value={newMessage}
-                  onChange={typingHandler}
-                />
-                <input
-        type="file"
-        onChange={handleFileChange}
-        name="file" // Ajoutez un nom au champ pour le différencier
-      /> 
-                <SendAudioModal>
+                  <Input
+                    variant="filled"
+                    placeholder="Enter a message.."
+                    value={newMessage}
+                    onChange={typingHandler}
+                  />
+                  <label htmlFor="filePicker" className="p-2 px-3 rounded mt-2" style={{background:"#e2e8f0", cursor:"pointer"}} >
+                  <Icon as={AttachmentIcon} />
+</label>
+
+
+                  {/* <input className="w-25 border-0"
+          type="file"
+          onChange={handleFileChange}
+         />  */}
+                  <SendAudioModal>
+                    <Button
+                   
+                     >
+                      <Icon as={BsMicFill}/>
+                    </Button>
+                  </SendAudioModal>
+                  
                   <Button
-                    rightIcon={<BsMicFill />}
-                    padding="5px"
-                  >
-                    Send
-                  </Button>
-                </SendAudioModal>
-                
-                       
+                      padding="18px"
+                      onClick={(e) => sendMessage(e)}
+                    >
+                      SEND
+                        <i class="fa-solid fa-play ms-2 mt-1"></i>
+                    </Button> 
+                    <input id="filePicker" className="w-0" style={{visibility:"hidden"}} type={"file"}  onChange={handleFileChange}>
+                    </input>
+                </div>
               </div>
               
             </FormControl>

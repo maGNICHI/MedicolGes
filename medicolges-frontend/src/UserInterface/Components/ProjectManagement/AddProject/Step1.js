@@ -110,7 +110,7 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
   };
 
   return (
-    <div>
+    <div className="card shadow-lg p-5">
       <Form onSubmit={handleSubmit}>
         <Row className="mb-6">
           <Col md={4}>
@@ -271,14 +271,14 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
                 Please select an organization.
               </Form.Control.Feedback>
             </div>
-            <div className="mb-4">
+            <div className="mb-4  w-100">
               <Title
                 secondTitle={"Upload Excel File"}
                 fontSize={"18px"}
                 fontWeight={600}
-                className={"mb-2"}
+                className={"mb-2 "}
               />
-              <FileInput onChange={handleFileChange} />
+              <FileInput className="w-100" onChange={handleFileChange} />
             </div>
           </Col>
           <Col

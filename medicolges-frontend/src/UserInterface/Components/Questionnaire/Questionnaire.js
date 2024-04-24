@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import IconButton from "../../../components/Button/IconButton";
 import { FaEdit } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchForm } from "../../../Dashboard/Dashboard/compnents/api";
 import ResponseList from "./ResponseList";
 
@@ -10,6 +10,8 @@ export default function Questionnaire({ formId }) {
   const [form, setForm] = useState({});
   const [nbrResponse, setNbrResponse] = useState(0);
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log("🚀 ~ Questionnaire ~ location:", formId)
 
   const displayForm = (form) => {
     console.log(form);
@@ -29,7 +31,7 @@ export default function Questionnaire({ formId }) {
     }
   };
   
-
+  console.log("🚀 ~ Questionnaire ~ location:", location)
   useEffect(() => {
     fetchForm()
       .then((res) => {
@@ -49,14 +51,14 @@ export default function Questionnaire({ formId }) {
   
 
   return (
-    <Container className="my-3">
+    <Container className="my-3 ">
       <Row>
         <Col md={9} xs={12} className="mb-2 pt-2">
           <h4>If you want to update the questionnaire</h4>
         </Col>
-        <Col md={3} xs={12}>
-          <IconButton
-            className="border-0 w-100"
+        <Col md={3} xs={12}> 
+          { location.pathname.search("consultProject") !=1  && <IconButton
+            className="border-0 w-100 me-3"
             style={{
               background: "linear-gradient(-45deg, #1990aa 0%, #8ac2bb 100%)",
               color: "white",
@@ -71,7 +73,7 @@ export default function Questionnaire({ formId }) {
             }}
           >
             Update Form
-          </IconButton>
+          </IconButton>}
         </Col>
       </Row>
       <hr />

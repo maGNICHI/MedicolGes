@@ -1,14 +1,12 @@
-
-import { makeStyles } from '@material-ui/core/styles';
-
-export default makeStyles((theme) => ({
+ 
+const useStyles = () => ({
   root: {
     '& .MuiTextField-root': {
-      margin: theme.spacing(1),
+      margin: '10px',
     },
   },
   paper: {
-    padding: theme.spacing(2),
+    padding: '16px',
   },
   form: {
     display: 'flex',
@@ -20,13 +18,14 @@ export default makeStyles((theme) => ({
     margin: '10px 0',
   },
   buttonSubmit: {
-    marginBottom: 10,
+    marginBottom: '10px',
   },
-  // Ajouter une règle de style spécifique pour l'entrée de nom
   inputNom: {
-    width: '300px', // Ajustez la largeur selon vos besoins
+    width: '300px',
     '&[name="Name"]': {
       // styles for name input
     }
   },
-}));
+});
+
+export default useStyles;

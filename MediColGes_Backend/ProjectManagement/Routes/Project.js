@@ -32,17 +32,27 @@ router.get("/", async (req, res) => {
 // Route to add a new project
 router.post("/addProject", upload.single("file"), async (req, res) => {
   try {
+    // Check if file was uploaded
+    const fileName = req.file ? path.basename(req.file.path) : null;
+
+    // Create new project instance
     const newProject = new Project({
       ...req.body,
       isDeleted: false,
-      file: req.file ? path.basename(req.file.path) : null, // Extracting only the file name
+      file: fileName, // Assign the file name to the file property
     });
+
+    // Save the project to the database
     const project = await newProject.save();
+
+    // Send success response
     res.status(201).send({
       success: { msg: "Project created successfully", project },
     });
   } catch (err) {
-    res.status(400).send({ errors: [{ msg: err.message }] });
+    // Handle errors
+    console.error("Error adding project:", err);
+    res.status(500).send({ error: "Failed to add project. Please try again later." });
   }
 });
 
