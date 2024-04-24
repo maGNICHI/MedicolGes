@@ -8,7 +8,7 @@ import {
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import "../Styles/Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import { NavDropdown } from "react-bootstrap";
 
@@ -16,6 +16,14 @@ function Navbar() {
   const [nav, setNav] = useState(false);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const location = useLocation();
+
+  const handleScrollToSection = (sectionId) => {
+    const section = document.getElementById(sectionId);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -57,17 +65,29 @@ function Navbar() {
       {/* Desktop */}
       <ul className="navbar-items mt-3">
         <li>
-          <Link to="/" className="navbar-links">
+          <Link
+            to="/"
+            className="navbar-links"
+            onClick={() => handleScrollToSection("hero")}
+          >
             Home
           </Link>
         </li>
         <li>
-          <Link to="/#info" className="navbar-links">
+          <Link
+            to="/"
+            className="navbar-links"
+            onClick={() => handleScrollToSection("info")}
+          >
             Informations
           </Link>
         </li>
         <li>
-          <Link to="/#about" className="navbar-links">
+          <Link
+            to="/"
+            className="navbar-links"
+            onClick={() => handleScrollToSection("about")}
+          >
             About Us
           </Link>
         </li>
@@ -79,7 +99,7 @@ function Navbar() {
         <li>
           <div className="dropdown" onClick={toggleDropdown}>
             <p className="navbar-links cursor-pointer">Organization</p>
-            {dropdownOpen &&(
+            {dropdownOpen && (
               <ul className="dropdown-content">
                 <li>
                   <Link to="/organizationFront">Create Organization</Link>
@@ -106,12 +126,12 @@ function Navbar() {
       <button
         className="navbar-btn"
         type="button"
-       
+
       >
-       <a href="/chats" className="navbar-links">
-           
-          
-        <FontAwesomeIcon icon={faCommentDots} /> Live Chat</a>
+        <a href="/chats" className="navbar-links">
+
+
+          <FontAwesomeIcon icon={faCommentDots} /> Live Chat</a>
       </button>
 
       {/* Mobile */}
@@ -122,25 +142,46 @@ function Navbar() {
 
         <ul className="mobile-navbar-links pt-5">
           <li>
-            <Link onClick={openNav} to="/">
+            <Link
+              onClick={() => {
+                openNav();
+                handleScrollToSection("hero");
+              }}
+              to="/"
+              className="navbar-links"
+            >
               Home
             </Link>
           </li>
           <li>
-            <Link onClick={openNav} to="/#info">
+            <Link
+              onClick={() => {
+                openNav();
+                handleScrollToSection("info");
+              }}
+              to="/"
+              className="navbar-links"
+            >
               Information
             </Link>
           </li>
           <li>
-            <Link onClick={openNav} to="/#about">
+            <Link
+              onClick={() => {
+                openNav();
+                handleScrollToSection("about");
+              }}
+              to="/"
+              className="navbar-links"
+            >
               About Us
             </Link>
           </li>
           <li>
-          <Link to="/projects" onClick={openNav}>
-            Projects
-          </Link>
-        </li>
+            <Link to="/projects" onClick={openNav}>
+              Projects
+            </Link>
+          </li>
           <li>
             <Link href="/organizationFront">Create Organization</Link>
           </li>
@@ -173,7 +214,7 @@ function Navbar() {
           className="hamb-icon"
         />
       </div>
-    </div>
+    </div >
   );
 }
 
