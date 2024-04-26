@@ -9,13 +9,6 @@ import { Flex } from "@chakra-ui/react";
 const ChatPage = () => {
   const [fetchAgain, setFetchAgain] = useState(false);
   const { user } = useContext(ChatContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    const userInformation = JSON.parse(localStorage.getItem("userInfo"));
-
-    if (userInformation) navigate("/chats");
-  }, [navigate]);
 
 
   return (

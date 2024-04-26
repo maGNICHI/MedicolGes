@@ -8,17 +8,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 function Home() {
   const navigate = useNavigate();
-  const location = useLocation();
-  useEffect(() => {
-    const userInformation = JSON.parse(localStorage.getItem("userInfo"));
-    const isLoginPage = location.pathname === "/login";
-    const isSignupPage = location.pathname === "/signup";
-
-    // Allow access to login and signup pages when the user is not logged in
-    if (!userInformation && !isLoginPage && !isSignupPage) {
-      navigate("/login");
-    }
-  }, [navigate, location]);
 
   return (
     <div className="home-section">

@@ -1,5 +1,5 @@
-import React from "react";
-import {  Route, Routes } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import Dashboard from '../src/Dashboard/Dashboard/Dashboard';
 import UserManagement from './Dashboard/UserManagement/UserList';
@@ -17,14 +17,13 @@ import FeedbackList from './Dashboard/FeedBackManagement/FeedbackList';
 //import { reducers } from './reducers';
 //import {thunk }from 'redux-thunk';
 //import { Provider } from 'react-redux';
-
 import Form from './Dashboard/FormGeneration/Form';
 import CreateOrganization from './Dashboard/OrganizationManagement/OrganizationCreate';
 import CreatePost from './UserInterface/Components/Post/CreatePost'
 import PostList from './UserInterface/Components/Post/PostList'
-import HomePage  from './UserInterface/Components/Post/HomePage'
-import Organization from  './UserInterface/Components/Organization/OrganizationCreate'
-import OrganizationShow from  './UserInterface/Components/Organization/OrganizationList'
+import HomePage from './UserInterface/Components/Post/HomePage'
+import Organization from './UserInterface/Components/Organization/OrganizationCreate'
+import OrganizationShow from './UserInterface/Components/Organization/OrganizationList'
 import AddProject from './Dashboard/ProjectManagement/AddProject/AddProject';
 import ConsultProject from './Dashboard/ProjectManagement/CosultProject/ConsultProject';
 import ListProject from './UserInterface/Components/ProjectManagement/ListProject';
@@ -40,56 +39,59 @@ import SignupScreen from "./userScreens/SignupScreen.js";
 import LoginScreen from "./userScreens/LoginScreen.js";
 import ProfileScreen from  './userScreens/profile/profile.js';
 import AdminProfileScreen from  './adminScreens/profile/profile.js';
-import { useAuthContext } from './userScreens/useAuthContext'
-import { ToastContainer } from 'react-toastify';
-import AutoLogout  from './userScreens/autoLogout'
 const ChatPage = React.lazy(() => import("./UserInterface/Pages/ChatPage"));
+
 function App() {
- // const store = createStore(reducers, compose(applyMiddleware(thunk)));
+  const navigate = useNavigate();
+  const location = useLocation();
+  // const store = createStore(reducers, compose(applyMiddleware(thunk)));
+  
+  // Allow access to login and signup pages when the user is not logged in
+
+  // const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
   return (
-    <>
-      <Routes>
-  <Route path="/signup" element={<SignupScreen />} />
-        <Route path="/loginn" element={<LoginScreen />} />
-        <Route path="/Profile" element={<ProfileScreen />} />
-        <Route path="/login" element={<Login />} />
-        <Route path='/signupp' element={<Signup />} />
-        <Route path="/AdminProfile" element={<AdminProfileScreen />} />
-        <Route path="/Dashboard" element={<Dashboard />} />
-        <Route path="/userList" element={<UserManagement />} />
-        <Route path="/projectList" element={<ProjectList />} />
-        <Route path="/formGeneration" element={<Form />} />
-        <Route path="/addProject" element={<AddProject />} />
-        <Route path="/post" element={<CreatePost />} />
-        <Route path="/chats" element={<ChatPage />} />
-        <Route path="/liste" element={<PostList />} />
-        <Route path="/consultProject/:id" element={<ConsultProject />} />
-        <Route path="/organizationList" element={<OrganizationList />} />
-        <Route path="/organizationCreate" element={<CreateOrganization />} />
-        <Route path="/organizationFront" element={<Organization />} />
-        <Route path="/organizationShow" element={<OrganizationShow />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/feedbackList" element={<FeedbackList />} />
-        <Route path="/" element={<Home />} />
-        <Route path="/legal" element={<Legal />} />
-        <Route path="/appointment" element={<Appointment />} />
-        <Route path="/ajouterForm" element={<AjouterForm />} />
-        <Route path='/addResponse' element={<AddResponseComponent />} />
-        <Route path='/updateForm' element={<UpdateQuestionnaireComponent />} />
-        <Route path='/editForm' element={<EditQuestionnaire />} />
-        <Route path="/afficheId/:id" element={<GetFormById />} />
-        <Route path='/projects' element={<ListProject />} />
-        <Route path='/projects/add' element={<Add />} />
-        <Route path='/projects/consult/:id' element={<Consult />} />
-        <Route path="/afficheForm" element={<AfficheForm/>} />
-        <Route path="/homeNew" element={<HomePost1 />} />
-       
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      <AutoLogout />
-      <ToastContainer />
-      </>
+
+    <Routes>
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/loginn" element={<LoginScreen />} />
+      <Route path="/Profile" element={<ProfileScreen />} />
+      <Route path="/login" element={<Login />} />
+      <Route path='/signupp' element={<Signup />} />
+      <Route path="/AdminProfile" element={<AdminProfileScreen />} />
+      <Route path="/Dashboard" element={<Dashboard />} />
+      <Route path="/userList" element={<UserManagement />} />
+      <Route path="/projectList" element={<ProjectList />} />
+      <Route path="/projectList" element={<ProjectList />} />
+      <Route path="/formGeneration" element={<Form />} />
+      <Route path="/addProject" element={<AddProject />} />
+      <Route path="/post" element={<CreatePost />} />
+      <Route path="/chats" element={<ChatPage />} />
+      <Route path="/liste" element={<PostList />} />
+      <Route path="/consultProject/:id" element={<ConsultProject />} />
+      <Route path="/organizationList" element={<OrganizationList />} />
+      <Route path="/organizationCreate" element={<CreateOrganization />} />
+      <Route path="/organizationFront" element={<Organization />} />
+      <Route path="/organizationShow" element={<OrganizationShow />} />
+      <Route path="/home" element={<HomePage />} />
+      <Route path="/feedbackList" element={<FeedbackList />} />
+      <Route path="/" element={<Home />} />
+      <Route path="/legal" element={<Legal />} />
+      <Route path="/appointment" element={<Appointment />} />
+      <Route path="/ajouterForm" element={<AjouterForm />} />
+      <Route path='/addResponse' element={<AddResponseComponent />} />
+      <Route path='/updateForm' element={<UpdateQuestionnaireComponent />} />
+      <Route path='/editForm' element={<EditQuestionnaire />} />
+      <Route path="/afficheId/:id" element={<GetFormById />} />
+      <Route path='/projects' element={<ListProject />} />
+      <Route path='/projects/add' element={<Add />} />
+      <Route path='/projects/consult/:id' element={<Consult />} />
+      <Route path="/afficheForm" element={<AfficheForm />} />
+      <Route path="/homeNew" element={<HomePost1 />} />
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+
 
   );
 }

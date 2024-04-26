@@ -1,6 +1,6 @@
 // Navbar Component
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faCommentDots,
@@ -14,9 +14,16 @@ import { NavDropdown } from "react-bootstrap";
 import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { useLogout } from '../../userScreens/useLogout'
 import { useAuthContext } from "../../userScreens/useAuthContext";
-import {   Navigate , useNavigate} from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 function Navbar() {
   const [nav, setNav] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if user is logged in from local storage
+    const userInfo = localStorage.getItem('userInfo');
+    setIsLoggedIn(!!userInfo); // Check if userInfo exists
+  }, []);
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -24,7 +31,9 @@ function Navbar() {
   const { logout } = useLogout()
   const handleClick = () => {
     navigate("/login");
-    logout()}
+    setIsLoggedIn(false);
+    logout()
+  }
   const handleScrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
@@ -118,26 +127,37 @@ function Navbar() {
             )}
           </div>
         </li>
-        <li>
-          <Link to="/homeNew" className="navbar-links">
-            Post
-          </Link>
-        </li>
+        {isLoggedIn ? (
+          <>
+            <li>
+              <Link to="/homeNew" className="navbar-links">
+                Post
+              </Link>
+            </li>
+            <li>
+              <Link to="/Profile" className="navbar-links">
+                Profile
+              </Link>
+            </li>
+            <li>
+              <Link onClick={handleClick} to="/login" className="navbar-links">
+                Logout
+              </Link>
+            </li>
+          </>
+        ) : (
+          <li>
+            <Link to="/login" className="navbar-links">
+              Login
+            </Link>
+          </li>
+        )}
         {/* <li>
           <Link to="/login" className="navbar-links">
             Login
           </Link>
         </li> */}
       </ul>
-
-      <a href="/Profile" className="navbar-links">
-          Profile
-          </a> 
-         
-        <a  onClick={handleClick} className="navbar-links">
-          
-          <FaSignOutAlt />logout  </a>
-
 
       <button
         className="navbar-btn"
@@ -164,7 +184,6 @@ function Navbar() {
                 handleScrollToSection("hero");
               }}
               to="/"
-              className="navbar-links"
             >
               Home
             </Link>
@@ -176,7 +195,6 @@ function Navbar() {
                 handleScrollToSection("info");
               }}
               to="/"
-              className="navbar-links"
             >
               Information
             </Link>
@@ -188,7 +206,6 @@ function Navbar() {
                 handleScrollToSection("about");
               }}
               to="/"
-              className="navbar-links"
             >
               About Us
             </Link>
@@ -205,20 +222,35 @@ function Navbar() {
             <Link href="/organizationShow">Show Organization</Link>
           </li>
           <li>
-            <Link onClick={openNav} to="/homeNew">
-              Posts
-            </Link>
-          </li>
-          <li>
             <a onClick={openNav} href="/chats">
               chats
             </a>
           </li>
-          <li>
-            <Link onClick={openNav} to="/login">
-              Login
-            </Link>
-          </li>
+          {isLoggedIn ? (
+            <>
+              <li>
+                <Link onClick={openNav} to="/homeNew">
+                  Posts
+                </Link>
+              </li>
+              <li>
+                <Link onClick={openNav} to="/Profile" >
+                  Profile
+                </Link>
+              </li>
+              <li>
+                <Link onClick={handleClick} to="/login">
+                  Logout
+                </Link>
+              </li>
+            </>
+          ) : (
+            <li>
+              <Link onClick={openNav} to="/login">
+                Login
+              </Link>
+            </li>
+          )}
         </ul>
       </div>
 

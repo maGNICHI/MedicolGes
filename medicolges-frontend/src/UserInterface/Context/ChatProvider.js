@@ -14,9 +14,13 @@ const ChatProvider = (props) => {
     const userInformation = JSON.parse(localStorage.getItem("userInfo"));
     setUser(userInformation);
 
-    if (!userInformation) navigate("/");
-    //if (!userInformation) navigate("/");
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // Allow navigation to "/" (home), "/login", or "/signup" if user is not logged in
+    if (!userInformation) {
+      const path = window.location.pathname;
+      if (path !== "/login" && path !== "/signup" && path !== "/") {
+        navigate("/login");
+      }
+    }
   }, [navigate]);
 //   useEffect(() => {
 //     const userInfo = JSON.parse(localStorage.getItem('userinfo'));

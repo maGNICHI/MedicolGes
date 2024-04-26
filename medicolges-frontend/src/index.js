@@ -11,7 +11,7 @@ import { Provider } from "react-redux";
 import store from "./Redux/Store";
 import Chat from "./Chat/Chat";
 import { FaRobot } from "react-icons/fa";
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { AuthContextProvider } from './userScreens/AuthContext'
 import { UsersContextProvider } from './userScreens/UserContext'
 const queryClient = new QueryClient();
@@ -23,38 +23,39 @@ const Root = () => {
     setShowChat((prevShowChat) => !prevShowChat);
   };
 
-  
+
 
   return (
     <React.StrictMode>
       <Provider store={store}>
         <BrowserRouter forceRefresh={true}>
-        <ChakraProvider>
-             {/* <ChatProvider>
-             
-                <QueryClientProvider client={queryClient}>
-                  <div className="app-container position-absolute left-1">
-                    <div className="app-container">
-                      <div className="chat-container">
-                        {showChat && <Chat />}
+          <ChakraProvider>
+
+            <AuthContextProvider>
+              <UsersContextProvider>
+                <ChatProvider>
+
+                  <QueryClientProvider client={queryClient}>
+                    <div className="app-container position-absolute left-1">
+                      <div className="app-container">
+                        <div className="chat-container">
+                          {showChat && <Chat />}
+                        </div>
+                      </div>
+                      <div className="chat-button-container">
+                        <button className="chat-button" onClick={toggleChat}>
+                          <FaRobot className="chat-icon" />
+                        </button>
                       </div>
                     </div>
-                    <div className="chat-button-container">
-                      <button className="chat-button" onClick={toggleChat}>
-                        <FaRobot className="chat-icon" />
-                      </button>
-                    </div>
-                  </div> */}
-                  <AuthContextProvider>
-                   <UsersContextProvider> 
-                  <App />
-                  </UsersContextProvider>
-                 </AuthContextProvider>
-                {/* </QueryClientProvider>
-              
-            </ChatProvider> */}
-            </ChakraProvider>
-         </BrowserRouter>
+                    <App />
+                  </QueryClientProvider>
+
+                </ChatProvider>
+              </UsersContextProvider>
+            </AuthContextProvider>
+          </ChakraProvider>
+        </BrowserRouter>
       </Provider>
     </React.StrictMode>
   );
