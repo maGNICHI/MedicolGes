@@ -1,16 +1,30 @@
 const jwt = require("jsonwebtoken");
 const User = require("../Model/User");
 
+// const generateToken = (user) => {
+//   return jwt.sign(
+//     {
+//       id: user._id,
+//       username: user.username,
+//       firstName: user.firstName,
+//       lastName: user.lastName,
+//       email: user.email,
+//       role: user.role,
+//       isAdmin: user.isAdmin // Include role in token payload
+//     },
+//     process.env.JWT_SECRET,
+//     {
+//       expiresIn: process.env.JWT_EXPIRES_IN // Set token expiration time
+//     }
+//   );
+// };
 const generateToken = (user) => {
   return jwt.sign(
     {
       id: user._id,
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
+     
       email: user.email,
-      role: user.role,
-      isAdmin: user.isAdmin // Include role in token payload
+      
     },
     process.env.JWT_SECRET,
     {

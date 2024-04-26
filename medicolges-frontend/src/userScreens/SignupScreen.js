@@ -5,6 +5,9 @@
   import { useSignup } from "./useSignup";
   import { toast } from "react-toastify";
   import axios from 'axios';
+
+import VerificationModal from './Email';
+
   const SignupScreen = () => {
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
@@ -60,8 +63,7 @@
         reader.readAsDataURL(file);
       }
     };
-    
-     
+  
     
     const [selectedAvatar, setSelectedAvatar] = useState(
       process.env.PUBLIC_URL + "/images/avatar/maleuseravatar.jpg"
@@ -109,7 +111,7 @@
         const response = await axios.post("http://localhost:5000/api/user", formData, config);
     
         console.log("User registered successfully:", response.data);
-        navigate("/login");
+        navigate("/verify-email");
       } catch (error) {
         toast.error(error.response.data.message || "Error registering user");
       }
@@ -124,6 +126,7 @@
       setCertification(file);
     };
     return (
+      <>
       <Container
       className="signup-screen d-flex align-items-center justify-content-center">
       
@@ -373,6 +376,8 @@
           </Col>
         </Row>
       </Container>
+       
+      </>
     );
   };
 

@@ -32,8 +32,10 @@ const UserSchema = mongoose.Schema(
       type: Boolean,
       required: true,
       default: false,
-    },
-    isDeleted: Boolean,
+    }, verificationCode: {type: "String"},
+    isVerified: { type: Boolean,
+                  default: false} 
+    ,
     blocked: {
       type: Boolean,
       default: false
@@ -61,14 +63,27 @@ UserSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 // Correct the pre-save hook
+// UserSchema.pre("save", async function (next) {
+//   // Only hash the password if it has been modified (or is new)
+//   if (!this.isModified('password')) {
+//     next();
+//   }
+
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password, salt);
+// });
+ 
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
+};
+
 UserSchema.pre("save", async function (next) {
   // Only hash the password if it has been modified (or is new)
-  if (!this.isModified('password')) {
-    next();
+  if (this.isModified('password')) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
   }
-
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
+  next();
 });
 
 module.exports = User = mongoose.model("User", UserSchema);

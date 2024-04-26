@@ -275,7 +275,7 @@ const updateUserRoleToAdmin = async (req, res) => {
       return res.status(404).send('User not found');
     }
 
-    user.role = 'admin';
+    user.role = 'Professionnal';
     await user.save();
 
     res.send(`User with ID ${id} has been updated to admin role.`);

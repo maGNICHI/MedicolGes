@@ -37,7 +37,10 @@ import UpdateQuestionnaireComponent from './UserInterface/Components/Questionnai
 import EditQuestionnaire from './UserInterface/Components/Questionnaire/EditQuestionnaire';
 import GetFormById from './UserInterface/Components/Questionnaire/GetFormById';
 import SignupScreen from "./userScreens/SignupScreen.js";
+import VerificationPage from "./userScreens/Email.js";
 import LoginScreen from "./userScreens/LoginScreen.js";
+import ResetPassword from "./userScreens/ResetPassword.js";
+import ForgotPassword from "./userScreens/ForgotPassword.js";
 import ProfileScreen from  './userScreens/profile/profile.js';
 import AdminProfileScreen from  './adminScreens/profile/profile.js';
 import { useAuthContext } from './userScreens/useAuthContext'
@@ -53,7 +56,10 @@ function App() {
   <Route path="/signup" element={<SignupScreen />} />
         <Route path="/loginn" element={<LoginScreen />} />
         <Route path="/Profile" element={<ProfileScreen />} />
+        <Route path="/verify-email" element={<VerificationPage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path='/signupp' element={<Signup />} />
         <Route path="/AdminProfile" element={<AdminProfileScreen />} />
         <Route path="/Dashboard" element={<Dashboard />} />

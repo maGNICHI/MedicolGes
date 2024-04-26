@@ -19,7 +19,6 @@ export const login = (email, password) => async (dispatch) => {
     const { data } = await axios.post('http://localhost:5000/api/user/login', { email, password }, config);
 
     if (data.blocked) {
-      // Check if the user account is blocked
       toast.error('Your account is blocked.');
       dispatch({
         type: LOGIN_FAIL,
@@ -27,7 +26,16 @@ export const login = (email, password) => async (dispatch) => {
       });
       return; // Exit the function early to prevent further actions
     }
-
+console.log(data.isVerified)
+console.log(data.blocked)
+//  if (!data.isVerified) {
+//       toast.error('Your account is not Verified.');
+//       dispatch({
+//         type: LOGIN_FAIL,
+//         payload: 'Account is blocked.',
+//       });
+//       return; // Exit the function early to prevent further actions
+//     }
     dispatch({
       type: LOGIN_SUCCESS,
       payload: data,

@@ -37,6 +37,8 @@ function Login() {
                   alt="Phone image"
                 />
                 <NavLink to="/signup" className="mt-3" color="#8ac2bb">I am not a member</NavLink>
+               
+                <NavLink to="/verify-email" className="mt-3" color="#8ac2bb">verify email</NavLink>
               </Col>
               <Col xs={12} md={6} className="order-md-2 order-1 d-flex align-items-center">
                 <Form className="mb-4 w-100" onSubmit={handleLogin}>
@@ -91,7 +93,8 @@ function Login() {
                       label="Remember me"
                       id="flexCheckDefault"
                     />
-                    <a href="!#" color="#8ac2bb">Forgot password?</a>
+                    {/* <a href="!#" color="#8ac2bb">Forgot password?</a> */}
+                    <NavLink to="/forgot-password" className="mt-3" color="#8ac2bb">forgot password</NavLink>
                   </div>
                   <Button className="mb-4 w-100 border-0" style={{background:"#1990aa"}} size="lg" type="submit">
                     Sign in
