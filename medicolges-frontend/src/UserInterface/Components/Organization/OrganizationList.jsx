@@ -104,7 +104,7 @@ function OrganizationList() {
           <div className="row pt-10 mb-10">
             <div className="col-md-7 col-xs-12">
               <h3 className="info-title ml-10">
-                <span>Our Projects</span>
+                <span>Our Organizations</span>
               </h3>
             </div>
             <div className="col-md-2 col-xs-5 my-3 mr-4">

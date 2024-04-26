@@ -220,6 +220,7 @@ function CreateOrganization() {
                       onChange={(e) => setType(e.target.value)}
                       className="rounded-pill"
                     >
+                      <option value="">choose</option>
                       <option value="hospitals">Hospitals</option>
                       <option value="clinics">Clinics</option>
                       <option value="diagnostic centers">

@@ -1001,10 +1001,11 @@ export default function Step2({ formDataProject, setformDataProject, onNext }) {
 
 
   const handleDeleteQuestion = (id) => {
-    const updatedQuestions = formData.questions.filter((q) => q.id !== id);
+    // const updatedQuestions = formData.questions.filter((q) => q.id !== id);
     setFormData((prevFormData) => ({
       ...prevFormData,
-      questions: updatedQuestions,
+      questions: prevFormData.questions.filter((q) => q.id !== id),
+      //questions: updatedQuestions,
     }));
   };
   const handleUpdateQuestion = (index) => {
@@ -1153,7 +1154,7 @@ export default function Step2({ formDataProject, setformDataProject, onNext }) {
                     </Text>
                       <DeleteIcon
                         color="info"
-                        onClick={() => handleDeleteQuestion(index)}
+                        onClick={() => handleDeleteQuestion(question.id)}
                         style={{ cursor: "pointer", marginLeft: "10px" }}
                       />
                       <FaEdit // Utilisez EditIcon ici

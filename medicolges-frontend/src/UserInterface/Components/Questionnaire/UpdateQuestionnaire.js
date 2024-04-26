@@ -1001,10 +1001,11 @@ const UpdateQuestionnaire = () => {
 
 
   const handleDeleteQuestion = (id) => {
-    const updatedQuestions = formData.questions.filter((q) => q.id !== id);
+    // const updatedQuestions = formData.questions.filter((q) => q.id !== id);
     setFormData((prevFormData) => ({
       ...prevFormData,
-      questions: updatedQuestions,
+      questions: prevFormData.questions.filter((q) => q.id !== id),
+      //questions: updatedQuestions,
     }));
   };
   const handleUpdateQuestion = (index) => {
@@ -1116,7 +1117,7 @@ const UpdateQuestionnaire = () => {
                     <IconButton
                       colorScheme="info"
                       aria-label="Delete question"
-                      onClick={() => handleDeleteQuestion(index)}
+                      onClick={() => handleDeleteQuestion(question.id)}
                       cursor="pointer"
                       marginLeft="10px"
                       icon={<FaTrash />}
