@@ -15,7 +15,13 @@ function Dashboard() {
           <Card.Body style={{ backgroundColor: "#ffffffa9", padding: "20px", borderRadius: "20px" }}>
             <Title title={"Dashboard"} fontWeight={600} fontSize={"24px"} />
             <hr />
+           
             {/* Your dashboard content here */}
+            <div>
+              <h2>MediColGes</h2>
+              <p>Welcome.</p>
+              {/* Add more content or components related to medical data collection */}
+            </div>
           </Card.Body>
         </Card>
       </Container>

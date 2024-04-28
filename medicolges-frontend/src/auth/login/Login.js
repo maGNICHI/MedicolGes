@@ -95,10 +95,14 @@ function Login() {
                     />
                     {/* <a href="!#" color="#8ac2bb">Forgot password?</a> */}
                     <NavLink to="/forgot-password" className="mt-3" color="#8ac2bb">forgot password</NavLink>
+                  
                   </div>
                   <Button className="mb-4 w-100 border-0" style={{background:"#1990aa"}} size="lg" type="submit">
                     Sign in
                   </Button>
+                  <NavLink to="/face" className="mt-3" color="#8ac2bb">Facial authentication (upload)</NavLink>
+                  <br/>
+                  <NavLink to="/faceauth" className="mt-3" color="#8ac2bb">Facial authentication</NavLink>
                 </Form>
               </Col>
             </Row>

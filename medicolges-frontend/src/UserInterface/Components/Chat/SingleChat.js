@@ -46,11 +46,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
    const handleFileChange = (e) => {
      setFile(e.target.files[0]);
    };
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const mic = new SpeechRecognition();
-  mic.continuous = true;
-  mic.interimResults = true;
-  mic.lang = "en-US";
+  // const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  // const mic = new SpeechRecognition();
+  // mic.continuous = true;
+  // mic.interimResults = true;
+  // mic.lang = "en-US";
   const fetchMessages = async () => {
     if (!selectedChat) return;
     try {

@@ -45,11 +45,31 @@ const Root = () => {
                       </button>
                     </div>
                   </div> */}
-                  <AuthContextProvider>
+                 
+                   {/* <ChatProvider>
+             
+             <QueryClientProvider client={queryClient}>
+               <div className="app-container position-absolute left-1">
+                 <div className="app-container">
+                   <div className="chat-container">
+                     {showChat && <Chat />}
+                   </div>
+                 </div>
+                 <div className="chat-button-container">
+                   <button className="chat-button" onClick={toggleChat}>
+                     <FaRobot className="chat-icon" />
+                   </button>
+                 </div>
+               </div> */}
+               <AuthContextProvider>
                    <UsersContextProvider> 
                   <App />
                   </UsersContextProvider>
                  </AuthContextProvider>
+                  {/* </QueryClientProvider>
+              
+            </ChatProvider>  */}
+                 
                 {/* </QueryClientProvider>
               
             </ChatProvider> */}

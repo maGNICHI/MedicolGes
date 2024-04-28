@@ -21,10 +21,18 @@ const ResetPassword = () => {
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
+
+    // Check if password meets minimum length requirement
+    if (password.length < 6) {
+      toast.error('Password must be at least 6 characters long.');
+      return;
+    }
+
     if (password !== confirmPassword) {
       toast.error('Passwords do not match.');
       return;
     }
+
     try {
       const response = await axios.post(`http://localhost:5000/api/user/reset-password/${token}`, {
         password  // Ensure this matches the backend expectation

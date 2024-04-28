@@ -74,8 +74,21 @@ import VerificationModal from './Email';
     const handleSubmit = async (e) => {
       e.preventDefault();
     
+      // First, check if all fields are filled including the avatar
       if (!avatar || !gender || !username || !firstName || !lastName || !email || !password || !role) {
         toast.error("Please fill in all the fields and select an avatar picture.");
+        return;
+      }
+    
+      // Next, check if the password is at least 6 characters long
+      if (password.length < 6) {
+        toast.error('Password must be at least 6 characters long.');
+        return;
+      }
+    
+      // Then, check if the passwords match
+      if (password !== confirmPassword) {
+        toast.error('Passwords do not match.');
         return;
       }
     
@@ -109,13 +122,13 @@ import VerificationModal from './Email';
         };
     
         const response = await axios.post("http://localhost:5000/api/user", formData, config);
-    
         console.log("User registered successfully:", response.data);
         navigate("/verify-email");
       } catch (error) {
         toast.error(error.response.data.message || "Error registering user");
       }
     };
+    
     
     
     // const handleCertificateChange = (e) => {
@@ -274,10 +287,7 @@ import VerificationModal from './Email';
       />
     </Form.Group>
 
-
-
-
-
+ 
                   {/* Email */}
                   <Form.Group className="my-2" controlId="email">
                     <Title secondTitle={"Email address"} fontSize={"16px"} fontWeight={600} />

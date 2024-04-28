@@ -3,7 +3,7 @@ const User = require("../Model/User");
 const asyncHandler = require("express-async-handler");
 const {
   fetchAllUsers,
-  updateUser,
+  updateUser,fetchAllPic,
   blockUserHelper,
   unBlockUserHelper
 } = require("./fct.js");
@@ -146,7 +146,15 @@ const getAllUsers = asyncHandler(async (req, res) => {
     throw new NotFoundError();
   }
 });
+const getAllPic = asyncHandler(async (req, res) => {
+  const usersData = await fetchAllPic();
 
+  if (usersData) {
+    res.status(200).json({ usersData });
+  } else {
+    throw new NotFoundError();
+  }
+});
 
 const blockUser = asyncHandler(async (req, res) => {
   const userId = req.body._id;
@@ -219,6 +227,7 @@ const addUser = async (req, res) => {
       password,
       role,
       pic: picUrl,
+      isVerified:true,
       certification: certificationUrl,
       isDeleted: false
     });
@@ -290,7 +299,7 @@ module.exports = { allUsers, UsersByRole, UsersById,
   blockUser,
   unBlockUser,
   getUserProfile,
-  updateUserProfile,addUser,deleteUser,updateUserRoleToAdmin };
+  updateUserProfile,addUser,deleteUser,updateUserRoleToAdmin ,getAllPic};
 
 
 

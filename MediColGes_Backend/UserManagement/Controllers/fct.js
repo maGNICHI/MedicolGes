@@ -12,6 +12,17 @@ const fetchAllUsers = async () => {
   }
 };
 
+const fetchAllPic= async () => {
+  try {
+    const users = await User.find({}, { pic:1,email:1});
+
+    return users;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+
+    throw error;
+  }
+};
 const blockUserHelper = async (_id) => {
   try {
     // Attempt to find the user by their _id
@@ -86,4 +97,4 @@ const updateUser = async (userData) => {
 
 
 
-module.exports = { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser };
+module.exports = { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser,fetchAllPic };

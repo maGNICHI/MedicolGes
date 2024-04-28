@@ -1,6 +1,10 @@
 const express = require("express");
 const multer = require("multer"); // Import multer for handling form data
- 
+const path = require('path');
+
+
+const uploadd = multer({ dest: 'uploads/' });
+const { spawn } = require('child_process');
 const {
   registerUser,
   authUser,logoutUser,
@@ -13,12 +17,13 @@ const jwt = require('jsonwebtoken')
 const {
   allUsers,
   UsersByRole,
-  UsersById,getAllUsers,blockUser,unBlockUser,getUserProfile,
+  UsersById,getAllUsers,blockUser,unBlockUser,getUserProfile,getAllPic,
   updateUserProfile,addUser,deleteUser ,updateUserRoleToAdmin
 } = require("../Controllers/UserController");
 const { protect } = require("../Middleware/AuthMiddleware");
 const crypto = require('crypto');
 const router = express.Router();
+const fs = require('fs');
 
 // Configure multer to save uploaded files to disk
 const storage = multer.diskStorage({
@@ -44,6 +49,7 @@ router.post("/addUser", addUser); //from admin
 router.post("/login", authUser);
 router.post("/logout", logoutUser);
 router.post("/get-users",  getAllUsers);
+router.post("/get-pictures",  getAllPic);
 router.delete("/delete-user/:id", deleteUser);
 router.patch("/block-user", blockUser);
 router.patch("/unblock-user",  unBlockUser);
@@ -143,9 +149,83 @@ router.post('/reset-password/:token', async (req, res) => {
     console.log("Error verifying token or saving new password:", error);
     return res.status(500).send('Failed to reset password. ' + error.message);
   }
+}); 
+router.post('/face', uploadd.single('image'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No image uploaded.');
+  }
+
+  const pythonExecutable = 'C:/Program Files/Python311/python';
+  const scriptPath = 'C:/Users/sinoh/Desktop/py/face.py';
+  const imagePath = req.file.path;
+
+  const pythonProcess = spawn(pythonExecutable, [scriptPath, imagePath]);
+
+  let dataToSend = '';
+  pythonProcess.stdout.on('data', (data) => {
+    dataToSend += data.toString();
+  });
+
+  pythonProcess.stderr.on('data', (data) => {
+    console.error(`stderr: ${data.toString()}`);
+  });
+
+  pythonProcess.on('close', (code) => {
+    if (code !== 0) {
+      res.status(500).send(`Python script error with exit code ${code}`);
+    } else {
+      try {
+        const jsonData = JSON.parse(dataToSend); // Ensure this is parsed as JSON
+        res.send(jsonData);
+      } catch (error) {
+        res.status(500).send('Failed to parse Python output as JSON');
+      }
+    }
+  });
 });
 
+ 
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
+    expiresIn: '1d',
+  });
+};
+ 
+router.post('/imglogin', async (req, res) => {
+  const { _id } = req.body;
 
+  try {
+    const user = await User.findById(_id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Simulate a successful login
+    res.json({
+      _id: user._id,
+      email: user.email,
+       token: generateToken(user._id)
+      // _id: user._id,
+      // username: user.username,
+      // firstName: user.firstName,
+      // lastName: user.lastName,
+      // email: user.email,
+      // role: user.role,
+      // isAdmin: user.isAdmin,
+      // pic: user.pic,
+      // certification: user.certification,
+      // isVerified:user.isVerified,
+      // isDeleted: user.isDeleted,
+      // blocked:user.blocked,
+
+      // token: generateToken(user),
+     
+      
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 ////////////////
 // GET user details by ID
 router.get('/:id', async (req, res) => {
