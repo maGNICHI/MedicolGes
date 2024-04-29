@@ -12,17 +12,32 @@ import {
   Center,
   Text,
   Heading,
-  Container
+  Container,
+  Fade,
+  ScaleFade,
+  Progress,
+  useColorModeValue,
+  Image
 } from '@chakra-ui/react';
+import { ArrowBackIcon } from '@chakra-ui/icons';
 
 function FacialAuth() {
     const [image, setImage] = useState(null);
+    const [previewSrc, setPreviewSrc] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const toast = useToast();
+    const bgColor = useColorModeValue('white', 'gray.700');
+    const buttonColor = useColorModeValue('blue.500', 'blue.300');
 
     const handleImageChange = (event) => {
-        setImage(event.target.files[0]);
+        const file = event.target.files[0];
+        setImage(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPreviewSrc(reader.result);
+        };
+        reader.readAsDataURL(file);
     };
 
     const handleSubmit = async (event) => {
@@ -91,23 +106,32 @@ function FacialAuth() {
     };
 
     return (
-        <Container centerContent p={4}>
-            <VStack spacing={8} w="full" maxW="lg" p={5} boxShadow="md" borderRadius="lg" bg="gray.50">
-                <Heading size="lg" color="teal.400">Facial Authentication</Heading>
-                <Text>If your face matches our records, you will be logged in automatically.</Text>
-                <FormControl isRequired>
-                    <FormLabel>Upload your photo for authentication</FormLabel>
-                    <Input type="file" accept="image/*" onChange={handleImageChange} p={1} />
-                </FormControl>
-                <Button colorScheme="blue" isLoading={loading} loadingText="Authenticating" onClick={handleSubmit}>
-                    {loading ? <Spinner /> : 'Authenticate'}
-                </Button>
-                <Button variant="link" colorScheme="teal" onClick={handleNavigation}>
-                    Go back to Login
-                </Button>
-                {loading && <Text>Processing...</Text>}
-            </VStack>
-        </Container>
+        <ScaleFade in={true}>
+            <Container centerContent p={4}>
+                <VStack spacing={8} w="full" maxW="lg" p={5} boxShadow="2xl" borderRadius="lg" bg={bgColor}>
+                    <Heading size="lg" color="teal.400">Facial Authentication</Heading>
+                    <Text>If your face matches our records, you will be logged in automatically.</Text>
+                    <FormControl isRequired>
+                        <FormLabel>Upload your photo for authentication</FormLabel>
+                        <Input type="file" accept="image/*" onChange={handleImageChange} p={1} />
+                        {previewSrc && (
+                            <Box mt={4} boxShadow="sm" borderRadius="md">
+                                <Image src={previewSrc} alt="Preview" borderRadius="md" />
+                            </Box>
+                        )}
+                    </FormControl>
+                    <Button colorScheme="blue" isLoading={loading} loadingText="Authenticating" onClick={handleSubmit} leftIcon={<ArrowBackIcon />}>
+                        Authenticate
+                    </Button>
+                    <Button variant="link" colorScheme="teal" onClick={handleNavigation}>
+                        Go back to Login
+                    </Button>
+                    {loading && (
+                        <Progress size="xs" isIndeterminate colorScheme="blue" w="full"/>
+                    )}
+                </VStack>
+            </Container>
+        </ScaleFade>
     );
 }
 

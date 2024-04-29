@@ -10,9 +10,17 @@ import {
   Heading,
   Container,
   Text,
-  Spinner
+  Spinner,
+  Fade,
+  useColorModeValue,
+  IconButton,
+  AspectRatio,
+  ScaleFade,
+  Progress,
+  Badge
 } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { CameraIcon } from '@heroicons/react/solid';
 
 function FacialAuthLive() {
     const webcamRef = React.useRef(null);
@@ -20,6 +28,9 @@ function FacialAuthLive() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const toast = useToast();
+    const bgColor = useColorModeValue('white', 'gray.700');
+    const textColor = useColorModeValue('gray.600', 'gray.200');
+    const buttonColor = useColorModeValue('teal.500', 'teal.300');
 
     const capture = React.useCallback(() => {
         const imageSrc = webcamRef.current.getScreenshot();
@@ -88,40 +99,55 @@ function FacialAuthLive() {
     };
 
     return (
-        <Container centerContent p={4}>
-            <VStack spacing={8} w="full" maxW="lg" p={5} boxShadow="md" borderRadius="lg" bg="gray.50">
-                <Heading size="lg" color="teal.400">Facial Authentication</Heading>
-                <Text>If your face matches our records, you will be logged in automatically.</Text>
-                <Box position="relative" boxShadow="xl" borderRadius="lg" overflow="hidden">
-                    <Webcam
-                        audio={false}
-                        ref={webcamRef}
-                        screenshotFormat="image/jpeg"
-                        style={{ width: '100%', height: 'auto' }}
-                        videoConstraints={{
-                            width: 1280,
-                            height: 720,
-                            facingMode: "user"
-                        }}
-                    />
-                    <Button position="absolute" bottom="3" right="3" colorScheme="purple" onClick={capture}>
-                        Capture Photo
+        <ScaleFade in={true}>
+            <Container centerContent p={4}>
+                <VStack spacing={8} w="full" maxW="lg" p={5} boxShadow="2xl" borderRadius="lg" bg={bgColor}>
+                    <Heading size="xl" color={buttonColor}>Facial Authentication</Heading>
+                    <Text fontSize="md" color={textColor}>
+                        If your face matches our records, you will be logged in automatically.
+                    </Text>
+                    <AspectRatio ratio={16 / 9} w="full">
+                        <Box position="relative" boxShadow="xl" borderRadius="lg" overflow="hidden">
+                            <Webcam
+                                audio={false}
+                                ref={webcamRef}
+                                screenshotFormat="image/jpeg"
+                                style={{ width: '100%', height: 'auto' }}
+                                videoConstraints={{
+                                    width: 1280,
+                                    height: 720,
+                                    facingMode: "user"
+                                }}
+                            />
+                            <IconButton
+                                aria-label="Capture photo"
+                                icon={<CameraIcon />}
+                                position="absolute"
+                                bottom="3"
+                                right="3"
+                                colorScheme="purple"
+                                onClick={capture}
+                                size="lg"
+                            />
+                        </Box>
+                    </AspectRatio>
+                    {imgSrc && (
+                        <Image
+                            src={imgSrc}
+                            alt="Captured"
+                            boxSize="100%"
+                            objectFit="cover"
+                            borderRadius="lg"
+                        />
+                    )}
+                    <Button colorScheme="purple" w="full" onClick={handleLogin} isLoading={loading} loadingText="Authenticating" size="lg">
+                        Authenticate
                     </Button>
-                </Box>
-                {imgSrc && (
-                    <Image
-                        src={imgSrc}
-                        alt="Captured"
-                        boxSize="100%"
-                        objectFit="cover"
-                        borderRadius="lg"
-                    />
-                )}
-                <Button colorScheme="blue" w="full" onClick={handleLogin} isLoading={loading} loadingText="Authenticating">
-                    Authenticate
-                </Button>
-            </VStack>
-        </Container>
+                    {loading && <Progress size="xs" isIndeterminate colorScheme="blue" w="full"/>}
+                    {!loading && imgSrc && <Badge colorScheme="green" p={2} borderRadius="full" m={2}>Photo Captured</Badge>}
+                </VStack>
+            </Container>
+        </ScaleFade>
     );
 }
 

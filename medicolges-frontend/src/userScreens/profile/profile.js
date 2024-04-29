@@ -16,10 +16,23 @@ const ProfileScreen = () => {
     email: '',
     password: '',
     cPassword: '',
+    oldPassword: '',
     role: '',
-    picture: '', // Assuming you have a picture URL in your user details
+    
+    profilePic: '', // Assuming you have a picture URL in your user details
   });
+  const [profilePic, setProfilePic] = useState(null);
+ 
 
+  // State to manage the preview of the profile picture
+  const [profilePicPreview, setProfilePicPreview] = useState(userDetails.pic || '/avatar.jpg');
+
+  const handleImageChange = (e) => {
+    if (e.target.files.length > 0) {
+      setProfilePic(e.target.files[0]);
+    }
+  };
+  
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('userInfo'));
     const userId = user?._id;
@@ -32,7 +45,7 @@ const ProfileScreen = () => {
       setLoading(true);
       try {
         const response = await axios.get(`http://localhost:5000/api/user/profile/${userId}`);
-        setUserDetails({ ...response.data, password: '' }); // Assuming response contains user data
+        setUserDetails({ ...response.data, password: '', cPassword: '', oldPassword: '' });
       } catch (error) {
         toast.error("Failed to fetch profile: " + error.toString());
       } finally {
@@ -50,32 +63,33 @@ const ProfileScreen = () => {
       [name]: value,
     }));
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (userDetails.password !== userDetails.cPassword) {
-      toast.error("Please insert password correctly");
-      return; // Stop the form submission
-    }
-
-    setLoading(true);
-    const userId = userDetails._id;
-
+  
+    const formData = new FormData();
+    formData.append('username', userDetails.username);
+    formData.append('firstName', userDetails.firstName);
+    formData.append('lastName', userDetails.lastName);
+    formData.append('email', userDetails.email);
+    formData.append('role', userDetails.role);
+    formData.append('password', userDetails.password);
+    formData.append('pfp', profilePic); // Ensure this matches the backend expected key
+  if (userDetails.password==userDetails.cPassword){
     try {
-      const { _id, cPassword, ...updateData } = userDetails;
-      await axios.put(`http://localhost:5000/api/user/profile/${userId}`, updateData, {
-        headers: { 'Content-Type': 'application/json' },
-      });
-
+      const config = {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      };
+      const response = await axios.put(`http://localhost:5000/api/user/profile/${userDetails._id}`, formData, config);
       toast.success('Profile updated successfully.');
+      // Update the state to reflect the new picture URL from the response if necessary
+      setUserDetails({ ...userDetails, pic: response.data.pic });
     } catch (error) {
       toast.error('Failed to update profile: ' + (error.response?.data?.message || error.message));
-    } finally {
-      setLoading(false);
+    }}else {
+      toast.error('Insert Password correctly')
     }
   };
-
+  
   return (
     <>
     <Navbar></Navbar>
@@ -90,13 +104,57 @@ const ProfileScreen = () => {
       
       <Row>
         <Col md={3}>
+      
           <Card>
             <Card.Img variant="top" src={userDetails.pic || '/avatar.jpg'} />
             <Card.Body>
-            <Card.Text>Welcome !</Card.Text>
+            <Card.Text>Welcome !  <Card.Title>{userDetails.username}</Card.Title></Card.Text>
+             
+              <Form.Group controlId="profilePic">
+  <Form.Label>Profile Picture</Form.Label>
+</Form.Group>
+ 
+<div className="d-flex align-items-center">
+ 
+    <Form.Control
+      type="file"
+      className="rounded-pill"
+      onChange={(e) => {
+        const file = e.target.files[0];
+        if (file) {
+          setProfilePic(file);
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setProfilePicPreview(reader.result);
+          };
+          reader.readAsDataURL(file);
+        }
+      }}
+    />
+  </div>
+  <Card.Body>
+<Card.Title>Role</Card.Title>
+<Form.Group controlId="role">
+<InputGroup>
+<InputGroup.Text><FaUserTag /></InputGroup.Text>
+<Form.Control
+as="select"
+name="role"
+value={userDetails.role}
+onChange={handleInputChange}
+>
+<option value="">Select Role</option>
+<option value="Patient">Patient</option>
+<option value="participative_member">Participative Member</option>
+<option value="Coordinator_Member">Coordinator Member</option>
 
-              <Card.Title>{userDetails.username}</Card.Title>
-              
+</Form.Control>
+</InputGroup>
+</Form.Group>
+</Card.Body>
+  <Button variant="primary" type="submit" onClick={handleSubmit} className="mt-3">
+Update Profile
+</Button>
               {/* Implement functionality to change picture if necessary */}
             </Card.Body>
           </Card>
@@ -105,6 +163,9 @@ const ProfileScreen = () => {
           <Card className="mb-3">
             <Card.Body>
               <Card.Title>Personal Information</Card.Title>
+              
+
+
               <Form.Group controlId="username">
                 <Form.Label>Name</Form.Label>
                 <InputGroup>
@@ -118,6 +179,11 @@ const ProfileScreen = () => {
                   />
                 </InputGroup>
               </Form.Group>
+
+
+
+
+              
               <Form.Group controlId="email">
                 <Form.Label>Email Address</Form.Label>
                 <InputGroup>
@@ -132,7 +198,7 @@ const ProfileScreen = () => {
                 </InputGroup>
               </Form.Group>
               <Form.Group controlId="firstName">
-                <Form.Label>first Name</Form.Label>
+                <Form.Label>First Name</Form.Label>
                 <InputGroup>
                   <InputGroup.Text><FaEnvelope /></InputGroup.Text>
                   <Form.Control
@@ -145,7 +211,7 @@ const ProfileScreen = () => {
                 </InputGroup>
               </Form.Group>
               <Form.Group controlId="lastName">
-                <Form.Label>last  Name</Form.Label>
+                <Form.Label>Last  Name</Form.Label>
                 <InputGroup>
                   <InputGroup.Text><FaEnvelope /></InputGroup.Text>
                   <Form.Control
@@ -198,30 +264,9 @@ onChange={handleInputChange}
 </Card>
 
 <Card>
-<Card.Body>
-<Card.Title>Role</Card.Title>
-<Form.Group controlId="role">
-<InputGroup>
-<InputGroup.Text><FaUserTag /></InputGroup.Text>
-<Form.Control
-as="select"
-name="role"
-value={userDetails.role}
-onChange={handleInputChange}
->
-<option value="">Select Role</option>
-<option value="Patient">Patient</option>
-<option value="participative_member">Participative Member</option>
-<option value="Coordinator_Member">Coordinator Member</option>
 
-</Form.Control>
-</InputGroup>
-</Form.Group>
-</Card.Body>
 </Card>
-<Button variant="primary" type="submit" onClick={handleSubmit} className="mt-3">
-Update Profile
-</Button>
+
 </Col>
 </Row>
 </motion.div>

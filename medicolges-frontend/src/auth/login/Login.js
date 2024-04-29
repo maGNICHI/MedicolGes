@@ -6,6 +6,10 @@ import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../Redux/Login/LoginActions";
 import { useNavigate } from "react-router-dom";
+import { Link as RouterLink } from 'react-router-dom';
+import { Link, VStack ,useColorModeValue } from '@chakra-ui/react';
+import { NavLink as RouterNavLink } from 'react-router-dom';
+
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -13,7 +17,8 @@ function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const loginState = useSelector(state => state.login);
- 
+  const linkColor = useColorModeValue('teal.500', 'teal.200');
+  const hoverColor = useColorModeValue('teal.600', 'teal.300');
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -36,9 +41,32 @@ function Login() {
                   className="img-fluid d-none d-md-block"
                   alt="Phone image"
                 />
-                <NavLink to="/signup" className="mt-3" color="#8ac2bb">I am not a member</NavLink>
-               
-                <NavLink to="/verify-email" className="mt-3" color="#8ac2bb">verify email</NavLink>
+                 <VStack spacing={3} align="center">
+      <Link
+        as={RouterNavLink}
+        to="/signup"
+        color={linkColor}
+        fontSize="lg"
+        fontWeight="bold"
+        _hover={{ color: hoverColor, textDecoration: "underline" }}
+        p={2}
+      >
+       Don't have an account ?
+      </Link>
+
+      <Link
+        as={RouterNavLink}
+        to="/verify-email"
+        color={linkColor}
+        fontSize="lg"
+        fontWeight="bold"
+        _hover={{ color: hoverColor, textDecoration: "underline" }}
+        p={2}
+      >
+        Verify email
+      </Link>
+    </VStack>
+
               </Col>
               <Col xs={12} md={6} className="order-md-2 order-1 d-flex align-items-center">
                 <Form className="mb-4 w-100" onSubmit={handleLogin}>
@@ -88,21 +116,48 @@ function Login() {
                     </div>
                   </div>
                   <div className="d-flex justify-content-between mx-4 mb-4">
-                    <Form.Check
-                      type="checkbox"
-                      label="Remember me"
-                      id="flexCheckDefault"
-                    />
+                     
                     {/* <a href="!#" color="#8ac2bb">Forgot password?</a> */}
-                    <NavLink to="/forgot-password" className="mt-3" color="#8ac2bb">forgot password</NavLink>
+                    <Link
+        as={RouterLink}
+        to="/forgot-password"
+        color="teal.500"
+        fontSize="lg"
+        fontWeight="bold"
+        _hover={{ color: "teal.600", textDecoration: "underline" }}
+        mt="3"
+      >
+       Forgot Password
+      </Link>
                   
                   </div>
                   <Button className="mb-4 w-100 border-0" style={{background:"#1990aa"}} size="lg" type="submit">
                     Sign in
                   </Button>
-                  <NavLink to="/face" className="mt-3" color="#8ac2bb">Facial authentication (upload)</NavLink>
-                  <br/>
-                  <NavLink to="/faceauth" className="mt-3" color="#8ac2bb">Facial authentication</NavLink>
+                  <VStack spacing={4} align="center">
+      <Link
+        as={RouterLink}
+        to="/face"
+        color="teal.500"
+        fontSize="lg"
+        fontWeight="bold"
+        _hover={{ color: "teal.600", textDecoration: "underline" }}
+        mt="3"
+      >
+        Facial authentication (upload)
+      </Link>
+      <Link
+        as={RouterLink}
+        to="/faceauth"
+        color="teal.500"
+        fontSize="lg"
+        fontWeight="bold"
+        _hover={{ color: "teal.600", textDecoration: "underline" }}
+        mt="3"
+      >
+        Facial authentication
+      </Link>
+    </VStack>
                 </Form>
               </Col>
             </Row>

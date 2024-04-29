@@ -10,11 +10,13 @@ import {
   Button,
   VStack,
   Box,
-  Text
+  Text,
+  useColorModeValue,
+  ScaleFade
 } from '@chakra-ui/react';
 
 const ResetPassword = () => {
-  const { token } = useParams();  // Extract the token from the URL
+  const { token } = useParams();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
@@ -22,7 +24,6 @@ const ResetPassword = () => {
   const handleResetPassword = async (e) => {
     e.preventDefault();
 
-    // Check if password meets minimum length requirement
     if (password.length < 6) {
       toast.error('Password must be at least 6 characters long.');
       return;
@@ -34,51 +35,74 @@ const ResetPassword = () => {
     }
 
     try {
-      const response = await axios.post(`http://localhost:5000/api/user/reset-password/${token}`, {
-        password  // Ensure this matches the backend expectation
-      });
+      const response = await axios.post(`http://localhost:5000/api/user/reset-password/${token}`, { password });
       if (response.status === 200) {
         toast.success('Password has been reset successfully.');
-        navigate('/login');  // Redirect to the login page after successful reset
+        navigate('/login');
       }
     } catch (error) {
-      console.log(error);
       toast.error('Failed to reset password. Please try again.');
     }
   };
-  
+
+  const inputFocusBorderColor = useColorModeValue('blue.500', 'blue.300');
+  const bgColor = useColorModeValue('gray.50', 'gray.900');
+  const boxShadowColor = "0 4px 6px 0 rgba(0, 0, 0, 0.1), 0 1px 3px 0 rgba(0, 0, 0, 0.08)";
 
   return (
-    <Container centerContent>
-      <VStack spacing={4} align="center" justify="center" minHeight="100vh">
-        <Box p={8} boxShadow="2xl" borderRadius="lg" bg="white" width="100%" maxWidth="500px">
-          <Text fontSize="2xl" mb={4} textAlign="center">Reset Your Password</Text>
-          <form onSubmit={handleResetPassword} style={{ width: '100%' }}>
-            <FormControl id="password" isRequired>
-              <FormLabel>New Password</FormLabel>
-              <Input
-                type="password"
-                placeholder="Enter new password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </FormControl>
-            <FormControl id="confirm-password" isRequired mt={4}>
-              <FormLabel>Confirm New Password</FormLabel>
-              <Input
-                type="password"
-                placeholder="Confirm new password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-              />
-            </FormControl>
-            <Button colorScheme="blue" width="full" mt={4} type="submit">
-              Reset Password
-            </Button>
-          </form>
-        </Box>
-      </VStack>
-    </Container>
+    <ScaleFade in={true} initialScale={0.9}>
+      <Container centerContent>
+        <VStack spacing={4} align="center" justify="center" minHeight="100vh"  
+                 bgPosition="center" bgRepeat="no-repeat" bgSize="cover">
+          <Box p={8} boxShadow={boxShadowColor} borderRadius="lg" bg="whiteAlpha.900" width="100%" maxWidth="500px">
+            <Text fontSize="3xl" mb={4} textAlign="center" color="teal.600">Reset Your Password</Text>
+            <form onSubmit={handleResetPassword} style={{ width: '100%' }}>
+              <FormControl id="password" isRequired>
+                <FormLabel>New Password</FormLabel>
+                <Input
+                  type="password"
+                  placeholder="Enter new password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  focusBorderColor={inputFocusBorderColor}
+                  _hover={{
+                    borderColor: inputFocusBorderColor,
+                  }}
+                  size="lg"
+                />
+              </FormControl>
+              <FormControl id="confirm-password" isRequired mt={4}>
+                <FormLabel>Confirm New Password</FormLabel>
+                <Input
+                  type="password"
+                  placeholder="Confirm new password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  focusBorderColor={inputFocusBorderColor}
+                  _hover={{
+                    borderColor: inputFocusBorderColor,
+                  }}
+                  size="lg"
+                />
+              </FormControl>
+              <Button
+                colorScheme="teal"
+                width="full"
+                mt={4}
+                type="submit"
+                size="lg"
+                _hover={{
+                    bgGradient: 'linear(to-r, teal.400, teal.500)',
+                    boxShadow: 'lg'
+                }}
+              >
+                Reset Password
+              </Button>
+            </form>
+          </Box>
+        </VStack>
+      </Container>
+    </ScaleFade>
   );
 };
 

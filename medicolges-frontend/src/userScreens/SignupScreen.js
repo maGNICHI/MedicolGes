@@ -5,7 +5,7 @@
   import { useSignup } from "./useSignup";
   import { toast } from "react-toastify";
   import axios from 'axios';
-
+  import { Link as RouterLink } from 'react-router-dom';
 import VerificationModal from './Email';
 
   const SignupScreen = () => {
@@ -140,19 +140,18 @@ import VerificationModal from './Email';
     };
     return (
       <>
-      <Container
-      className="signup-screen d-flex align-items-center justify-content-center">
+      <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh", backgroundColor: "white" }}>
       
         <Row className="justify-content-center w-100">
-          <Col lg={10} xl={8} className="signup-container shadow">
+          <Col lg={10} xl={8}  >
             <Row  >
               <Col  md={6} className="signup-form-col">
-              {/* <Title
-                    title={"Welcome To CoMediC Application Web"}
-                    fontSize={"40px"}
-                    fontWeight={900}
+              <Title
+                    title={"Welcome To CoMediC "}
+                    fontSize={"30px"}
+                    fontWeight={700}
                     color={"#1990aa"}
-                  /> */}
+                  />
               </Col>
             </Row>
             <Row>
@@ -165,7 +164,7 @@ import VerificationModal from './Email';
                 {/* Form fields */}
                 <div className="text-center mb-2">
                     <Title
-                      secondTitle={"If You Want To Upload A Profile Picture"}
+                      secondTitle={"Upload A Profile Picture"}
                       fontSize={"16px"}
                       fontWeight={600}
                     />
@@ -239,7 +238,7 @@ import VerificationModal from './Email';
                     </Col>
 
                     <Form.Group className="mb-3" controlId="username">
-      <Title secondTitle={"username"} fontSize={"16px"} fontWeight={600} />
+      <Title secondTitle={"Username"} fontSize={"16px"} fontWeight={600} />
       <Form.Control
         type="text"
         placeholder="Enter first name"
@@ -264,7 +263,7 @@ import VerificationModal from './Email';
     </Form.Group> */}
 
     {/* First Name */}
-    <Form.Group className="mb-3" controlId="firstName">
+    <Form.Group className="mb-3" controlId="FirstName">
       <Title secondTitle={"First Name"} fontSize={"16px"} fontWeight={600} />
       <Form.Control
         type="text"
@@ -276,7 +275,7 @@ import VerificationModal from './Email';
     </Form.Group>
 
     {/* Last Name */}
-    <Form.Group className="mb-3" controlId="lastName">
+    <Form.Group className="mb-3" controlId="LastName">
       <Title secondTitle={"Last Name"} fontSize={"16px"} fontWeight={600} />
       <Form.Control
         type="text"
@@ -354,11 +353,7 @@ import VerificationModal from './Email';
                   
 
                   <div className="d-flex justify-content-between mx-2 mb-2">
-                    <Form.Check
-                      type="checkbox"
-                      label="Accept Conditions"
-                      id="flexCheckDefault"
-                    />
+                    
                   </div>
 
                   <Button
@@ -377,7 +372,19 @@ import VerificationModal from './Email';
       alt="Sign up visual" 
       className="img-fluid my-3 signup-image" // Use the "signup-image" class
     />
-    <NavLink to="/login" className="already-member-link">I am already a member</NavLink>
+     
+    <Link
+        as={RouterLink}
+        to="/login"
+        color="teal.500"
+        fontSize="lg"
+        fontWeight="bold"
+        _hover={{ color: "teal.600", textDecoration: "underline" }}
+        mt="3"
+      >
+     Already a member? Log in
+      </Link>
+    
   </Col>
 
 

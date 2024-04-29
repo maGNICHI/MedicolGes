@@ -28,14 +28,14 @@ export const login = (email, password) => async (dispatch) => {
     }
 console.log(data.isVerified)
 console.log(data.blocked)
-//  if (!data.isVerified) {
-//       toast.error('Your account is not Verified.');
-//       dispatch({
-//         type: LOGIN_FAIL,
-//         payload: 'Account is blocked.',
-//       });
-//       return; // Exit the function early to prevent further actions
-//     }
+ if (!data.isVerified) {
+      toast.error('Your account is not Verified.');
+      dispatch({
+        type: LOGIN_FAIL,
+        payload: 'Account is blocked.',
+      });
+      return; // Exit the function early to prevent further actions
+    }
     dispatch({
       type: LOGIN_SUCCESS,
       payload: data,

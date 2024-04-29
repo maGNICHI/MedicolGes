@@ -53,10 +53,9 @@ router.post("/get-pictures",  getAllPic);
 router.delete("/delete-user/:id", deleteUser);
 router.patch("/block-user", blockUser);
 router.patch("/unblock-user",  unBlockUser);
-router
-  .route("/profile/:id") // Include the ID parameter in the route
-  .get( getUserProfile)
-  .put( updateUserProfile);
+router.route("/profile/:id")
+    .get(getUserProfile)
+    .put(upload.fields([{ name: 'pfp', maxCount: 1 }]), updateUserProfile);
  router.patch("/updateUserRoleToAdmin/:id", updateUserRoleToAdmin);
 
  router.post('/verify-email', async (req, res) => {

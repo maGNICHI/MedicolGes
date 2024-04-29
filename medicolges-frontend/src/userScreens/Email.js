@@ -11,7 +11,9 @@ import {
   useToast,
   InputGroup,
   InputLeftElement,
-  Icon
+  Icon,
+  ScaleFade,
+  useColorModeValue
 } from '@chakra-ui/react';
 import { EmailIcon, LockIcon } from '@chakra-ui/icons';
 
@@ -20,6 +22,9 @@ const VerificationPage = () => {
   const [code, setCode] = useState('');
   const navigate = useNavigate();
   const toast = useToast();
+
+  const formBackground = useColorModeValue("white", "gray.700");
+  const borderColor = useColorModeValue("blue.500", "blue.200");
 
   const handleVerify = async (event) => {
     event.preventDefault();
@@ -63,48 +68,53 @@ const VerificationPage = () => {
   };
 
   return (
-    <VStack spacing={4} align="center" justify="center" height="100vh" bg="gray.50" p={4}>
-      <Box p={6} boxShadow="2xl" bg="white" borderRadius="lg" w="100%" maxW="md">
-        <Text fontSize="3xl" mb={4} fontWeight="bold" textAlign="center">Email Verification</Text>
-        <form onSubmit={handleVerify}>
-          <FormControl isRequired>
-            <FormLabel>Email</FormLabel>
-            <InputGroup>
-              <InputLeftElement
-                pointerEvents="none"
-                children={<Icon as={EmailIcon} color="gray.500" />}
-              />
-              <Input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                borderColor="blue.500"
-              />
-            </InputGroup>
-          </FormControl>
-          <FormControl isRequired mt={4}>
-            <FormLabel>Verification Code</FormLabel>
-            <InputGroup>
-              <InputLeftElement
-                pointerEvents="none"
-                children={<Icon as={LockIcon} color="gray.500" />}
-              />
-              <Input
-                type="text"
-                value={code}
-                onChange={(e) => setCode(e.target.value)}
-                placeholder="Enter your verification code"
-                borderColor="blue.500"
-              />
-            </InputGroup>
-          </FormControl>
-          <Button type="submit" colorScheme="blue" size="lg" mt={6} w="full">
-            Verify Email
-          </Button>
-        </form>
-      </Box>
-    </VStack>
+    <ScaleFade in={true} initialScale={0.9}>
+      <VStack spacing={4} align="center" justify="center" height="100vh" bg="gray.50" p={4}>
+        <Box p={8} boxShadow="xl" bg={formBackground} borderRadius="xl" w="100%" maxW="md">
+          <Text fontSize="3xl" mb={6} fontWeight="bold" textAlign="center"  >Email Verification </Text>
+          <Text fontSize="1xl" mb={6}  textAlign="center"  >Check Email Spam </Text>
+          <form onSubmit={handleVerify}>
+            <FormControl isRequired>
+              <FormLabel>Email</FormLabel>
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<Icon as={EmailIcon} color="gray.500" />}
+                />
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Enter your email"
+                  borderColor={borderColor}
+                  focusBorderColor={borderColor}
+                />
+              </InputGroup>
+            </FormControl>
+            <FormControl  mt={4}>
+              <FormLabel>Verification Code</FormLabel>
+              <InputGroup>
+                <InputLeftElement
+                  pointerEvents="none"
+                  children={<Icon as={LockIcon} color="gray.500" />}
+                />
+                <Input
+                  type="text"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                  placeholder="Enter your verification code"
+                  borderColor={borderColor}
+                  focusBorderColor={borderColor}
+                />
+              </InputGroup>
+            </FormControl>
+            <Button type="submit" colorScheme="teal" size="lg" mt={6} w="full" _hover={{ bg: "teal.600" }}>
+              Verify Email
+            </Button>
+          </form>
+        </Box>
+      </VStack>
+    </ScaleFade>
   );
 };
 

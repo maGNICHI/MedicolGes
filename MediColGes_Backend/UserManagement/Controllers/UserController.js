@@ -1,5 +1,6 @@
 
 const User = require("../Model/User");
+
 const asyncHandler = require("express-async-handler");
 const {
   fetchAllUsers,
@@ -7,7 +8,7 @@ const {
   blockUserHelper,
   unBlockUserHelper
 } = require("./fct.js");
-
+const { uploads } = require('../../cloudinary');
 const allUsers = async (req, res) => {
   try {
     if (!req.user) {
@@ -76,65 +77,49 @@ const getUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-const updateUserProfile = asyncHandler(async (req, res) => {
-  
-  const userId = req.params.id; // Extracting ID from request params
 
+const updateUserProfile = asyncHandler(async (req, res) => {
+  const userId = req.params.id; // Extracting ID from request params
   const user = await User.findById(userId);
 
   if (!user) {
-    res.status(404);
-    throw new Error('User not found');
+      return res.status(404).json({ message: 'User not found' });
   }
 
-  // Only allow profile updates for the user making the request or an admin
-  // Assuming you have a way to identify the user making the request (e.g., from req.user added by a middleware)
-  // if (req.user.id !== userId && !req.user.isAdmin) {
-  //   res.status(403);
-  //   throw new Error('User not authorized to update this profile');
-  // }
-
-  // Update the user with new data or keep the old data
-   
+  // Update user details from request body
   user.username = req.body.username || user.username;
   user.firstName = req.body.firstName || user.firstName;
   user.lastName = req.body.lastName || user.lastName;
   user.email = req.body.email || user.email;
   user.role = req.body.role || user.role;
-  user.pic = req.body.pic || user.pic;
-  user.certification = req.body.certification || user.certification;
-  // user.isAdmin = req.body.isAdmin !== undefined ? req.body.isAdmin : user.isAdmin;
-  // user.isDeleted = req.body.isDeleted !== undefined ? req.body.isDeleted : user.isDeleted;
-  // user.blocked = req.body.blocked !== undefined ? req.body.blocked : user.blocked;
 
+  // Handle password updates with hashing in your model's middleware
   if (req.body.password) {
-    user.password = req.body.password; // Ensure you have password encryption handled, e.g., in Mongoose pre-save middleware
+      user.password = req.body.password;
   }
 
-  if (req.file) {
-    user.profileImageName = req.file.filename || user.profileImageName;
-  }
+  
+// Handle profile picture upload
+if (req.files && req.files['pfp']) {
+  const result = await uploads(req.files['pfp'][0].path);
+  user.pic = result.url; // Ensure that the 'url' property exists in the resolved object
+}
 
-  const updatedUserData = await user.save();
+
+  const updatedUser = await user.save();
 
   res.status(200).json({
-    id: updatedUserData._id,
-    name: updatedUserData.name,
-    
-    gender: updatedUserData.gender,
-    username: updatedUserData.username,
-    firstName: updatedUserData.firstName,
-    lastName: updatedUserData.lastName,
-    email: updatedUserData.email,
-    role: updatedUserData.role,
-    pic: updatedUserData.pic,
-    certification: updatedUserData.certification,
-    isAdmin: updatedUserData.isAdmin,
-    isDeleted: updatedUserData.isDeleted,
-    blocked: updatedUserData.blocked,
-    // Depending on your needs, you might choose to return only specific fields
+      id: updatedUser._id,
+      username: updatedUser.username,
+      firstName: updatedUser.firstName,
+      lastName: updatedUser.lastName,
+      email: updatedUser.email,
+      role: updatedUser.role,
+      pic: updatedUser.pic,
+      isAdmin: updatedUser.isAdmin
   });
 });
+
 
 
 const getAllUsers = asyncHandler(async (req, res) => {
@@ -146,6 +131,9 @@ const getAllUsers = asyncHandler(async (req, res) => {
     throw new NotFoundError();
   }
 });
+
+
+
 const getAllPic = asyncHandler(async (req, res) => {
   const usersData = await fetchAllPic();
 
