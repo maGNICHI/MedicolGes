@@ -53,6 +53,12 @@ const registerUser = async (req, res) => {
       }
     });
 
+
+    
+
+ 
+
+
     let picUrl = req.files && req.files['pfp'] ? (await uploads(req.files['pfp'][0].path)).url : undefined;
     let certificationUrl = req.files && req.files['certification'] ? (await uploads(req.files['certification'][0].path)).url : undefined;
     const blocked = role === 'Professional' || role === 'Initiator';
@@ -173,43 +179,122 @@ const registerUser = async (req, res) => {
 
 //@description     Auth the user
 //@route           POST /api/users/login
-//@access          Public
+// //@access          Public
+// const authUser = async (req, res) => {
+//   const { email, password } = req.body;
+
+//   try {
+//     const user = await User.findOne({ email });
+//     // const bcrypt = require('bcryptjs');
+//     // const hash = '$2a$10$5DmUEyhS51yA51dUwAGuc./yp2M.EarTYOKNRLyO9lNoj3bV.3px2'; // New hash
+//     // bcrypt.compare('a', hash, (err, res) => {
+//     //   console.log('Match:', res); // Should print true if 'yourTestPassword' is the correct password
+//     // });
+//     if (!user || !(await user.matchPassword(password))) {
+//       return res.status(401).json({ message: "Invalid Email or Password" });
+//     }
+    
+//     if (user.blocked) {
+//       return res.status(401).json({ success: false, error: 'Your account is blocked.' });
+//     }
+//     if (user.twoFactorAuth && user.twoFactorAuth.enabled) {
+//       return res.json({
+//         success: true,
+//         twoFactorRequired: true,
+//         userId: user._id,
+//         message: "2FA is enabled. Please verify using your 2FA application."
+//       });
+//     }
+
+//     // If 2FA is not enabled, redirect to QR code page for setup
+//     if (user.twoFactorAuth && !user.twoFactorAuth.enabled) {
+//       return res.json({
+//         success: true,
+//         twoFactorSetupRequired: true,
+//         userId: user._id,
+//         message: "2FA is not enabled. Please set up using the QR code."
+//       });
+//     }
+
+
+   
+//     return res.json({
+//       _id: user._id,
+//       username: user.username,
+//       firstName: user.firstName,
+//       lastName: user.lastName,
+//       email: user.email,
+//       role: user.role,
+//       isAdmin: user.isAdmin,
+//       pic: user.pic,
+//       certification: user.certification,
+//       isVerified:user.isVerified,
+//       isDeleted: user.isDeleted,
+//       blocked:user.blocked,
+
+//      // token: generateToken(user),
+//     });
+//   } catch (error) {
+//     return res.status(500).json({ message: error.message });
+//   }
+// };
 const authUser = async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
-    // const bcrypt = require('bcryptjs');
-    // const hash = '$2a$10$5DmUEyhS51yA51dUwAGuc./yp2M.EarTYOKNRLyO9lNoj3bV.3px2'; // New hash
-    // bcrypt.compare('a', hash, (err, res) => {
-    //   console.log('Match:', res); // Should print true if 'yourTestPassword' is the correct password
-    // });
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({ message: "Invalid Email or Password" });
     }
-    
 
-   
-    return res.json({
-      _id: user._id,
-      username: user.username,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
-      role: user.role,
-      isAdmin: user.isAdmin,
-      pic: user.pic,
-      certification: user.certification,
-      isVerified:user.isVerified,
-      isDeleted: user.isDeleted,
-      blocked:user.blocked,
+    if (user.blocked) {
+      return res.status(401).json({ success: false, error: 'Your account is blocked.' });
+    }
 
-      token: generateToken(user),
-    });
+    const twoFAStatus = user.twoFactorAuth && user.twoFactorAuth.enabled;
+
+    // Check if 2FA is setup but not enabled
+    if (user.twoFactorAuth && !user.twoFactorAuth.enabled) {
+      return res.json({
+        success: true,
+        twoFactorSetupRequired: true,
+        twoFactorEnabled: false,  // Reflect actual enabled status
+        userId: user._id,
+        message: "2FA is not enabled. Please set up using the QR code."
+      });
+    }
+
+    // User has 2FA enabled and has previously verified it successfully
+    if (twoFAStatus) {
+      const token = generateToken(user);  // Assuming generateToken handles token creation
+      return res.json({
+        success: true,
+        twoFactorRequired: false,
+        token: token,
+        userId: user._id,
+        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        role: user.role,
+        isAdmin: user.isAdmin,
+        pic: user.pic,
+        certification: user.certification,
+        isVerified: user.isVerified,
+        isDeleted: user.isDeleted,
+        blocked: user.blocked
+      });
+    }
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
 };
+
+
+
+
+
+
 const logoutUser = asyncHandler(async (req, res) => {
   
   destroyAuthToken(res);

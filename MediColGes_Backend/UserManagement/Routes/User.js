@@ -3,7 +3,7 @@ const multer = require("multer"); // Import multer for handling form data
 const path = require('path');
 
 
-const uploadd = multer({ dest: 'uploads/' });
+const uploadd = multer({ dest: 'uploadd/' });
 const { spawn } = require('child_process');
 const {
   registerUser,
@@ -12,7 +12,10 @@ const {
 const nodemailer = require('nodemailer');
 const User = require('../Model/User');
    // For generating the reset token
- 
+   const {
+    verify2FA,enable2FA,
+  } = require("../Controllers/step");
+  
 const jwt = require('jsonwebtoken')
 const {
   allUsers,
@@ -28,7 +31,7 @@ const fs = require('fs');
 // Configure multer to save uploaded files to disk
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, 'uploads/');
+    cb(null, 'uploadd/');
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -44,6 +47,8 @@ router.get("/getUserById/:userId", UsersById);
 router.route("/").post(upload.fields([{ name: 'pfp', maxCount: 1 }, { name: 'certification', maxCount: 1 }]), registerUser);
 //////
 
+router.post('/enable-2fa',enable2FA);
+router.post('/verify-2fa',verify2FA,registerUser);
 
 router.post("/addUser", addUser); //from admin
 router.post("/login", authUser);

@@ -39,6 +39,9 @@ const UserSchema = mongoose.Schema(
     blocked: {
       type: Boolean,
       default: false
+  },twoFactorAuth: {
+    secret: String,
+    enabled: Boolean
   }
   },
   {

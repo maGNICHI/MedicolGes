@@ -47,8 +47,12 @@ import { useAuthContext } from './userScreens/useAuthContext'
 import { ToastContainer } from 'react-toastify';
 import AutoLogout  from './userScreens/autoLogout'
 import FacialAuth  from './userScreens/facial.js'
+import ProtectedRoute  from './userScreens/protect.js'
+import TwoFactorAuthSetup  from './userScreens/qrcode.js'
 import FacialAuthLive  from './userScreens/live picture.js'
 const ChatPage = React.lazy(() => import("./UserInterface/Pages/ChatPage"));
+
+
 function App() {
  // const store = createStore(reducers, compose(applyMiddleware(thunk)));
 
@@ -58,7 +62,19 @@ function App() {
   <Route path="/signup" element={<SignupScreen />} />
         <Route path="/loginn" element={<LoginScreen />} />
         <Route path="/faceauth" element={<FacialAuthLive />} />
+
+
+         
+     <Route path="/" element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute>
+        } />
+        
+
+
         <Route path="/face" element={<FacialAuth />} />
+        <Route path="/qr" element={<TwoFactorAuthSetup />} />
         <Route path="/Profile" element={<ProfileScreen />} />
         <Route path="/verify-email" element={<VerificationPage />} />
         <Route path="/login" element={<Login />} />
