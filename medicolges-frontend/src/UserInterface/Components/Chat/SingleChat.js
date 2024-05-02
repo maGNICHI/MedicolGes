@@ -46,11 +46,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
    const handleFileChange = (e) => {
      setFile(e.target.files[0]);
    };
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  const mic = new SpeechRecognition();
-  mic.continuous = true;
-  mic.interimResults = true;
-  mic.lang = "en-US";
+  //const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  //const mic = new SpeechRecognition();
+  //mic.continuous = true;
+  //mic.interimResults = true;
+  //mic.lang = "en-US";
   const fetchMessages = async () => {
     if (!selectedChat) return;
     try {
@@ -64,9 +64,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       );
       setMessages(data);
       setLoading(false);
-      console.log(data, "fetched messsages of the selected chat data");
+     // console.log(data, "fetched messsages of the selected chat data");
       socket.emit("join chat", selectedChat._id);
-      console.log(data);
+     // console.log(data);
     } catch (error) {
       console.log(error.message);
       toast({
@@ -273,6 +273,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   // Effect hook for handling incoming messages
   useEffect(() => {
     socket.on("message recieved", (newMessageRecieved) => {
+      if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id) {
+
+        if (!notification.includes(newMessageRecieved)) {
+          setNotification([newMessageRecieved, ...notification]);
+          setFetchAgain(!fetchAgain);
+          console.log(notification, "notification bell-icon check");
+        }
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+    socket.on("audio recieved", (newMessageRecieved) => {
       if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat._id) {
 
         if (!notification.includes(newMessageRecieved)) {

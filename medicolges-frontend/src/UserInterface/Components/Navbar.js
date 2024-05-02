@@ -6,6 +6,7 @@ import {
   faCommentDots,
   faBars,
   faXmark,
+  faBell,
 } from "@fortawesome/free-solid-svg-icons";
 import "../Styles/Navbar.css";
 import { Link, useLocation } from "react-router-dom";
@@ -15,15 +16,60 @@ import { FaSignInAlt, FaSignOutAlt } from "react-icons/fa";
 import { useLogout } from '../../userScreens/useLogout'
 import { useAuthContext } from "../../userScreens/useAuthContext";
 import { Navigate, useNavigate } from "react-router-dom";
+import axios from "axios";
 function Navbar() {
   const [nav, setNav] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-
+  const [notifications, setNotifications] = useState([]);
+  const sortedNotifications = [...notifications].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+  const [user, setUser] = useState({});
   useEffect(() => {
-    // Check if user is logged in from local storage
-    const userInfo = localStorage.getItem('userInfo');
-    setIsLoggedIn(!!userInfo); // Check if userInfo exists
+    const fetchNotifications = async () => {
+      try {
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+        setUser(userInfo);
+        setIsLoggedIn(!!userInfo);
+        if (!userInfo) return;
+        const response = await axios.get(`http://localhost:5000/api/notification/byowner/${userInfo._id}`);
+        console.log(response);
+        setNotifications(response.data);
+      } catch (error) {
+        console.error("Error fetching notifications:", error);
+      }
+    };
+
+    fetchNotifications();
   }, []);
+
+  console.log(notifications);
+  const handleNotificationClick = async (notificationId) => {
+    try {
+      // Make a PUT request to mark the notification as opened
+      await axios.put(`/api/notifications/markAsOpened/${notificationId}`);
+
+      // Update the state to reflect the change in isOpened
+      const updatedNotifications = notifications.map((notification) =>
+        notification._id === notificationId
+          ? { ...notification, isOpened: true }
+          : notification
+      );
+      setNotifications(updatedNotifications);
+    } catch (error) {
+      console.error("Error marking notification as opened:", error);
+    }
+  };
+
+
+  const handleDeleteAllNotifications = async () => {
+    try {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      await axios.delete(`/api/notifications/deleteAll/${userInfo._id}`);
+      setNotifications([]);
+    } catch (error) {
+      console.error("Error deleting notifications:", error);
+    }
+  };
+
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
@@ -117,9 +163,9 @@ function Navbar() {
             <p className="navbar-links cursor-pointer">Organization</p>
             {dropdownOpen && (
               <ul className="dropdown-content">
-                <li>
+                {user.role === "admin" && (<li>
                   <Link to="/organizationFront">Create Organization</Link>
-                </li>
+                </li>)}
                 <li>
                   <Link to="/organizationShow">Show Organization</Link>
                 </li>
@@ -143,6 +189,27 @@ function Navbar() {
               <Link to="/Profile" className="navbar-links">
                 Profile
               </Link>
+            </li>
+            <li className="dropdown" onClick={() => setDropdownOpen(!dropdownOpen)}>
+              <div className="navbar-links cursor-pointer icon-link mr-2">
+                <FontAwesomeIcon icon={faBell} size={24} />
+                <span className="num">{notifications.filter(notification => !notification.isOpened).length}</span>
+              </div>
+              {dropdownOpen && (
+                <ul className="dropdown-content" style={{ maxHeight: "500px", width: "300px", overflowY: "auto" }}>
+                  {sortedNotifications.map(notification => (
+                    <li key={notification._id} style={{ fontWeight: notification.isOpened ? "normal" : "bold", backgroundColor: notification.isOpened ? "transparent" : "#e0e0e0" }}>
+                      <div onClick={() => handleNotificationClick(notification._id)}>
+                        {notification.action}
+                      </div>
+                    </li>
+                  ))}
+                  <li>
+                    <button onClick={handleDeleteAllNotifications}>Delete All</button>
+                  </li>
+                </ul>
+
+              )}
             </li>
             <li>
               <Link onClick={handleClick} to="/login" className="navbar-links">
@@ -227,10 +294,10 @@ function Navbar() {
             <Link href="/organizationShow">Show Organization</Link>
           </li>
           <li>
-          <Link to="/disease">
-            Disease
-          </Link>
-        </li>
+            <Link to="/disease">
+              Disease
+            </Link>
+          </li>
           <li>
             <a onClick={openNav} href="/chats">
               chats

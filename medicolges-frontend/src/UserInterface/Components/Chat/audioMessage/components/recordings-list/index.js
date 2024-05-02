@@ -9,7 +9,7 @@ import {Buffer} from 'buffer';
 import { io } from 'socket.io-client';
 const ENDPOINT = 'http://localhost:5000';
 
-const RecordingsList = ({ audio }) => {
+const RecordingsList = ({ audio}) => {
    const { recordings, deleteAudio } = useRecordingsList(audio);
    //const { user, selectedChat } = ChatState();
    const { user, selectedChat } = useContext(ChatContext);
@@ -24,12 +24,12 @@ const RecordingsList = ({ audio }) => {
       return uint8Array;
    }
    useEffect(() => {
-      // Initialisation de la connexion WebSocket
+      // Initialize Socket.IO connection
       const newSocket = io(ENDPOINT);
       setSocket(newSocket);
-
-      return () => newSocket.close(); // Fermeture de la connexion lors du démontage du composant
-   }, []);
+  
+      return () => newSocket.close(); // Clean up connection on unmount
+    }, []);
    const sendAudio = async () => {
       try {
          const config = {
@@ -41,15 +41,16 @@ const RecordingsList = ({ audio }) => {
 
          const Uint8A=await getUint8ArrayFromBlobUrl(recordings[0].audio);
          const buffer=Buffer.from(Uint8A)
-         await axios.post('http://localhost:5000/api/message', {
+         const { data } =await axios.post('http://localhost:5000/api/message', {
             content: 'Audio Message',
             chatId: selectedChat._id,
             isMedia: true,
             buffer
          }, config);
-         console.log(Uint8A);
-         console.log(buffer);
-        
+        // console.log(Uint8A);
+         //console.log(buffer);
+         socket.emit('new audio', data);
+         console.log(data);
       } catch (err) {
          toast({
             title: "Error Occured!",

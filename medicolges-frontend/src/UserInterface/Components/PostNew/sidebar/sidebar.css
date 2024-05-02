@@ -54,4 +54,37 @@
   list-style: none;
 }
 
+/* Médias requêtes pour la réactivité */
+@media (max-width: 768px) {
+  .sidebar1 {
+    flex: initial; /* Réinitialiser la propriété flex à sa valeur par défaut */
+    height: auto; /* Hauteur automatique pour s'adapter au contenu */
+    position: static; /* Position statique pour ne pas coller en haut */
+    top: auto; /* Réinitialiser la valeur top */
+    overflow-y: visible; /* Pas de défilement sur les appareils mobiles */
+    width: 100%; /* Sidebar prend toute la largeur sur les appareils mobiles */
+  }
 
+  .sidebar1Wrapper {
+    padding: 10px; /* Ajustement de l'espacement interne */
+  }
+
+  .sidebar1ListItem {
+    margin-bottom: 10px; /* Ajustement de l'espacement entre les éléments de la liste */
+  }
+  .sidebar1ListItemText{
+    font-weight: 500;
+  }
+
+  .sidebar1Button {
+    width: 100%; /* Les boutons occupent toute la largeur disponible */
+  }
+}
+.postProfileImg {
+  width: 40px; /* Ajustez la largeur de l'image selon vos besoins */
+  height: 40px; /* Ajustez la hauteur de l'image selon vos besoins */
+  border-radius: 50%;
+  margin-right: 10px;
+  max-width: 100%; /* Rendre l'image responsive */
+  height: auto; /* Assurer la proportionnalité */
+}

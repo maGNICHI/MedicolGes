@@ -62,7 +62,6 @@
   margin-bottom: 20px; /* Add space between each user */
 }
 
-
 .postProfileImg {
   width: 40px; /* Adjust the width as needed */
   height: 40px; /* Adjust the height as needed */
@@ -75,23 +74,24 @@
 }
 
 .eight h3 {
-  text-align:center;
-
-  text-transform:uppercase;
-  font-size:26px; letter-spacing:1px;
-
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 26px;
+  letter-spacing: 1px;
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   grid-template-rows: 16px 0;
   grid-gap: 22px;
 }
 
-.eight h3:after,.eight h1:before {
+.eight h3:after,
+.eight h1:before {
   content: " ";
   display: block;
   border-bottom: 2px solid #ccc;
-  background-color:#f8f8f8;
+  background-color: #f8f8f8;
 }
+
 .title-user {
   position: relative;
   padding: 0;
@@ -103,4 +103,36 @@
   -webkit-transition: all 0.4s ease 0s;
   -o-transition: all 0.4s ease 0s;
   transition: all 0.4s ease 0s;
+}
+
+/* Médias requêtes pour la réactivité */
+@media (max-width: 768px) {
+  .sidebar1 {
+    width: 100%; /* La sidebar prend toute la largeur de l'écran sur les appareils mobiles */
+  }
+
+  .sidebar1Wrapper {
+    padding: 10px; /* Ajustement de l'espacement interne */
+  }
+
+  .sidebar1ListItem {
+    margin-bottom: 10px; /* Ajustement de l'espacement entre les éléments de la liste */
+  }
+
+  .sidebar1Button {
+    width: 100%; /* Les boutons occupent toute la largeur disponible */
+  }
+
+  .userRow {
+    margin-bottom: 10px; /* Ajustement de l'espacement entre les utilisateurs */
+  }
+
+  .postProfileImg {
+    width: 30px; /* Ajustement de la taille de l'image du profil */
+    height: 30px;
+  }
+
+  .title-user {
+    font-size: 24px; /* Ajustement de la taille de la police */
+  }
 }

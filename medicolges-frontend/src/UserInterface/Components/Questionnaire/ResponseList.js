@@ -72,18 +72,6 @@ function ResponseList({ formId, setNbrResponse }) {
   };
   
   
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-
   useEffect(() => {
     const fetchData = async (formId) => {
       try {

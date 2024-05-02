@@ -12,7 +12,7 @@ export default function Sidebar() {
         const userInfo = JSON.parse(localStorage.getItem("userInfo"));
         const token = userInfo.token;
 
-        const response = await axios.get("http://localhost:5000/api/user/", {
+        const response = await axios.get("http://localhost:5000/api/user", {
           headers: {
             Authorization: `Bearer ${token}`,
           },

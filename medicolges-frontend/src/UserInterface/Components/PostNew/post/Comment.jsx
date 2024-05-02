@@ -9,6 +9,20 @@ const Comment = ({ comment, user, setPosts, postId }) => {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(comment.text);
  
+useEffect(() => {
+  const fetchCommenterDetails = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/user/${comment.commenterId}`
+      );
+      setCommenter(response.data);
+    } catch (error) {
+      console.error("Error fetching commenter details:", error);
+    }
+  };
+
+  fetchCommenterDetails();
+}, [comment.commenterId]);
 
   const handleDeleteComment = async () => {
     try {
@@ -48,50 +62,44 @@ const Comment = ({ comment, user, setPosts, postId }) => {
 
   return (
     <div className="comment-item d-flex justify-content-between ">
-      <div className="d-flex align-items-center">
-        {user && (
-          <img
-            className="postProfileImg"
-            src={user.pic}
-            alt={user.username}
-          />
-        )}
-        <div>
-
-        <p className="commenter-username mt-2">
-          {user ? user.username : "Unknown User"}
-        </p>
-        {editing ? (
-          <div className="d-flex justify-content-between  ">
-        <input
-          type="text"
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-        />
-                 
-          </div>
-      ) : <p>{comment.text}</p>}
-        
+      <div className="comment-item">
+        <div className="commenter-info">
+          {commenter && (
+            <img
+              className="postProfileImg"
+              src={commenter.pic}
+              alt={commenter.username}
+            />
+          )}
+          <p className="commenter-username">
+            {commenter ? commenter.username : "Unknown User"}
+          </p>
         </div>
-      </div>
-    
-      <div className="button-container">
-        <div className="icon-container">
-          <MdDeleteOutline
-            className="delete-icon"
-            onClick={() =>handleDeleteComment()}
-          />
-        </div>
-        <div className="icon-container">
+        <div className="comment-text-container">
           {editing ? (
-            <CiEdit className="edit-icon" onClick={() => setEditing(false)} />
+            <input
+              type="text"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
           ) : (
-            <CiEdit className="edit-icon" onClick={() => setEditing(true)} />
+            <p className="comment-text">{comment.text}</p>
           )}
         </div>
-        <div>
-        {editing && <button className="btn btn-primary mt-3"  onClick={handleEditComment} >Update </button>}
-
+        <div className="button-container">
+          <div className="icon-container">
+            <MdDeleteOutline
+              className="delete-icon"
+              onClick={handleDeleteComment}
+            />
+          </div>
+          <div className="icon-container">
+            {editing ? (
+              <CiEdit className="edit-icon" onClick={handleEditComment} />
+            ) : (
+              <CiEdit className="edit-icon" onClick={() => setEditing(true)} />
+            )}
+          </div>
         </div>
       </div>
     </div>

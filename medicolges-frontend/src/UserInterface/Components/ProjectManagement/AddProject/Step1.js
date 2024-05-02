@@ -213,7 +213,7 @@ export default function Step1({ formDataProject, setformDataProject, onNext }) {
                     )
                     .map(
                       (collaborative) =>
-                        collaborative.isDeleted === false && (
+                        collaborative && (
                           <Badge
                             key={collaborative._id}
                             bg="primary"

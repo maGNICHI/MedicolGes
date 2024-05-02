@@ -48,4 +48,4 @@ def get_project():
         return jsonify({'error': 'Project not found'}), 400
 
 if __name__ == '__main__':
-    app.run(port=1000)
+    app.run(port=2000)

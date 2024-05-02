@@ -1,8 +1,8 @@
+/* Styles de base */
 .post {
   background: white;
   width: 100%;
   border-radius: 10px;
-  -webkit-box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
   box-shadow: 0px 0px 16px -8px rgba(0, 0, 0, 0.68);
   margin: 30px 0;
 }
@@ -35,47 +35,47 @@
   margin: 0 10px;
 }
 
-.postDate{
-    font-size: 12px;
+.postDate {
+  font-size: 12px;
 }
 
-.postCenter{
-    margin: 20px 0;
+.postCenter {
+  margin: 20px 0;
 }
 
-.postImg{
-    margin-top: 20px;
-    width: 100%;
-    max-height: 500px;
-    object-fit: contain;
+.postImg {
+  margin-top: 20px;
+  width: 100%;
+  max-height: 500px;
+  object-fit: contain;
 }
 
-.postBottom{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.postBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
-.postBottomLeft{
-    display: flex;
-    align-items: center;   
+.postBottomLeft {
+  display: flex;
+  align-items: center;
 }
 
-.likeIcon{
-    width: 24px;
-    height: 24px;
-    margin-right: 5px;
-    cursor: pointer;
+.likeIcon {
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
+  cursor: pointer;
 }
 
-.postLikeCounter{
-    font-size: 15px;
+.postLikeCounter {
+  font-size: 15px;
 }
 
-.postCommentText{
-    cursor: pointer;
-    border-bottom: 1px dashed gray;
-    font-size: 15px;
+.postCommentText {
+  cursor: pointer;
+  border-bottom: 1px dashed gray;
+  font-size: 15px;
 }
 
 .Btn {
@@ -91,8 +91,7 @@
   overflow: hidden;
   transition-duration: 0.3s;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
-  background: rgba(255, 65, 65, 1) ;
-
+  background: rgba(255, 65, 65, 1);
 }
 
 /* plus sign */
@@ -111,6 +110,7 @@
 .sign svg path {
   fill: white;
 }
+
 /* text */
 .text {
   position: absolute;
@@ -122,6 +122,7 @@
   font-weight: 600;
   transition-duration: 0.3s;
 }
+
 /* hover effect on button width */
 .Btn:hover {
   width: 125px;
@@ -134,6 +135,7 @@
   transition-duration: 0.3s;
   padding-left: 20px;
 }
+
 /* hover effect button's text */
 .Btn:hover .text {
   opacity: 1;
@@ -141,10 +143,12 @@
   transition-duration: 0.3s;
   padding-right: 10px;
 }
+
 /* button click effect*/
 .Btn:active {
   transform: translate(2px, 2px);
 }
+
 .postImages {
   display: flex;
   flex-wrap: wrap;
@@ -165,28 +169,73 @@
   max-width: calc(50% - 5px);
 }
 
+/* Media Queries pour la réactivité */
 @media (max-width: 768px) {
-  .multiImg {
-    max-width: calc(100% - 5px);
+  .postWrapper {
+    padding: 5px;
+  }
+
+  .postTopLeft {
+    align-items: flex-start;
+    margin-bottom: 5px;
+  }
+
+  .postProfileImg {
+    width: 28px;
+    height: 28px;
+  }
+
+  .postUsername {
+    font-size: 14px;
+    margin-right: 5px;
+  }
+
+  .postDate {
+    font-size: 11px;
+  }
+
+  .postCenter {
+    margin: 10px 0;
+  }
+
+  .postImg {
+    margin-top: 10px;
+  }
+
+  .postTags {
+    margin-top: 10px;
+  }
+
+  .postBottom {
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .postLikeCounter,
+  .postCommentText {
+    font-size: 14px;
   }
 }
- .shareButton{
-    border: none;
-    padding: 7px;
-    border-radius: 5px;
-    background-color: #1990aa;
-    font-weight: 500;
-    margin-right: 20px;
-    cursor: pointer;
-    color: white;
+
+/* Styles pour le bouton de partage */
+.shareButton {
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  background-color: #1990aa;
+  font-weight: 500;
+  margin-right: 20px;
+  cursor: pointer;
+  color: white;
 }
 
 .icon-container {
   display: inline-block;
-  margin-right: 10px; /* Adjust margin as needed */
+  margin-right: 10px; /* Ajuster la marge si nécessaire */
 }
 
 .delete-icon,
 .edit-icon {
   display: block;
 }
+

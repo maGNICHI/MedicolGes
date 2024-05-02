@@ -1,0 +1,34 @@
+/* Comment.css */
+.comment-item {
+  display: flex;
+  align-items: flex-start; /* Align items at the top */
+}
+
+.commenter-info {
+  display: flex; /* Display pic and username in a row */
+  align-items: center; /* Align items vertically */
+  margin-right: 10px; /* Add margin to the right */
+}
+
+.postProfileImg {
+  width: 30px; /* Adjust the width of the profile picture */
+  height: 30px; /* Adjust the height of the profile picture */
+  border-radius: 50%; /* Make the profile picture circular */
+  margin-right: 10px; /* Add margin between the picture and username */
+}
+
+.commenter-username {
+  font-weight: bold; /* Make the username bold */
+  font-size: smaller; /* Adjust the font size of the username */
+  margin: 0; /* Remove any margin */
+}
+
+.comment-text-container {
+  flex-grow: 1; /* Allow the comment text container to grow and occupy remaining space */
+}
+
+.comment-text {
+  margin: 5px 0; /* Add margin to the top and bottom of the comment text */
+}
+
+/* Add any additional styling you need */

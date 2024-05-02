@@ -75,11 +75,11 @@ router.get("/download/:fileName", (req, res) => {
 // Route to update a project
 router.put("/updateProject/:_id", async (req, res) => {
   const { _id } = req.params;
-  const resFound = req.body;
+  const { name, description, file, ...otherFields } = req.body;
   try {
     const updatedRes = await Project.findByIdAndUpdate(
       _id,
-      { $set: resFound },
+      { $set: { name, description, file, ...otherFields } }, // inclure le champ "file" ici
       { new: true }
     );
     res

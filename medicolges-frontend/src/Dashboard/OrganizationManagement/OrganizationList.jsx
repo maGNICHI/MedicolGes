@@ -54,7 +54,7 @@ export default function OrganizationList() {
               <Col xs={12} md={9}>
                 <Title title={"Organization List"} fontWeight={600} fontSize={"24px"} />
               </Col>
-              <Col xs={12} md={3} className="text-md-end mt-3 mt-md-0">
+              {/* <Col xs={12} md={3} className="text-md-end mt-3 mt-md-0">
                 <IconButton
                   className="h-100 border-0"
                   style={{
@@ -69,7 +69,7 @@ export default function OrganizationList() {
                 >
                   <Title title={"Add Organization"} />
                 </IconButton>
-              </Col>
+              </Col> */}
             </Row>
           </Card.Header>
           <Card.Body className="p-0">

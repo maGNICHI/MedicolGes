@@ -41,7 +41,7 @@ const UsersByRole = async (req, res) => {
           ],
         }
       : {};
-    const users = await User.find({ ...keyword, role: { $in: ["admin", "initiator", "participative_member"] } });
+    const users = await User.find({ ...keyword, role: { $in: ["admin", "initiator", "participative_member", "Coordinator_Member", "Professionnal"] } });
     res.json(users);
   } catch (err) {
     console.error(err.message);

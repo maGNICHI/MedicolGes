@@ -40,7 +40,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-//router.route("/").get(protect, allUsers); //aamel kifha get-users
+router.route("/").get(protect, allUsers); //aamel kifha get-users
  
 router.get("/getCollaborative",UsersByRole);
 router.get("/getUserById/:userId", UsersById);

@@ -1,7 +1,56 @@
-.feed{
-    flex:5.5
+.feed {
+  flex: 5.5;
 }
 
-.feedWrapper{
-    padding: 20px;
+.feedWrapper {
+  padding: 20px;
+}
+
+/* Ajoutez des Media Queries pour rendre le feed responsive */
+@media only screen and (max-width: 768px) {
+  .feed {
+    flex: 1; /* Par exemple, ajustez la taille du feed pour les écrans plus petits */
+  }
+
+  .feedWrapper {
+    padding: 10px; /* Réduisez l'espacement pour les écrans plus petits */
+  }
+}
+
+/* Extra small devices (phones, less than 768px) */
+/* No need for changes here as you have handled mobile view */
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+  .feed {
+    flex: 4;
+  }
+
+  .feedWrapper {
+    padding: 15px;
+  }
+}
+
+/* Medium devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+  .feed {
+    flex: 3.5;
+  }
+}
+
+/* Large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+  .feed {
+    flex: 3;
+  }
+}
+.btnFetchPopular {
+   border: none;
+  padding: 7px 15px; /* Ajustez les marges pour un meilleur rendu sur de petits écrans */
+  border-radius: 5px;
+  background-color: #1990aa;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+  margin-top: 10px;
 }

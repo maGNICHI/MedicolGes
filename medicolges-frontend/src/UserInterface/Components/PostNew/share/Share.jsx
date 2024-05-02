@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./share.css";
-import { MdPermMedia as PermMedia } from 'react-icons/md';
-import { MdLabel as Label } from 'react-icons/md';
-import { MdRoom as Room } from 'react-icons/md';
-import { MdEmojiEmotions as EmojiEmotions } from 'react-icons/md';
+import {
+  MdPermMedia as PermMedia,
+  MdLabel as Label,
+  MdRoom as Room,
+  MdEmojiEmotions as EmojiEmotions,
+} from "react-icons/md";
+
 export default function CreatePost({ project, setPosts }) {
   const [content, setContent] = useState("");
   const [files, setFiles] = useState([]);
@@ -12,9 +15,10 @@ export default function CreatePost({ project, setPosts }) {
   const [tags, setTags] = useState([]);
   const [showTagInput, setShowTagInput] = useState(false);
   const [tagSuggestions, setTagSuggestions] = useState([]);
-  const [userPic, setUserPic] = useState(""); // State to store user's profile picture
+  const [userPic, setUserPic] = useState("");
+  const [sentimentEmoji, setSentimentEmoji] = useState("");
+  const [projectName, setProjectName] = useState("");
 
-  // Fetch user's profile picture from local storage when component mounts
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("userInfo"));
     if (userData && userData.pic) {
@@ -29,8 +33,6 @@ export default function CreatePost({ project, setPosts }) {
   const handleTagChange = (e) => {
     const input = e.target.value;
     setTagInput(input);
-
-    // Filter tag suggestions based on user input
     const filteredTags = tags.filter((tag) =>
       tag.toLowerCase().startsWith(input.toLowerCase())
     );
@@ -52,139 +54,164 @@ export default function CreatePost({ project, setPosts }) {
     }
   };
 
+  const analyzeSentimentBeforePosting = async (text) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:1000/analyze_sentiment",
+        { text: text }
+      );
+      if (response.data && response.data.polarity !== undefined) {
+        const emoji = getSentimentEmoji(response.data.polarity);
+        setSentimentEmoji(emoji); // Update emoji based on sentiment
+      }
+    } catch (error) {
+      console.error("Error analyzing sentiment:", error);
+    }
+  };
+
+  const getSentimentEmoji = (polarity) => {
+    console.log("Polarity received:", polarity); // Debugging polarity
+    if (polarity > 0.5) return "😊";
+    else if (polarity < -0.5) return "😞";
+    else if (polarity === 0) return "😐";
+    else return "🤔";
+  };
+
+  const handleInputChange = async (e) => {
+    const newText = e.target.value;
+    setContent(newText);
+    if (newText === "") {
+      setSentimentEmoji(""); // Clear the emoji if the input is cleared
+    } else {
+      // Optionally, throttle this call to avoid overloading your server on every keystroke
+      analyzeSentimentBeforePosting(newText);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!content && files.length === 0) {
+      console.error("Please enter content or select a file.");
+      return;
+    }
 
+    await analyzeSentimentBeforePosting();
     try {
-      if (!content && files.length === 0) {
-        console.error("Please enter content or select a file.");
-        return;
-      }
-
       const userData = JSON.parse(localStorage.getItem("userInfo"));
-      const posterId = userData ? userData._id : null; // Get the user's ID from localStorage
-
+      const posterId = userData ? userData._id : null;
       const formData = new FormData();
       formData.append("posterId", posterId);
       formData.append("message", content);
-      for (let i = 0; i < files.length; i++) {
-        formData.append("image", files[i]);
-      }
+      files.forEach((file) => formData.append("image", file));
       formData.append("tags", tags.join(","));
       if (project) {
         formData.append("project", project);
       }
-
-      // Send the POST request to the backend API
       const response = await axios.post(
         "http://localhost:5000/api/posts",
         formData,
         {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          headers: { "Content-Type": "multipart/form-data" },
         }
       );
-
-      // Fetch user details after successfully creating the post
-      const userResponse = await axios.get(
-        `http://localhost:5000/api/user/${posterId}`
-      );
-
-      // Update state with user's details
-      setUserPic(userResponse.data.pic);
-
-   
-         try {
-          const response = await axios.get("http://localhost:5000/api/posts");
-          setPosts(response.data);
-        } catch (error) {
-          console.error("Error fetching posts:", error);
-        } 
-        setContent("")
-      console.log("Post created:", response.data);
+      try {
+        const projectResponse = await axios.get(
+          `http://localhost:5000/api/project/${project}`
+        );
+        setProjectName(projectResponse.data.success.project.name);
+        // Create notification for the creator of the project
+        const creatorNotification = await axios.post(
+          "http://localhost:5000/api/notification/addNotification",
+          {
+            userAction: posterId,
+            action: `${userData.username} have written a post on the project ${projectResponse.data.success.project.name}`,
+            project,
+            owner: projectResponse.data.success.project.creator,
+            isOpened: false,
+            isDeleted: false,
+          }
+        );
+        console.log(
+          "Notification created for project creator:",
+          creatorNotification.data
+        );
+      } catch (error) {
+        console.error(
+          "Error creating notification for project creator:",
+          error
+        );
+      }
+      setPosts((prevPosts) => [response.data, ...prevPosts]);
+      setContent("");
+      setFiles([]);
+      setTags([]);
+      setSentimentEmoji(""); // Clear emoji after posting
     } catch (error) {
       console.error("Error creating post:", error);
     }
   };
 
   return (
-    <div className="share" style={{padding:"8px 10px"}}>
-      <div className="" style={{padding:"10px 10px 0 10px"}}>
-        <div className="shareTop">
-          <img className="shareProfileImg" src={userPic} alt="User Profile" />{" "}
-          {/* Display user's profile picture */}
-          <input
-            placeholder="What's going through your mind? "
-            className="shareInput"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            style={{ width:"100%" }}
-          />
-        </div>
-        <hr className="shareHr" style={{width:"100%",margin:"20px 0 20px"}} />
-        <div className="shareBottom">
-          <form onSubmit={handleSubmit} className="shareOptions">
-            <label htmlFor="file" className="shareOption">
-              <PermMedia htmlColor="tomato" className="shareIcon" />
-              <span className="shareOptionText">Photo & Video</span>
-              <input
-                type="file"
-                style={{ display: "none" }}
-                id="file"
-                accept=".png, .jpg, .jpeg"
-                multiple // Allow selecting multiple files
-                onChange={(e) => setFiles([...files, ...e.target.files])} // Add new files to the files list
-              />
-            </label>
-            <div className="shareOption" onClick={handleTagClick}>
-              <Label htmlColor="blue" className="shareIcon" />
-              <span className="shareOptionText">Tag</span>
-            </div>
-            {showTagInput && (
-              <div className="shareOption">
-                {tags.map((tag, index) => (
-                  <div key={index} className="tagBadge">
-                    #{tag}
-                  </div>
-                ))}
-                <input
-                  placeholder="Enter tags (press Enter to add)"
-                  className="shareInput"
-                  value={tagInput}
-                  onChange={handleTagChange}
-                  onKeyDown={handleTagKeyDown}
-                />
-                <div className="tagSuggestions">
-                  {tagSuggestions.map((tag, index) => (
-                    <div
-                      key={index}
-                      className="tagSuggestion"
-                      onClick={() => {
-                        setTagInput(tag);
-                        handleAddTag();
-                      }}
-                    >
-                      {tag}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-            <div className="shareOption">
-              <Room htmlColor="green" className="shareIcon" />
-              <span className="shareOptionText">Location</span>
-            </div>
-            <div className="shareOption">
-              <EmojiEmotions htmlColor="goldenrod" className="shareIcon" />
-              <span className="shareOptionText">Emotions</span>
-            </div>
-            <button type="submit" className="shareButton">
-              Share
-            </button>
-          </form>
-        </div>
+    <div className="share" style={{ padding: "8px 10px" }}>
+      <div className="shareTop">
+        <img className="shareProfileImg" src={userPic} alt="User Profile" />
+        <input
+          placeholder="What's going through your mind?"
+          className="shareInput"
+          value={content}
+          onChange={handleInputChange} // Updated to use the new handler
+          style={{ width: "100%" }}
+        />
+        {sentimentEmoji && (
+          <div style={{ fontSize: "24px" }}>{sentimentEmoji}</div>
+        )}{" "}
       </div>
+      <hr className="shareHr" />
+      <form onSubmit={handleSubmit} className="shareOptions">
+        <label htmlFor="file" className="shareOption">
+          <PermMedia htmlColor="tomato" className="shareIcon" />
+          <span className="shareOptionText">Photo & Video</span>
+          <input
+            type="file"
+            style={{ display: "none" }}
+            id="file"
+            accept=".png, .jpg, .jpeg"
+            multiple
+            onChange={(e) => setFiles([...files, ...e.target.files])}
+          />
+        </label>
+        <div className="shareOption" onClick={handleTagClick}>
+          <Label htmlColor="blue" className="shareIcon" />
+          <span className="shareOptionText">Tag</span>
+        </div>
+        {showTagInput && (
+          <div className="shareOption">
+            {tags.map((tag, index) => (
+              <div key={index} className="tagBadge">
+                #{tag}
+              </div>
+            ))}
+            <input
+              placeholder="Enter tags (press Enter to add)"
+              className="shareInput"
+              value={tagInput}
+              onChange={handleTagChange}
+              onKeyDown={handleTagKeyDown}
+            />
+          </div>
+        )}
+        <div className="shareOption">
+          <Room htmlColor="green" className="shareIcon" />
+          <span className="shareOptionText">Location</span>
+        </div>
+        <div className="shareOption">
+          <EmojiEmotions htmlColor="goldenrod" className="shareIcon" />
+          <span className="shareOptionText">Emotions</span>
+        </div>
+        <button type="submit" className="shareButton">
+          Share
+        </button>
+      </form>
     </div>
   );
 }

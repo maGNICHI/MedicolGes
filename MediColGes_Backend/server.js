@@ -143,6 +143,16 @@ io.on("connection", (socket) => {
     
     });
   });
+  socket.on("new audio", (messageaudio) => {
+    var chat = messageaudio.chat;
+
+    chat.users.forEach((user) => {
+      if (user._id == messageaudio.sender._id) return;
+
+      socket.in(user._id).emit("audio recieved", messageaudio);
+ 
+    });
+  });
   socket.off("setup", () => {
     socket.leave(userData._id);
   });

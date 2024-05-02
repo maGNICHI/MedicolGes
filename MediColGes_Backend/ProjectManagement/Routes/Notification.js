@@ -14,6 +14,17 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/byowner/:ownerId", async (req, res) => {
+  const { ownerId } = req.params;
+  try {
+    const notifications = await NotificationProject.find({ owner: ownerId });
+    res.json(notifications);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 // @route POST api/notifications/addNotification
 // @desc Add a new notification
 router.post("/addNotification", async (req, res) => {
@@ -59,6 +70,22 @@ router.delete("/deleteNotification/:_id", async (req, res) => {
     res.status(200).send({ success: { msg: "Notification deleted" } });
   } catch (err) {
     res.status(500).send({ errors: [{ msg: "Server Error" }] });
+  }
+});
+
+// @route PUT api/notifications/markAsOpened/:notificationId
+// @desc Mark a notification as opened
+router.put("/markAsOpened/:notificationId", async (req, res) => {
+  const { notificationId } = req.params;
+  try {
+    const notification = await NotificationProject.findByIdAndUpdate(
+      notificationId,
+      { isOpened: true },
+      { new: true }
+    );
+    res.status(200).json({ success: { msg: "Notification marked as opened", notification } });
+  } catch (err) {
+    res.status(500).json({ errors: [{ msg: "Server Error" }] });
   }
 });
 

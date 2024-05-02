@@ -124,7 +124,7 @@ function OrganizationList() {
                 />
               </div>
             </div>
-            <div className="col-md-2 col-xs-7 mt-3">
+            {/* <div className="col-md-2 col-xs-7 mt-3">
               <IconButton
                 className="border-0 w-100"
                 style={{
@@ -140,7 +140,7 @@ function OrganizationList() {
               >
                 Add New Organization
               </IconButton>
-            </div>
+            </div> */}
           </div>
           <div className="row pt-10 mb-10">
             {currentOrganizations.map((organization, index) => (

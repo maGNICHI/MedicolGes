@@ -11,7 +11,7 @@ export default function Step3({ formDataProject, onNext }) {
 
   const addProject = async (e) => {
     e.preventDefault(); // Prevent default form submission
-  
+
     try {
       const formData = new FormData();
       formData.append('name', formDataProject.name);
@@ -20,12 +20,12 @@ export default function Step3({ formDataProject, onNext }) {
       formData.append('organization', formDataProject.organization);
       formData.append('form', formDataProject.form);
       formData.append('file', formDataProject.file);
-      
+
       // Append collaboratives as a list
       formDataProject.collaboratives.forEach(collaborativeId => {
         formData.append('collaboratives[]', collaborativeId);
       });
-  
+
       const response = await axios.post(
         "http://localhost:5000/api/project/addProject",
         formData,
@@ -35,15 +35,39 @@ export default function Step3({ formDataProject, onNext }) {
           }
         }
       );
-  
+
+      if (formDataProject.collaboratives.length > 0) {
+        formDataProject.collaboratives.forEach(async (collaborativeId) => {
+          try {
+            const collaborator = await axios.get(
+              `http://localhost:5000/api/user/getUserById/${collaborativeId}`
+            );
+
+            await axios.post(
+              "http://localhost:5000/api/notification/addNotification",
+              {
+                userAction: formDataProject.creator,
+                action: `You have been added to the project ${formDataProject.name}`,
+                project: response.data.success.project._id,
+                owner: collaborativeId,
+                isOpened: false,
+                isDeleted: false,
+              }
+            );
+
+            console.log(`Notification created for ${collaborator.data.success.user.username}`);
+          } catch (error) {
+            console.error("Error creating notification for collaborator:", error);
+          }
+        });
+      }
+
       console.log(response.data);
       navigate(`/projects/consult/${response.data.success.project._id}`);
     } catch (error) {
       console.error("Error adding project:", error);
     }
   };
-  
-  
 
   const handleDeleteForm = (id) => {
     deleteForm(id)
