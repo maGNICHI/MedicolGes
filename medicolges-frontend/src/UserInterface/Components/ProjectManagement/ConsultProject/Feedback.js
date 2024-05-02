@@ -4,6 +4,7 @@ import { Button, Form, Modal } from "react-bootstrap";
 import Title from "../../../../components/Title/Title";
 import axios from "axios";
 import Feed from "./Feed";
+import Sentiment from "sentiment";
 
 export default function Feedback({ projectId }) {
   const [showAddFeedBackModal, setShowAddFeedBackModal] = useState(false);
@@ -13,13 +14,58 @@ export default function Feedback({ projectId }) {
   const [feedbacks, setFeedbacks] = useState([]);
   const [userDetails, setUserDetails] = useState();
   const [sortOption, setSortOption] = useState("mostRecent");
-  const [feedb, setFeedb] = useState({}); // Initialize feedb as an empty object
+  const [feedb, setFeedb] = useState({});
   const [displayedFeedbacks, setDisplayedFeedbacks] = useState([]);
   const [numDisplayedReviews, setNumDisplayedReviews] = useState(3);
+  const [sentiment, setSentiment] = useState("");
   const user = JSON.parse(localStorage.getItem("userInfo"));
+
+  const analyzeSentiment = (text) => {
+    const sentimentScore = new Sentiment().analyze(text).score;
+    if (sentimentScore > 0) {
+      setSentiment("😊"); // Positive sentiment
+    } else if (sentimentScore < 0) {
+      setSentiment("😞"); // Negative sentiment
+    } else {
+      setSentiment("😐"); // Neutral sentiment
+    }
+  };
+
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+    analyzeSentiment(e.target.value);
+  };
 
   const handleCloseAddFeedBackModal = () => setShowAddFeedBackModal(false);
   const handleShowAddFeedBackModal = () => setShowAddFeedBackModal(true);
+
+  const handleAddFeedback = async () => {
+    try {
+      await axios.post("http://localhost:5000/api/feedback/addFeedback", {
+        title,
+        description,
+        rating,
+        projectId: projectId._id,
+        userId: user._id,
+      });
+      handleCloseAddFeedBackModal();
+      fetchFeedbacks(projectId._id);
+
+      const projectOwner = projectId.creator; // Assuming projectId.owner holds the owner's ID
+      const feedbackCreator = user._id;
+      const notificationMessage = `${user.username} wrote a feedback on your project ${projectId.name}`;
+      await axios.post("http://localhost:5000/api/notification/addNotification", {
+        userAction: feedbackCreator,
+        action: notificationMessage,
+        project: projectId._id,
+        owner: projectOwner,
+        isOpened: false,
+        isDeleted: false,
+      });
+    } catch (error) {
+      console.error("Error adding feedback:", error);
+    }
+  };
 
   const fetchFeedbacks = async (id) => {
     try {
@@ -52,28 +98,12 @@ export default function Feedback({ projectId }) {
 
   useEffect(() => {
     feedbacks.forEach((feedback) => {
-      setFeedb(feedback); // Update feedb for each feedback
+      setFeedb(feedback);
       if (feedback.userId) {
         fetchUser(feedback.userId);
       }
     });
   }, [feedbacks]);
-
-  const handleAddFeedback = async () => {
-    try {
-      await axios.post("http://localhost:5000/api/feedback/addFeedback", {
-        title,
-        description,
-        rating,
-        projectId: projectId._id,
-        userId: user._id,
-      });
-      handleCloseAddFeedBackModal();
-      fetchFeedbacks(projectId._id); // Fetch updated feedbacks after adding new feedback
-    } catch (error) {
-      console.error("Error adding feedback:", error);
-    }
-  };
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -176,8 +206,9 @@ export default function Feedback({ projectId }) {
                 as="textarea"
                 placeholder="Enter a Description"
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={handleDescriptionChange}
               />
+              <p>Sentiment: {sentiment}</p>
             </Form.Group>
             <Form.Group controlId="formRating">
               <Form.Label>Rate The Project</Form.Label>
@@ -199,7 +230,7 @@ export default function Feedback({ projectId }) {
                       >
                         <path
                           pathLength="360"
-                          d="M12,17.27L18.18,21L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
+                          d="M12,17.27L18.18,21,L16.54,13.97L22,9.24L14.81,8.62L12,2L9.19,8.62L2,9.24L7.45,13.97L5.82,21L12,17.27Z"
                         ></path>
                       </svg>
                     </label>

@@ -5,6 +5,9 @@
   import { useSignup } from "./useSignup";
   import { toast } from "react-toastify";
   import axios from 'axios';
+  import { Link as RouterLink } from 'react-router-dom';
+import VerificationModal from './Email';
+
   const SignupScreen = () => {
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
@@ -60,8 +63,7 @@
         reader.readAsDataURL(file);
       }
     };
-    
-     
+  
     
     const [selectedAvatar, setSelectedAvatar] = useState(
       process.env.PUBLIC_URL + "/images/avatar/maleuseravatar.jpg"
@@ -72,8 +74,21 @@
     const handleSubmit = async (e) => {
       e.preventDefault();
     
+      // First, check if all fields are filled including the avatar
       if (!avatar || !gender || !username || !firstName || !lastName || !email || !password || !role) {
         toast.error("Please fill in all the fields and select an avatar picture.");
+        return;
+      }
+    
+      // Next, check if the password is at least 6 characters long
+      if (password.length < 6) {
+        toast.error('Password must be at least 6 characters long.');
+        return;
+      }
+    
+      // Then, check if the passwords match
+      if (password !== confirmPassword) {
+        toast.error('Passwords do not match.');
         return;
       }
     
@@ -107,13 +122,13 @@
         };
     
         const response = await axios.post("http://localhost:5000/api/user", formData, config);
-    
         console.log("User registered successfully:", response.data);
-        navigate("/login");
+        navigate("/verify-email");
       } catch (error) {
         toast.error(error.response.data.message || "Error registering user");
       }
     };
+    
     
     
     // const handleCertificateChange = (e) => {
@@ -124,19 +139,19 @@
       setCertification(file);
     };
     return (
-      <Container
-      className="signup-screen d-flex align-items-center justify-content-center">
+      <>
+      <Container className="d-flex align-items-center justify-content-center" style={{ minHeight: "100vh", backgroundColor: "white" }}>
       
         <Row className="justify-content-center w-100">
-          <Col lg={10} xl={8} className="signup-container shadow">
+          <Col lg={10} xl={8}  >
             <Row  >
               <Col  md={6} className="signup-form-col">
-              {/* <Title
-                    title={"Welcome To CoMediC Application Web"}
-                    fontSize={"40px"}
-                    fontWeight={900}
+              <Title
+                    title={"Welcome To CoMediC "}
+                    fontSize={"30px"}
+                    fontWeight={700}
                     color={"#1990aa"}
-                  /> */}
+                  />
               </Col>
             </Row>
             <Row>
@@ -149,7 +164,7 @@
                 {/* Form fields */}
                 <div className="text-center mb-2">
                     <Title
-                      secondTitle={"If You Want To Upload A Profile Picture"}
+                      secondTitle={"Upload A Profile Picture"}
                       fontSize={"16px"}
                       fontWeight={600}
                     />
@@ -223,7 +238,7 @@
                     </Col>
 
                     <Form.Group className="mb-3" controlId="username">
-      <Title secondTitle={"username"} fontSize={"16px"} fontWeight={600} />
+      <Title secondTitle={"Username"} fontSize={"16px"} fontWeight={600} />
       <Form.Control
         type="text"
         placeholder="Enter first name"
@@ -248,7 +263,7 @@
     </Form.Group> */}
 
     {/* First Name */}
-    <Form.Group className="mb-3" controlId="firstName">
+    <Form.Group className="mb-3" controlId="FirstName">
       <Title secondTitle={"First Name"} fontSize={"16px"} fontWeight={600} />
       <Form.Control
         type="text"
@@ -260,7 +275,7 @@
     </Form.Group>
 
     {/* Last Name */}
-    <Form.Group className="mb-3" controlId="lastName">
+    <Form.Group className="mb-3" controlId="LastName">
       <Title secondTitle={"Last Name"} fontSize={"16px"} fontWeight={600} />
       <Form.Control
         type="text"
@@ -271,10 +286,7 @@
       />
     </Form.Group>
 
-
-
-
-
+ 
                   {/* Email */}
                   <Form.Group className="my-2" controlId="email">
                     <Title secondTitle={"Email address"} fontSize={"16px"} fontWeight={600} />
@@ -341,11 +353,7 @@
                   
 
                   <div className="d-flex justify-content-between mx-2 mb-2">
-                    <Form.Check
-                      type="checkbox"
-                      label="Accept Conditions"
-                      id="flexCheckDefault"
-                    />
+                    
                   </div>
 
                   <Button
@@ -364,7 +372,19 @@
       alt="Sign up visual" 
       className="img-fluid my-3 signup-image" // Use the "signup-image" class
     />
-    <NavLink to="/login" className="already-member-link">I am already a member</NavLink>
+     
+    <Link
+        as={RouterLink}
+        to="/login"
+        color="teal.500"
+        fontSize="lg"
+        fontWeight="bold"
+        _hover={{ color: "teal.600", textDecoration: "underline" }}
+        mt="3"
+      >
+     Already a member? Log in
+      </Link>
+    
   </Col>
 
 
@@ -373,6 +393,8 @@
           </Col>
         </Row>
       </Container>
+       
+      </>
     );
   };
 

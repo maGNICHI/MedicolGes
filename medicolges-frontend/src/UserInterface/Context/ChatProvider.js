@@ -17,7 +17,7 @@ const ChatProvider = (props) => {
     // Allow navigation to "/" (home), "/login", or "/signup" if user is not logged in
     if (!userInformation) {
       const path = window.location.pathname;
-      if (path !== "/login" && path !== "/signup" && path !== "/") {
+      if (path !== "/login" && path !== "/signup" && path !== "/" && path !== "/verify-email" && path !== "/forgot-password" && path !== "/reset-password/:token" && path !== "/faceauth" && path !== "/face" && path !== "/qr") {
         navigate("/login");
       }
     }

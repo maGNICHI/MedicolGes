@@ -56,8 +56,9 @@ app.use(cookieParser());
 // routes
 app.use("/api/chat", require("./Chat/routes/chatRoutes"));
 app.use("/api/message", require("./Chat/routes/messageRoutes"));
-app.use('/api/project', require('./ProjectManagement/Routes/Project'))
-app.use('/api/feedback', require('./ProjectManagement/Routes/Feedback'))
+app.use('/api/project', require('./ProjectManagement/Routes/Project'));
+app.use('/api/feedback', require('./ProjectManagement/Routes/Feedback'));
+app.use("/api/notification", require("./ProjectManagement/Routes/Notification"));
 app.use('/form', require('./FormManagement/routes/FormRoutes'));
 app.use('/reponse', require('./FormManagement/routes/FormReponse'));
 app.use("/api/posts", require("./ForumAndOrganizationManagement/routes/post.routes"));

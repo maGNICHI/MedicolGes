@@ -9,10 +9,9 @@ import PhoneInput from "react-phone-input-2";
 import "react-phone-input-2/lib/style.css";
 
 import {
-
   FormControl,
   FormLabel,
-  Button ,
+  Button,
   RadioGroup,
   Radio,
   Checkbox,
@@ -25,19 +24,19 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FaAd, FaAngleDown, FaArchive, FaSave } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 import { sendResponse } from "../../../Dashboard/Dashboard/compnents/api";
 import TimePickerInput from "../../../Dashboard/Dashboard/compnents/Form/TimePickerInput";
 import { Box, Switch, Text, Textarea } from "@chakra-ui/react";
-  //image
-  const preset_key="cw1paxgz";
-  const cloud_name="dwkto7nzl";
+//image
+const preset_key = "cw1paxgz";
+const cloud_name = "dwkto7nzl";
 const AjouterForm = () => {
-  const [error, setError] = useState(''); // Définition de l'état error
-  const [textError, setTextError] = useState('');
+  const [error, setError] = useState(""); // Définition de l'état error
+  const [textError, setTextError] = useState("");
 
-  const [formData, setFormData] = useState({id:"",name: "", questions: [] });
-  console.log("formdata from ajouter form",formData._id)
+  const [formData, setFormData] = useState({ id: "", name: "", questions: [] });
+  console.log("formdata from ajouter form", formData._id);
   const [formId, setFormId] = useState(""); // Initialiser formId à null ou une valeur par défaut appropriée
   const [selectedName, setSelectedName] = useState("Dashboard");
   const dispatch = useDispatch();
@@ -47,15 +46,14 @@ const AjouterForm = () => {
   const navigate = useNavigate();
 
   //ajouter
-  const[image, setImage]=useState();
+  const [image, setImage] = useState();
 
   //forUdpate
   const [questions, setQuestions] = useState([]);
-//ajouter visibilite 
-const [isUpdating, setIsUpdating] = useState(false); // State to control update mode
+  //ajouter visibilite
+  const [isUpdating, setIsUpdating] = useState(false); // State to control update mode
 
   const handleUpdate = async (e) => {
-
     navigate("/editForm", { state: { formData } });
   };
 
@@ -63,7 +61,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
   const handleToggleChange = (questionId, checked) => {
     setFormData((prevFormData) => {
       const updatedQuestions = prevFormData.questions.map((question) => {
-        if (question.id === questionId && question.questionType === 'toggle') {
+        if (question.id === questionId && question.questionType === "toggle") {
           return {
             ...question,
             responseValue: checked,
@@ -71,14 +69,14 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
         }
         return question;
       });
-  
+
       return {
         ...prevFormData,
         questions: updatedQuestions,
       };
     });
   };
-  
+
   useEffect(() => {
     console.log(formData);
   }, [formData]);
@@ -95,9 +93,8 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
     console.log("Form data before saving:", formData); // Vérifiez les données du formulaire avant la sauvegarde
 
     createForm(formData);
-    navigate('/projects')
+    navigate("/projects");
     // navigate("/affucheyourReponse", { state: { formData } });
-
   };
   const createForm = async (formData) => {
     console.log("Form data to save:", formData);
@@ -118,23 +115,23 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
       // // Envoyer une réponse à l'API pour chaque question du formulaire
       // for (const question of formData.questions) {
       //   console.log("Form ID before sending response:", formId);
-         
+
       //     await sendResponse(formData._id, question.id, question.responseValue);
       // }
-      
-        // Map form data to an array of response objects
-        const responses = formData.questions.map(question => ({
-          questionId: question.id,
-          responseValue: question.responseValue,
-          // userId: '66033c44e4bf89819130ebce'
+
+      // Map form data to an array of response objects
+      const responses = formData.questions.map((question) => ({
+        questionId: question.id,
+        responseValue: question.responseValue,
+        // userId: '66033c44e4bf89819130ebce'
       }));
       await sendResponse(formData._id, responses);
 
       console.log("Toutes les réponses ont été envoyées avec succès!");
-  } catch (err) {
+    } catch (err) {
       console.log("Erreur lors de l'envoi des réponses: ", err);
       throw err; // Facultatif : propager l'erreur vers le code appelant
-  }
+    }
     // addForm({
     //   name: formData.name,
     //   questions: JSON.stringify(formData.questions),
@@ -147,7 +144,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
     //   });
   };
   const handleResponse = (id, responseValue, responseType) => {
-    console.log("kkkkkk", id, responseValue, responseType);//
+    console.log("kkkkkk", id, responseValue, responseType); //
     switch (responseType) {
       case "toggle":
         setFormData((prev) => ({
@@ -243,25 +240,29 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
         break;
       case "file":
         const formData = new FormData();
-  formData.append('file', responseValue);
-  formData.append('upload_preset', preset_key);
-  axios.post(`https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`, formData)
-    .then(res => {
-      const imageUrl = res.data.secure_url;
-      setFormData(prev => ({
-        ...prev,
-        questions: prev.questions.map(obj => {
-          if (obj.id === id) {
-            return { ...obj, responseValue: imageUrl };
-          }
-          return obj;
-        }),
-      }));
-      setImage(imageUrl);
-    })
-    .catch(err => console.log(err));
-  break;
-        // break;
+        formData.append("file", responseValue);
+        formData.append("upload_preset", preset_key);
+        axios
+          .post(
+            `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+            formData
+          )
+          .then((res) => {
+            const imageUrl = res.data.secure_url;
+            setFormData((prev) => ({
+              ...prev,
+              questions: prev.questions.map((obj) => {
+                if (obj.id === id) {
+                  return { ...obj, responseValue: imageUrl };
+                }
+                return obj;
+              }),
+            }));
+            setImage(imageUrl);
+          })
+          .catch((err) => console.log(err));
+        break;
+      // break;
       case "number":
         // Mise à jour de la réponse pour le type 'number'
         setFormData((prev) => ({
@@ -295,17 +296,19 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
           ...prev,
           ["questions"]: prev.questions.map((obj) => {
             if (obj.id === id) {
-              // Update the properties for the object with the given id
-              const checked = obj.responseValue.checked || []; // Ensure checked is an array
-              const updatedChecked = checked.includes(responseValue)
-                ? checked.filter((x) => x !== responseValue)
-                : [...checked, responseValue];
-  
+              let checked = obj.responseValue.checked ?? []; // Ensure checked is an array
+
+              if (checked.includes(responseValue)) {
+                checked = checked.filter((x) => x != responseValue);
+              } else {
+                checked.push(responseValue);
+              }
+
               return {
                 ...obj,
                 ["responseValue"]: {
                   ...obj.responseValue,
-                  ["checked"]: updatedChecked,
+                  ["checked"]: checked,
                 },
               };
             }
@@ -314,28 +317,28 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
           }),
         }));
         break;
-        // setFormData((prev) => ({
-        //   ...prev,
-        //   ["questions"]: prev.questions.map((obj) => {
-        //     if (obj.id === id) {
-        //       // Update the properties for the object with id 2
-        //       return {
-        //         ...obj,
-        //         ["responseValue"]: {
-        //           ...obj.responseValue,
-        //           ["checked"]: obj.responseValue.checked.includes(responseValue)
-        //             ? obj.responseValue.checked.filter(
-        //                 (x) => x != responseValue
-        //               )
-        //             : obj.responseValue.checked.push(responseValue),
-        //         },
-        //       }; // Add or update other properties as needed
-        //     }
-        //     // If the id doesn't match, return the original object
-        //     return obj;
-        //   }),
-        // }));
-        // break;
+      // setFormData((prev) => ({
+      //   ...prev,
+      //   ["questions"]: prev.questions.map((obj) => {
+      //     if (obj.id === id) {
+      //       // Update the properties for the object with id 2
+      //       return {
+      //         ...obj,
+      //         ["responseValue"]: {
+      //           ...obj.responseValue,
+      //           ["checked"]: obj.responseValue.checked.includes(responseValue)
+      //             ? obj.responseValue.checked.filter(
+      //                 (x) => x != responseValue
+      //               )
+      //             : obj.responseValue.checked.push(responseValue),
+      //         },
+      //       }; // Add or update other properties as needed
+      //     }
+      //     // If the id doesn't match, return the original object
+      //     return obj;
+      //   }),
+      // }));
+      // break;
       case "email":
         setFormData((prev) => ({
           ...prev,
@@ -376,7 +379,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
       [questionId]: option,
     }));
   };
- 
+
   const handleOptionInputChange = (questionId, optionIndex, value) => {
     const updatedOptions = formData.questions.map((question) => {
       if (question.id === questionId) {
@@ -436,14 +439,14 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
       case "toggle":
         return (
           <FormControl display="flex" alignItems="center">
-          <Switch
-            isChecked={question.responseValue} // Use responseValue to indicate whether the toggle is checked or not
-            onChange={(e) => {
-              handleToggleChange(question.id, e.target.checked); // Update the response value with the toggle state
-            }}
-          />
-          <FormLabel htmlFor={`toggle-${question.id}`}>Reponse</FormLabel>
-        </FormControl>
+            <Switch
+              isChecked={question.responseValue} // Use responseValue to indicate whether the toggle is checked or not
+              onChange={(e) => {
+                handleToggleChange(question.id, e.target.checked); // Update the response value with the toggle state
+              }}
+            />
+            <FormLabel htmlFor={`toggle-${question.id}`}>Reponse</FormLabel>
+          </FormControl>
         );
       case "paragraph":
         return (
@@ -465,7 +468,7 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
               }
               resize="vertical"
             />
-        </FormControl>
+          </FormControl>
         );
       // case "telephone":
       //   return (
@@ -489,29 +492,28 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
       case "listederoulate":
         return (
           <>
-           <FormControl>
+            <FormControl>
               <FormLabel htmlFor={`selectChoicesInput-${question.id}`}>
                 {question.questionType === "multipleChoice" && "Enter Option"}
               </FormLabel>
-              
             </FormControl>
-                    {question.responseValue ? (
-                    <Select
-                      placeholder="Select Option"
-                      value={question.responseValue.selectedOption }
-                      onChange={(e) => {
-                        // Update the selected option value
-                        handleResponse(question.id, e.target.value, "listederoulate");
-                      }}
-                      fullWidth
-                    >
-                      {question.responseValue.options.map((item, index) => (
-                        <option key={index} value={item}>
-                          {item}
-                        </option>
-                      ))}
-                    </Select>
-                  ) : null}
+            {question.responseValue ? (
+              <Select
+                placeholder="Select Option"
+                value={question.responseValue.selectedOption}
+                onChange={(e) => {
+                  // Update the selected option value
+                  handleResponse(question.id, e.target.value, "listederoulate");
+                }}
+                fullWidth
+              >
+                {question.responseValue.options.map((item, index) => (
+                  <option key={index} value={item}>
+                    {item}
+                  </option>
+                ))}
+              </Select>
+            ) : null}
           </>
         );
       case "gender":
@@ -541,7 +543,9 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
             onChange={(e) => {
               handleResponse(question.id, e.target.value, "text");
             }}
-            placeholder={question.questionType === "text" ? "Your Text Answer" : ""}
+            placeholder={
+              question.questionType === "text" ? "Your Text Answer" : ""
+            }
             fullWidth
           />
         );
@@ -555,7 +559,9 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
             onChange={(e) => {
               handleResponse(question.id, e.target.value, "number");
             }}
-            placeholder={question.questionType === "number" ? "Your Number Answer" : ""}
+            placeholder={
+              question.questionType === "number" ? "Your Number Answer" : ""
+            }
             fullWidth
           />
         );
@@ -571,86 +577,129 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
       case "dropdown":
         return (
           <FormControl variant="outlined" fullWidth>
-          <Select
-            variant="outline"
-            value={question.responseValue}
-            onChange={(e) => {
-              handleResponse(question.id, e.target.value, "dropdown");
-            }}
-            placeholder={question.question}
-            id={`dropdown-${question.id}`}
-            size="md"
-            fullWidth
-          >
-            {/* Put your dropdown options here */}
-          </Select>
+            <Select
+              variant="outline"
+              value={question.responseValue}
+              onChange={(e) => {
+                handleResponse(question.id, e.target.value, "dropdown");
+              }}
+              placeholder={question.question}
+              id={`dropdown-${question.id}`}
+              size="md"
+              fullWidth
+            >
+              {/* Put your dropdown options here */}
+            </Select>
           </FormControl>
         );
       case "dropdown":
         return (
           <Input
-          name="dropdownAnswer"
-          variant="outline"
-          value={question.responseValue}
-          onChange={(e) => {
-            handleResponse(question.id, e.target.value, "file");
-          }}
-          placeholder={
-            question.questionType === "dropdown" ? "Your Dropdown Answer" : ""
-          }
-          fullWidth
-        />
+            name="dropdownAnswer"
+            variant="outline"
+            value={question.responseValue}
+            onChange={(e) => {
+              handleResponse(question.id, e.target.value, "file");
+            }}
+            placeholder={
+              question.questionType === "dropdown" ? "Your Dropdown Answer" : ""
+            }
+            fullWidth
+          />
         );
       case "multipleChoice":
-        console.log(("rrrrrrrrrrrrr", question));
         return (
-          <div>
-          {[...Array(question.optionsCount)].map((item, index) => (
-            <Stack key={index} direction="row" alignItems="center" marginBottom="10px">
-              <RadioGroup
-                value={formData?.questions.find((q) => q.id === question.id)?.responseValue.options[index]}
-                onChange={(e) => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    ["questions"]: prev.questions.map((obj) => {
-                      if (obj.id === question.id) {
-                        return {
-                          ...obj,
-                          responseValue: {
-                            ...obj.responseValue,
-                            ["selectedOption"]: e.target.value,
-                          },
-                        };
+          <RadioGroup
+            onChange={(selectedOption) => {
+              console.log(selectedOption, "selectedOption");
+              setFormData((prev) => ({
+                ...prev,
+                questions: prev.questions.map((obj) =>
+                  obj.id === question.id
+                    ? {
+                        ...obj,
+                        responseValue: {
+                          ...obj.responseValue,
+                          ["selectedOption"]: selectedOption,
+                        },
                       }
-                      return obj;
-                    }),
-                  }));
-                }}
-              >
-                <Radio colorScheme="blue" >{formData?.questions.find((q) => q.id === question.id)?.responseValue.options[index]} </Radio>
-              </RadioGroup>
-             
+                    : obj
+                ),
+              }));
+            }}
+            value={question.responseValue.selectedOption || ""}
+          >
+            <Stack spacing={2}>
+              {[...Array(question.optionsCount)].map((_, index) => (
+                <Stack key={index} direction="row" alignItems="center">
+                  <Radio
+                    //{formData.questions.find((q) => q.id === question.id)?.responseValue.options[index] == formData.questions.find((q) => q.id === question.id)?.responseValue.selectedOption }
+                    value={question.responseValue.options[index]}
+                  />
+                  <Input
+                    variant="outline"
+                    size="sm"
+                    value={
+                      formData.questions.find((q) => q.id === question.id)
+                        ?.responseValue.options[index] || ""
+                    }
+                    onChange={(e) => {
+                      const updatedOptions = [
+                        ...formData.questions.find((q) => q.id === question.id)
+                          ?.responseValue.options,
+                      ];
+                      updatedOptions[index] = e.target.value;
+                      setFormData((prev) => ({
+                        ...prev,
+                        questions: prev.questions.map((obj) =>
+                          obj.id === question.id
+                            ? {
+                                ...obj,
+                                responseValue: {
+                                  ...obj.responseValue,
+                                  options: updatedOptions,
+                                },
+                              }
+                            : obj
+                        ),
+                      }));
+                    }}
+                  />
+                </Stack>
+              ))}
             </Stack>
-          ))}
-        </div>
+          </RadioGroup>
         );
       ///cmobox
       case "combobox":
         return (
           <Stack spacing={4}>
-        <div>
-            {[...Array(question.optionsCount)].map((item, index) => (
-              <div key={index}>
-          
-                          
-               <FormControl className="d-flex">
-                <Checkbox />
-                <FormLabel> {" "}  {          formData.questions.find((q) => q.id === question.id)?.responseValue.checkboxes[index]} </FormLabel>
-              </FormControl>
-              </div>
-            ))}
-          </div>
-        </Stack>
+            <div>
+              {[...Array(question.optionsCount)].map((item, index) => (
+                <div key={index}>
+                  <FormControl className="d-flex">
+                    <Checkbox
+                      onChange={() =>
+                        handleResponse(
+                          question.id,
+                          formData.questions.find((q) => q.id === question.id)
+                            ?.responseValue.checkboxes[index],
+                          "combobox"
+                        )
+                      }
+                    />
+                    <FormLabel>
+                      {" "}
+                      {
+                        formData.questions.find((q) => q.id === question.id)
+                          ?.responseValue.checkboxes[index]
+                      }{" "}
+                    </FormLabel>
+                  </FormControl>
+                </div>
+              ))}
+            </div>
+          </Stack>
         );
       // case "email":
       //   const handleChangeEmail = (e) => {
@@ -718,26 +767,25 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
                 handleResponse(question.id, e.target.value, "email");
               }}
             />
-        </FormControl>
+          </FormControl>
         );
       default:
         return null;
     }
   };
   return (
-      <Container fluid className="mt-4">
-        <Card className="card h-100">
-          <Card.Body
-            style={{
-              backgroundColor: "#ffffffa9",
-              padding: "20px",
-              borderRadius: "20px",
-            }}
-          >
-            <Row>
+    <Container fluid className="mt-4">
+      <Card className="card h-100">
+        <Card.Body
+          style={{
+            backgroundColor: "#ffffffa9",
+            padding: "20px",
+            borderRadius: "20px",
+          }}
+        >
+          <Row>
             <Col xs={12} md={12} className="text-center">
-             
-                <Box
+              <Box
                 className={classes.appBar}
                 position="static"
                 color="inherit"
@@ -746,112 +794,106 @@ const [isUpdating, setIsUpdating] = useState(false); // State to control update 
                 backgroundRepeat="no-repeat"
                 backgroundSize="cover"
               >
-                <Text
-                  as="h1"
-                  fontSize="90px"
-                  color="black"
-                  fontWeight={900}
-                >
+                <Text as="h1" fontSize="90px" color="black" fontWeight={900}>
                   Form Generation
                 </Text>
               </Box>
-              </Col>
-              <Col xs={12} md={12} className="text-center">
-                <div>
+            </Col>
+            <Col xs={12} md={12} className="text-center">
+              <div>
                 {formData && (
-                        <>
-                          <Box
-                            display="flex"
-                            alignItems="center"
-                            padding="0px"
-                            marginBottom="4px"
+                  <>
+                    <Box
+                      display="flex"
+                      alignItems="center"
+                      padding="0px"
+                      marginBottom="4px"
+                    >
+                      <Box marginLeft="18px" marginRight="10px">
+                        <Text
+                          fontSize="18px"
+                          fontWeight={600}
+                          marginBottom="0px"
+                          marginRight="7px"
+                          fontFamily="Poppins, sans-serif"
+                        >
+                          Name of the questionnaire:
+                        </Text>
+                      </Box>
+                      <Box>
+                        {formData && (
+                          <Text
+                            className={classes.title}
+                            marginBottom="7px"
+                            fontSize="18px"
+                            fontFamily="Poppins, sans-serif"
                           >
-                            <Box marginLeft="18px" marginRight="10px">
+                            {formData.name}
+                            {formData.id}
+                          </Text>
+                        )}
+                      </Box>
+                    </Box>
+                    <Box>
+                      {formData.questions &&
+                        Array.isArray(formData.questions) &&
+                        formData.questions.map((question, index) => (
+                          <Box key={index} marginBottom="20px">
+                            <Box
+                              display="flex"
+                              alignItems="center"
+                              paddingBottom="8px"
+                            >
                               <Text
                                 fontSize="18px"
                                 fontWeight={600}
-                                marginBottom="0px"
-                                marginRight="7px"
                                 fontFamily="Poppins, sans-serif"
+                                paddingBottom="8px"
                               >
-                                Name of the questionnaire:
+                                Question {index + 1}: {question.question}
                               </Text>
+                              {/* You can add Question Type if needed */}
                             </Box>
-                            <Box>
-                              {formData && (
-                                <Text
-                                  className={classes.title}
-                                  marginBottom="7px"
-                                  fontSize="18px"
-                                  fontFamily="Poppins, sans-serif"
-                                >
-                                  {formData.name}
-                                  {formData.id}
-                                </Text>
-                              )}
-                            </Box>
+                            {/* Render input field based on question type */}
+                            {renderInputField(question)}
                           </Box>
-                          <Box>
-                            {formData.questions &&
-                              Array.isArray(formData.questions) &&
-                              formData.questions.map((question, index) => (
-                                <Box key={index} marginBottom="20px">
-                                  <Box
-                                    display="flex"
-                                    alignItems="center"
-                                    paddingBottom="8px"
-                                  >
-                                    <Text
-                                      fontSize="18px"
-                                      fontWeight={600}
-                                      fontFamily="Poppins, sans-serif"
-                                      paddingBottom="8px"
-                                    >
-                                      Question {index + 1}: {question.question}
-                                    </Text>
-                                    {/* You can add Question Type if needed */}
-                                  </Box>
-                                  {/* Render input field based on question type */}
-                                  {renderInputField(question)}
-                                </Box>
-                              ))}
-                          </Box>
-                        </>
-                      )}
-                </div>
-                <div className="col-md-12 col-xs-12 d-flex justify-content-end">
+                        ))}
+                    </Box>
+                  </>
+                )}
+              </div>
+              <div className="col-md-12 col-xs-12 d-flex justify-content-end">
                 {location.state && location.state.case === "create" ? (
-                      <Button
-                        variant="solid"
-                        colorScheme="blue"
-                        size="lg"
-                        fontWeight="bold"
-                        borderRadius="20px"
-                        onClick={handleSave}
-                        fullWidth // Add fullWidth prop to make button take full width
-                      >
-                        Save {/* Change the button label */}
-                      </Button>
-                    ) : (
-                      <Button
-                        variant="solid"
-                        colorScheme="blue"
-                        size="lg"
-                        fontWeight="bold"
-                        borderRadius="20px"
-                        onClick={handleUpdate}
-                        fullWidth // Add fullWidth prop to make button take full width
-                      >
-                        Update {/* Change the button label */}
-                      </Button>
-                    )}
-                </div>
-              </Col>
-            </Row>
-          </Card.Body>
-        </Card>
-      </Container>
+                  <Button
+                    variant="solid"
+                    colorScheme="blue"
+                    size="lg"
+                    fontWeight="bold"
+                    borderRadius="20px"
+                    onClick={handleSave}
+                    fullWidth // Add fullWidth prop to make button take full width
+                  >
+                    Save {/* Change the button label */}
+                  </Button>
+                ) : (
+                  <Button
+                    variant="solid"
+                    colorScheme="blue"
+                    size="lg"
+                    fontWeight="bold"
+                    borderRadius="20px"
+                    onClick={handleUpdate}
+                    fullWidth // Add fullWidth prop to make button take full width
+                  >
+                    Update {/* Change the button label */}
+                  </Button>
+                )}
+              </div>
+            </Col>
+          </Row>
+        </Card.Body>
+      </Card>
+    </Container>
   );
 };
 export default AjouterForm;
-

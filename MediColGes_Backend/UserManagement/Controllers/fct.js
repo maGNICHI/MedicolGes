@@ -2,7 +2,19 @@ const User = require("../Model/User");
 
 const fetchAllUsers = async () => {
   try {
-    const users = await User.find({}, { gender:1,username:1 , firstName:1, lastName: 1,email: 1, role: 1,pic:1 ,certification:1 ,isAdmin:1,isDeleted:1,blocked:1 , createdAt : 1});
+    const users = await User.find({}, { gender:1,username:1 , firstName:1, lastName: 1,email: 1, role: 1,pic:1 ,certification:1 ,isAdmin:1,isDeleted:1,isVerified:1,blocked:1 , createdAt : 1});
+
+    return users;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+
+    throw error;
+  }
+};
+
+const fetchAllPic= async () => {
+  try {
+    const users = await User.find({}, { pic:1,email:1});
 
     return users;
   } catch (error) {
@@ -86,4 +98,4 @@ const updateUser = async (userData) => {
 
 
 
-module.exports = { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser };
+module.exports = { fetchAllUsers, blockUserHelper, unBlockUserHelper, updateUser,fetchAllPic };

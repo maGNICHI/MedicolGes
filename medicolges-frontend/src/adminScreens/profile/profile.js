@@ -1,33 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Form, Button, Card, Row, Col, InputGroup, FormControl } from 'react-bootstrap';
-import { FaUser, FaEnvelope, FaLock, FaUserTag } from 'react-icons/fa';
-import './profile.css'; // Make sure this path is correct
+import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
+import { Form} from 'react-bootstrap';
+import {
+  Box, Button, FormControl, FormLabel, Input, InputGroup, InputLeftElement,
+  Avatar, AvatarBadge, IconButton, Flex, Grid, GridItem, Card, Text, useToast,
+  VStack, HStack, chakra, Container, Heading, Icon
+} from '@chakra-ui/react';
+import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import Layout from "../../Dashboard/SuperAdminLayout/Layout";
 import 'react-toastify/dist/ReactToastify.css';
 
+const MotionBox = motion(Box);
 
 const AdminProfileScreen = () => {
   const [loading, setLoading] = useState(false);
   const [adminDetails, setAdminDetails] = useState({
-    _id: '',
-
-    username: '',
-    firstName:'',
-    lastName:'',
-    email: '',
-    password: '',
-     
+    _id: '', username: '', firstName:'', lastName:'', email: '', password: '', pic: '',profilePic: '',
   });
-  const [selectedName, setSelectedName] = useState("User Management");
+  
+  const toast = useToast();
+  const selectedName = "User Management";
+  const [profilePicPreview, setProfilePicPreview] = useState(adminDetails.pic || '/avatar.jpg');
+
+  const handleImageChange = (e) => {
+    if (e.target.files.length > 0) {
+      setProfilePic(e.target.files[0]);
+    }
+  };
+  const [profilePic, setProfilePic] = useState(null);
   useEffect(() => {
-    // Assuming you have a similar setup for admin authentication
     const admin = JSON.parse(localStorage.getItem('userInfo'));
     const adminId = admin?._id;
     if (!adminId) {
-      toast.error("Admin ID is missing. Please log in again.");
+      toast({
+        title: "Admin ID is missing.",
+        description: "Please log in again.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
       return;
     }
 
@@ -37,7 +51,13 @@ const AdminProfileScreen = () => {
         const response = await axios.get(`http://localhost:5000/api/user/profile/${adminId}`);
         setAdminDetails({ ...response.data, password: '' }); // Assuming response contains admin data
       } catch (error) {
-        toast.error("Failed to fetch profile: " + error.toString());
+        toast({
+          title: "Failed to fetch profile",
+          description: error.toString(),
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
       } finally {
         setLoading(false);
       }
@@ -54,146 +74,181 @@ const AdminProfileScreen = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   const adminId = adminDetails._id;
 
-    setLoading(true);
-    const adminId = adminDetails._id;
+  //   try {
+  //     const { _id, ...updateData } = adminDetails;
+  //     await axios.put(`http://localhost:5000/api/user/profile/${adminId}`, updateData, {
+  //       headers: { 'Content-Type': 'application/json' },
+  //     });
+  //     toast({
+  //       title: "Profile Updated",
+  //       description: "Profile updated successfully.",
+  //       status: "success",
+  //       duration: 5000,
+  //       isClosable: true,
+  //     });
+  //   } catch (error) {
+  //     toast({
+  //       title: "Failed to Update Profile",
+  //       description: error.response?.data?.message || error.message,
+  //       status: "error",
+  //       duration: 9000,
+  //       isClosable: true,
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
-    try {
-      const { _id, ...updateData } = adminDetails;
-      await axios.put(`http://localhost:5000/api/user/profile/${adminId}`, updateData, {
-        headers: { 'Content-Type': 'application/json' },
-      });
 
-      toast.success('Profile updated successfully.');
-    } catch (error) {
-      toast.error('Failed to update profile: ' + (error.response?.data?.message || error.message));
-    } finally {
-      setLoading(false);
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const formData = new FormData();
+  formData.append('username', adminDetails.username);
+  formData.append('firstName', adminDetails.firstName);
+  formData.append('lastName', adminDetails.lastName);
+  formData.append('email', adminDetails.email);
+  formData.append('role', adminDetails.role);
+  formData.append('password', adminDetails.password);
+  formData.append('pfp', profilePic); // Key should match backend
+
+  try {
+    const config = {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    };
+    const response = await axios.put(`http://localhost:5000/api/user/profile/${adminDetails._id}`, formData, config);
+    toast({
+      title: 'Profile updated successfully.',
+      status: 'success',
+      duration: 5000,
+      isClosable: true,
+    });
+    setAdminDetails({ ...adminDetails, pic: response.data.pic }); // Update state
+  } catch (error) {
+    toast({
+      title: 'Failed to update profile.',
+      description: error.response?.data?.message || error.message,
+      status: 'error',
+      duration: 9000,
+      isClosable: true,
+    });
+  }
+};
 
   return (
     <Layout selectedName={selectedName}>
-    <motion.div
-      className="update-profile-container"
-      initial={{ opacity: 5, y: 2 }}
-      animate={{ opacity:50, y: 10 }}
-      transition={{ duration: 0.5 }}
-    >
-      <Row>
-        <Col md={4}>
-          <Card>
-            <Card.Img variant="top" src={adminDetails.pic || '/avatar.jpg'} />
-            <Card.Body>
-            <Card.Text>Welcome !</Card.Text>
-              <Card.Title>{adminDetails.username}</Card.Title>
+      <MotionBox
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        mt={5}
+        mx="auto"
+        maxW="4xl"
+        p={5}
+        shadow="md"
+        borderWidth="1px"
+      >
+        <Flex>
+          <Box flex="1" borderWidth="1px" borderRadius="lg" overflow="hidden">
+            <Avatar size="2xl" name={adminDetails.username} src={adminDetails.pic || '/avatar.jpg'} />
+            <Box p={6}>
+              <Box display="flex" alignItems="baseline">
+                <Box
+                  color="gray.500"
+                  fontWeight="semibold"
+                  letterSpacing="wide"
+                  fontSize="xs"
+                  textTransform="uppercase"
+                >
+                 Welcome Super Admin! <br/>{adminDetails.username}
+                </Box>
+              </Box>
+            </Box>
+            
+<div className="d-flex align-items-center">
+ 
+ <Form.Control
+   type="file"
+   className="rounded-pill"
+   onChange={(e) => {
+     const file = e.target.files[0];
+     if (file) {
+       setProfilePic(file);
+       const reader = new FileReader();
+       reader.onloadend = () => {
+         setProfilePicPreview(reader.result);
+       };
+       reader.readAsDataURL(file);
+     }
+   }}
+ />
+</div>
+          </Box>
+          
+ 
+          <Box flex="3" ml={10}>
+            <VStack spacing={4} align="stretch">
               
-              {/* Implement functionality to change picture if necessary */}
-            </Card.Body>
-          </Card>
-        </Col>
-        <Col md={8}>
-          <Card className="mb-3">
-            <Card.Body>
-              <Card.Title>Personal Information</Card.Title>
-              <Form.Group controlId="username">
-                <Form.Label>user name</Form.Label>
+              <FormControl id="username">
+                <FormLabel>Username</FormLabel>
                 <InputGroup>
-                  <InputGroup.Text><FaUser /></InputGroup.Text>
-                  <Form.Control
-                    type="text"
-                    name="username"
-                    placeholder="username"
-                    value={adminDetails.username}
-                    onChange={handleInputChange}
-                  />
+                  <InputLeftElement pointerEvents="none">
+                    <FaUser color="gray.300" />
+                  </InputLeftElement>
+                  <Input type="text" name="username" placeholder="Username" value={adminDetails.username} onChange={handleInputChange} />
                 </InputGroup>
-              </Form.Group>
-              <Form.Group controlId="firstName">
-                <Form.Label>first Name</Form.Label>
+              </FormControl>
+              <FormControl id="firstName">
+                <FormLabel>First Name</FormLabel>
                 <InputGroup>
-                  <InputGroup.Text><FaUser /></InputGroup.Text>
-                  <Form.Control
-                    type="text"
-                    name="firstName"
-                    placeholder="firstName"
-                    value={adminDetails.firstName}
-                    onChange={handleInputChange}
-                  />
+                  <InputLeftElement pointerEvents="none">
+                    <FaUser color="gray.300" />
+                  </InputLeftElement>
+                  <Input type="text" name="firstName" placeholder="firstName" value={adminDetails.firstName} onChange={handleInputChange} />
                 </InputGroup>
-              </Form.Group>
-              <Form.Group controlId="lastName">
-                <Form.Label>last Name</Form.Label>
+              </FormControl>
+              <FormControl id="lastname">
+                <FormLabel>Last Name</FormLabel>
                 <InputGroup>
-                  <InputGroup.Text><FaUser /></InputGroup.Text>
-                  <Form.Control
-                    type="text"
-                    name="lastName"
-                    placeholder="lastName"
-                    value={adminDetails.lastName}
-                    onChange={handleInputChange}
-                  />
+                  <InputLeftElement pointerEvents="none">
+                    <FaUser color="gray.300" />
+                  </InputLeftElement>
+                  <Input type="text" name="lastName" placeholder="lastName" value={adminDetails.lastName} onChange={handleInputChange} />
                 </InputGroup>
-              </Form.Group>
-              <Form.Group controlId="email">
-                <Form.Label>Email Address</Form.Label>
+              </FormControl>
+              <FormControl id="email">
+                <FormLabel>Email Address</FormLabel>
                 <InputGroup>
-                  <InputGroup.Text><FaEnvelope /></InputGroup.Text>
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    placeholder="Email"
-                    value={adminDetails.email}
-                    onChange={handleInputChange}
-                  />
+                  <InputLeftElement pointerEvents="none">
+                    <FaEnvelope color="gray.300" />
+                  </InputLeftElement>
+                  <Input type="email" name="email" placeholder="Email" value={adminDetails.email} onChange={handleInputChange} />
                 </InputGroup>
-              </Form.Group>
-            </Card.Body>
-          </Card>
-          <Card className="mb-3">
-            <Card.Body>
-              <Card.Title>Change Password</Card.Title>
-               
-
-              <Form.Group controlId="password">
-<Form.Label>Password</Form.Label>
-<InputGroup>
-<InputGroup.Text><FaLock /></InputGroup.Text>
-<Form.Control
-type="password"
-name="password"
-placeholder="New Password"
-value={adminDetails.password}
-onChange={handleInputChange}
-/>
-</InputGroup>
-</Form.Group>
- 
-<Form.Group controlId="cPassword">
-<Form.Label>Confirm Password</Form.Label>
-<InputGroup>
-<InputGroup.Text><FaLock /></InputGroup.Text>
-<Form.Control
-type="password"
-name="cPassword"
-placeholder="Confirm New Password"
-value={adminDetails.cPassword}
-onChange={handleInputChange}
-/>
-</InputGroup>
-</Form.Group>
-</Card.Body>
-</Card>
- 
-<Button variant="primary" type="submit" onClick={handleSubmit} className="mt-3">
-Update Profile
-</Button>
-</Col>
-</Row>
-</motion.div>
-</Layout>
-);
+              </FormControl>
+              <FormControl id="password">
+                <FormLabel>password</FormLabel>
+                <InputGroup>
+                  <InputLeftElement pointerEvents="none">
+                    <FaUser color="gray.300" />
+                  </InputLeftElement>
+                  <Input type="password" name="password" placeholder="password" value={adminDetails.password} onChange={handleInputChange} />
+                </InputGroup>
+              </FormControl>
+              
+            </VStack>
+            <Button mt={4} colorScheme="teal" isLoading={loading} onClick={handleSubmit}>
+              Update Profile
+            </Button>
+          </Box>
+        </Flex>
+      </MotionBox>
+    </Layout>
+  );
 };
+
 export default AdminProfileScreen;

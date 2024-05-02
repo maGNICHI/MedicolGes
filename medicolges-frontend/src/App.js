@@ -37,15 +37,23 @@ import EditQuestionnaire from './UserInterface/Components/Questionnaire/EditQues
 import GetFormById from './UserInterface/Components/Questionnaire/GetFormById';
 import SignupScreen from "./userScreens/SignupScreen.js";
 import LoginScreen from "./userScreens/LoginScreen.js";
-import ProfileScreen from  './userScreens/profile/profile.js';
-import AdminProfileScreen from  './adminScreens/profile/profile.js';
+import ProfileScreen from './userScreens/profile/profile.js';
+import AdminProfileScreen from './adminScreens/profile/profile.js';
+import DiseaseAI from './UserInterface/Components/DiseaseAi.js';
+import FacialAuth from './userScreens/facial.js'
+import ProtectedRoute from './userScreens/protect.js'
+import TwoFactorAuthSetup from './userScreens/qrcode.js'
+import FacialAuthLive from './userScreens/live picture.js'
+import VerificationPage from "./userScreens/Email.js";
+import ForgotPassword from "./userScreens/ForgotPassword.js";
+
 const ChatPage = React.lazy(() => import("./UserInterface/Pages/ChatPage"));
 
 function App() {
   const navigate = useNavigate();
   const location = useLocation();
   // const store = createStore(reducers, compose(applyMiddleware(thunk)));
-  
+
   // Allow access to login and signup pages when the user is not logged in
 
   // const store = createStore(reducers, compose(applyMiddleware(thunk)));
@@ -53,8 +61,22 @@ function App() {
   return (
 
     <Routes>
-      <Route path="/signup" element={<Signup />} />
-      <Route path="/loginn" element={<LoginScreen />} />
+
+      <Route path="/login" element={<Login />} />
+      <Route path="/qr" element={<TwoFactorAuthSetup />} />
+      <Route path="/" element={<Home />} />
+      {/* <Route path="/dashboard" element={
+        <ProtectedRoute roleRequired="super admin">
+          <Dashboard />
+        </ProtectedRoute>
+      } /> */}
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/verify-email" element={<VerificationPage />} />
+      <Route path="/face" element={<FacialAuth />} />
+      <Route path="/faceauth" element={<FacialAuthLive />} />
+      {/* <Route path="/signup" element={<Signup />} /> */}
+      <Route path="/signup" element={<SignupScreen />} />
+      <Route path="/login" element={<LoginScreen />} />
       <Route path="/Profile" element={<ProfileScreen />} />
       <Route path="/login" element={<Login />} />
       <Route path='/signupp' element={<Signup />} />
@@ -88,6 +110,7 @@ function App() {
       <Route path='/projects/consult/:id' element={<Consult />} />
       <Route path="/afficheForm" element={<AfficheForm />} />
       <Route path="/homeNew" element={<HomePost1 />} />
+      <Route path="/disease" element={<DiseaseAI />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

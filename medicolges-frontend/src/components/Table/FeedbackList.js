@@ -4,11 +4,11 @@ import { FaInfoCircle, FaTrash } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import Title from "../Title/Title";
 import axios from "axios";
-import Pagination from "react-bootstrap/Pagination"; // Import Pagination from react-bootstrap
+import Pagination from "react-bootstrap/Pagination";
 
 const FeedbackList = () => {
   const [page, setPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage] = useState(5); // Set the number of feedback items per page
   const [feedback, setFeedback] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [feedbackToDelete, setFeedbackToDelete] = useState("");
@@ -26,7 +26,6 @@ const FeedbackList = () => {
         `http://localhost:5000/api/feedback/${feedbackToDelete}`
       );
       getFeedback();
-      setFeedback(feedback.filter((item) => item.id !== feedbackToDelete));
       handleCloseDeleteModal();
     } catch (error) {
       console.error("Error deleting feedback:", error);
@@ -46,13 +45,14 @@ const FeedbackList = () => {
     setPage(pageNumber);
   };
 
-  const handlePerPageChange = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-  };
-
   useEffect(() => {
     getFeedback();
-  }, [page, rowsPerPage]);
+  }, []);
+
+  // Calculate indexes for pagination
+  const indexOfLastFeedback = page * rowsPerPage;
+  const indexOfFirstFeedback = indexOfLastFeedback - rowsPerPage;
+  const currentFeedback = feedback.slice(indexOfFirstFeedback, indexOfLastFeedback);
 
   return (
     <>
@@ -75,49 +75,43 @@ const FeedbackList = () => {
             </tr>
           </thead>
           <tbody>
-            {feedback &&
-              feedback
-                .slice((page - 1) * rowsPerPage, page * rowsPerPage)
-                .map(
-                  (row) =>
-                    row.isDeleted === false && (
-                      <tr key={row.id}>
-                        <td>{row.title}</td>
-                        <td>{row.description}</td>
-                        <td>{row.rating}</td>
-                        <td>
-                          <div style={{ display: "flex" }}>
-                            <NavLink to={`/feedback/${row.id}`}>
-                              <FaInfoCircle color="#0236be" />
-                            </NavLink>
-                            <FaTrash
-                              color="#0236be"
-                              onClick={() => handleShowDeleteModal(row._id)}
-                              style={{ cursor: "pointer", marginLeft: "10px" }}
-                            />
-                          </div>
-                        </td>
-                      </tr>
-                    )
-                )}
+            {currentFeedback.map((row) => 
+            row.isDeleted === false &&(
+              <tr key={row.id}>
+                <td>{row.title}</td>
+                <td>{row.description}</td>
+                <td>{row.rating}</td>
+                <td>
+                  <div style={{ display: "flex" }}>
+                    <NavLink to={`/feedback/${row.id}`}>
+                      <FaInfoCircle color="#0236be" />
+                    </NavLink>
+                    <FaTrash
+                      color="#0236be"
+                      onClick={() => handleShowDeleteModal(row._id)}
+                      style={{ cursor: "pointer", marginLeft: "10px" }}
+                    />
+                  </div>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </Table>
       </div>
       <div className="d-flex justify-content-center mt-3">
-        <Pagination
-          size="lg"
-          className="justify-content-center"
-          prev
-          next
-          first
-          last
-          ellipsis
-          boundaryLinks
-          maxButtons={5}
-          activePage={page}
-          items={Math.ceil(feedback.length / rowsPerPage)}
-          onSelect={handleChangePage}
-        />
+        <Pagination>
+          <Pagination.Prev
+            onClick={() => handleChangePage(page - 1)}
+            disabled={page === 1}
+          />
+          <Pagination.Item active={page === 1} onClick={() => handleChangePage(1)}>
+            {1}
+          </Pagination.Item>
+          <Pagination.Next
+            onClick={() => handleChangePage(page + 1)}
+            disabled={currentFeedback.length < rowsPerPage}
+          />
+        </Pagination>
       </div>
       {/* Delete confirmation modal */}
       <Modal show={showDeleteModal} onHide={handleCloseDeleteModal}>

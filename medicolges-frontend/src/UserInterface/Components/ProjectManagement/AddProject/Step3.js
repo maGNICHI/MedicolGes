@@ -11,8 +11,7 @@ export default function Step3({ formDataProject, onNext }) {
 
   const addProject = async (e) => {
     e.preventDefault(); // Prevent default form submission
-
-    console.log("🚀 ~ addProject ~ formDataProject:", formDataProject)
+  
     try {
       const formData = new FormData();
       formData.append('name', formDataProject.name);
@@ -21,19 +20,30 @@ export default function Step3({ formDataProject, onNext }) {
       formData.append('organization', formDataProject.organization);
       formData.append('form', formDataProject.form);
       formData.append('file', formDataProject.file);
+      
+      // Append collaboratives as a list
+      formDataProject.collaboratives.forEach(collaborativeId => {
+        formData.append('collaboratives[]', collaborativeId);
+      });
+  
       const response = await axios.post(
-        "http://localhost:5000/api/project/addProject" 
-        , formData, {
+        "http://localhost:5000/api/project/addProject",
+        formData,
+        {
           headers: {
             'Content-Type': 'multipart/form-data'
           }
-        });
+        }
+      );
+  
       console.log(response.data);
-      navigate(`/projects/consult/${response.data.success.project._id}`) // Call the onNext function passed from the parent component
+      navigate(`/projects/consult/${response.data.success.project._id}`);
     } catch (error) {
       console.error("Error adding project:", error);
     }
   };
+  
+  
 
   const handleDeleteForm = (id) => {
     deleteForm(id)

@@ -1,46 +1,56 @@
+/* profile.css */
 .update-profile-container {
-    background: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    padding: 2rem;
-    max-width: 500px;
-    margin: 2rem auto;
-    background: linear-gradient(to right, #f6f7f9, #ffffff);
-  }
-  
-  .update-profile-container h2 {
-    color: #ffffff;
-    margin-bottom: 1.5rem;
-    text-align: center;
-  }
-  
-  .form-label {
-    font-weight: 600;
-  }
-  
-  .form-control {
-    border-radius: 5px;
-    border: 1px solid #3b4f64;
-    transition: all 0.3s ease-in-out;
-  }
-  
-  .form-control:focus {
-    box-shadow: 0 0 0 0.2rem rgba(79, 112, 148, 0.25);
-  }
-  
-  .btn-primary {
-    background-color: #f8fbff;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    margin-top: 1rem;
-    transition: background-color 0.3s ease-in-out;
-  }
-  
-  .btn-primary:hover {
-    background-color: #f8fbff;
-  }
- 
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
 
+.card-custom {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
 
- 
+.input-group-text {
+  background-color: #eff1f3;
+  border: none;
+}
 
+.form-control {
+  border: none;
+  background-color: #eff1f3;
+  border-radius: 0.375rem;
+}
+
+.form-control:focus {
+  background-color: #ffffff;
+  box-shadow: 0 0 0 2px #007bff;
+}
+
+.card-body-custom {
+  padding: 20px;
+}
+.custom-file-upload .upload-icon {
+  cursor: pointer;
+  display: inline-block;
+  padding: 10px;
+  background-color: #f8f9fa; /* Light grey background */
+  border: 1px solid #ccc; /* Grey border */
+  border-radius: 50%; /* Rounded borders to make it look button-like */
+  color: #333; /* Dark grey icon color */
+}
+
+.mb-3-custom {
+  margin-bottom: 1.5rem;
+}
+
+button.update-button {
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+}
+
+button.update-button:hover {
+  background-color: #0056b3;
+}

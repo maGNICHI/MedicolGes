@@ -794,62 +794,63 @@ export default function Step2({ formDataProject, setformDataProject, onNext }) {
           fullWidth
         />
         );
-      case "multipleChoice":
-        console.log(("rrrrrrrrrrrrr", question));
-        return (
-          <div>
-          {[...Array(question.optionsCount)].map((item, index) => (
-            <Stack key={index} direction="row" alignItems="center" marginBottom="10px">
-              <RadioGroup
-                value={formData?.questions.find((q) => q.id === question.id)?.responseValue.options[index]}
-                onChange={(e) => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    ["questions"]: prev.questions.map((obj) => {
-                      if (obj.id === question.id) {
-                        return {
+        case "multipleChoice":
+          return (
+            <RadioGroup
+              onChange={(selectedOption) => {
+                setFormData((prev) => ({
+                  ...prev,
+                  questions: prev.questions.map((obj) =>
+                    obj.id === question.id
+                      ? {
                           ...obj,
                           responseValue: {
                             ...obj.responseValue,
-                            ["selectedOption"]: e.target.value,
+                            selectedOption,
                           },
-                        };
+                        }
+                      : obj
+                  ),
+                }));
+              }}
+              value={
+                formData.questions.find((q) => q.id === question.id)?.responseValue.selectedOption || ""
+              }
+            >
+              <Stack spacing={2}>
+                {[...Array(question.optionsCount)].map((_, index) => (
+                  <Stack key={index} direction="row" alignItems="center">
+                    <Radio value={index.toString()} />
+                    <Input
+                      variant="outline"
+                      size="sm"
+                      value={
+                        formData.questions.find((q) => q.id === question.id)?.responseValue.options[index] || ""
                       }
-                      return obj;
-                    }),
-                  }));
-                }}
-              >
-                <Radio colorScheme="blue" />
-              </RadioGroup>
-              <Input
-                variant="outline"
-                size="sm"
-                value={formData?.questions.find((q) => q.id === question.id)?.responseValue.options[index]}
-                onChange={(e) => {
-                  setFormData((prev) => ({
-                    ...prev,
-                    ["questions"]: prev.questions.map((obj) => {
-                      if (obj.id === question.id) {
-                        return {
-                          ...obj,
-                          responseValue: {
-                            ...obj.responseValue,
-                            ["options"]: obj.responseValue.options.map(
-                              (x, i) => (i === index ? e.target.value : x)
-                            ),
-                          },
-                        };
-                      }
-                      return obj;
-                    }),
-                  }));
-                }}
-              />
-            </Stack>
-          ))}
-        </div>
-        );
+                      onChange={(e) => {
+                        const updatedOptions = [...formData.questions.find((q) => q.id === question.id)?.responseValue.options];
+                        updatedOptions[index] = e.target.value;
+                        setFormData((prev) => ({
+                          ...prev,
+                          questions: prev.questions.map((obj) =>
+                            obj.id === question.id
+                              ? {
+                                  ...obj,
+                                  responseValue: {
+                                    ...obj.responseValue,
+                                    options: updatedOptions,
+                                  },
+                                }
+                              : obj
+                          ),
+                        }));
+                      }}
+                    />
+                  </Stack>
+                ))}
+              </Stack>
+            </RadioGroup>
+          );
       ///cmobox
       case "combobox":
         return (
@@ -986,14 +987,12 @@ export default function Step2({ formDataProject, setformDataProject, onNext }) {
 
 
   const handleDeleteQuestion = (id) => {
-    // const updatedQuestions = formData.questions.filter((q) => q.id !== id);
+    const updatedQuestions = formData.questions.filter((q) => q.id !== id);
     setFormData((prevFormData) => ({
       ...prevFormData,
-      questions: prevFormData.questions.filter((q) => q.id !== id),
-      //questions: updatedQuestions,
+      questions: updatedQuestions,
     }));
   };
-
   const handleUpdateQuestion = (index) => {
     // Récupérer la question à partir de l'index
     const questionToUpdate = sortedQuestions[index];
@@ -1139,7 +1138,7 @@ export default function Step2({ formDataProject, setformDataProject, onNext }) {
                     </Text>
                       <DeleteIcon
                         color="info"
-                        onClick={() => handleDeleteQuestion(question.id)}
+                        onClick={() => handleDeleteQuestion(index)}
                         style={{ cursor: "pointer", marginLeft: "10px" }}
                       />
                       <FaEdit // Utilisez EditIcon ici

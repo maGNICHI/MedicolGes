@@ -1009,11 +1009,10 @@ const Form = () => {
 
 
   const handleDeleteQuestion = (id) => {
-    // const updatedQuestions = formData.questions.filter((q) => q.id !== id);
+    const updatedQuestions = formData.questions.filter((q) => q.id !== id);
     setFormData((prevFormData) => ({
       ...prevFormData,
-      questions: prevFormData.questions.filter((q) => q.id !== id),
-      //questions: updatedQuestions,
+      questions: updatedQuestions,
     }));
   };
   const handleUpdateQuestion = (index) => {
@@ -1139,7 +1138,7 @@ const Form = () => {
               </Text>
                 <DeleteIcon
                   color="info"
-                  onClick={() => handleDeleteQuestion(question.id)}
+                  onClick={() => handleDeleteQuestion(index)}
                   style={{ cursor: "pointer", marginLeft: "10px" }}
                 />
                    <FaEdit // Utilisez EditIcon ici

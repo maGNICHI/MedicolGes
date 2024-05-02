@@ -127,6 +127,11 @@ function Navbar() {
             )}
           </div>
         </li>
+        <li>
+          <Link to="/disease" className="navbar-links">
+            Disease
+          </Link>
+        </li>
         {isLoggedIn ? (
           <>
             <li>
@@ -221,6 +226,11 @@ function Navbar() {
           <li>
             <Link href="/organizationShow">Show Organization</Link>
           </li>
+          <li>
+          <Link to="/disease">
+            Disease
+          </Link>
+        </li>
           <li>
             <a onClick={openNav} href="/chats">
               chats

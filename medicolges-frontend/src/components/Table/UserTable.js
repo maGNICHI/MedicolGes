@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import FileDisplay from './file';
 import {
   Box,
   Flex,
@@ -144,7 +145,7 @@ const CheckTable = () => {
             <Text fontSize="sm">Role: {user.role}</Text>
             <Text fontSize="sm">Created At: :{new Date(user.createdAt).toLocaleDateString("en-UK")}</Text>
              
-           
+            <Tag colorScheme={user.isVerified ? 'green' : 'red'}>{user.isVerified ? 'Verified' : 'Not Verified'}</Tag>
             <Tag colorScheme={user.blocked ? 'red' : 'green'}>{user.blocked ? 'Blocked' : 'Active'}</Tag>
             <HStack>
               <IconButton
@@ -156,7 +157,7 @@ const CheckTable = () => {
               <IconButton aria-label="Promote to admin" icon={<FaUserEdit />} onClick={() => handleUpdateAdmin(user._id)} />
               
             </HStack>
-             {/* <Text fontSize="sm">Certification : <img src={user.certification}/></Text> */}
+             <Text fontSize="sm">Certification : <img src={user.certification } alt='No certification to display'/></Text>
           </VStack>
         ))}
       </Grid>

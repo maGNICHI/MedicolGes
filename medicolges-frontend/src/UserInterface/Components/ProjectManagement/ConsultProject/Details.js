@@ -157,6 +157,7 @@ export default function Details({ projectData, organization, setProjectData }) {
         `http://localhost:5000/api/project/${projectData._id}`
       );
       setShowConfirmationModal(false);
+      navigate('/projects')
     } catch (error) {
       console.error("Error deleting project:", error);
     }
