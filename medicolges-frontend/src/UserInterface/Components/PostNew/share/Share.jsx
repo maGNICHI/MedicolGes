@@ -54,6 +54,30 @@ export default function CreatePost({ project, setPosts }) {
     }
   };
 
+  const undesirableWords = ["badword", "badword1", "badword2","fuck", "shit"]; // Ajoutez plus de mots selon le besoin
+
+  const handleInputChange = async (e) => {
+    const newText = e.target.value;
+    const words = newText.split(" ");
+    const containsUndesirable = words.some((word) =>
+      undesirableWords.includes(word.toLowerCase())
+    );
+
+    if (containsUndesirable) {
+      alert("Your message contains words that are not allowed.");
+      // Vous pouvez aussi choisir de ne pas mettre à jour setContent si vous ne voulez pas afficher le texte
+      // return; // Décommentez cette ligne si vous ne voulez pas que le contenu soit mis à jour
+    }
+
+    setContent(newText);
+
+    if (newText === "") {
+      setSentimentEmoji(""); // Clear the emoji if the input is cleared
+    } else {
+      analyzeSentimentBeforePosting(newText);
+    }
+  };
+
   const analyzeSentimentBeforePosting = async (text) => {
     try {
       const response = await axios.post(
@@ -69,24 +93,14 @@ export default function CreatePost({ project, setPosts }) {
     }
   };
 
-  const getSentimentEmoji = (polarity) => {
-    console.log("Polarity received:", polarity); // Debugging polarity
-    if (polarity > 0.5) return "😊";
-    else if (polarity < -0.5) return "😞";
-    else if (polarity === 0) return "😐";
-    else return "🤔";
-  };
+const getSentimentEmoji = (polarity) => {
+  if (polarity > 0.5) return "😊";
+  else if (polarity > 0.3) return "😄";
+  else if (polarity > -0.3) return "😐";
+  else if (polarity > -0.5) return "😞";
+  else return "😢";
+};
 
-  const handleInputChange = async (e) => {
-    const newText = e.target.value;
-    setContent(newText);
-    if (newText === "") {
-      setSentimentEmoji(""); // Clear the emoji if the input is cleared
-    } else {
-      // Optionally, throttle this call to avoid overloading your server on every keystroke
-      analyzeSentimentBeforePosting(newText);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -95,7 +109,7 @@ export default function CreatePost({ project, setPosts }) {
       return;
     }
 
-    await analyzeSentimentBeforePosting();
+    await analyzeSentimentBeforePosting(content);
     try {
       const userData = JSON.parse(localStorage.getItem("userInfo"));
       const posterId = userData ? userData._id : null;
@@ -141,6 +155,7 @@ export default function CreatePost({ project, setPosts }) {
           error
         );
       }
+      
       setPosts((prevPosts) => [response.data, ...prevPosts]);
       setContent("");
       setFiles([]);
@@ -159,12 +174,12 @@ export default function CreatePost({ project, setPosts }) {
           placeholder="What's going through your mind?"
           className="shareInput"
           value={content}
-          onChange={handleInputChange} // Updated to use the new handler
+          onChange={handleInputChange}
           style={{ width: "100%" }}
         />
         {sentimentEmoji && (
           <div style={{ fontSize: "24px" }}>{sentimentEmoji}</div>
-        )}{" "}
+        )}
       </div>
       <hr className="shareHr" />
       <form onSubmit={handleSubmit} className="shareOptions">

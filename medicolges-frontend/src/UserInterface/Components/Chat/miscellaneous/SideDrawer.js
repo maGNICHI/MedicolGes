@@ -29,8 +29,8 @@ import { useToast } from "@chakra-ui/toast";
 import { Input, Spinner } from "@chakra-ui/react";
 import ChatLoading from "../ChatLoading";
 import UserListItem from "../userAvatar/UserListItem";
-//import NotificationBadge from "react-notification-badge";
-//import { Effect } from "react-notification-badge";
+import NotificationBadge from "react-notification-badge";
+import { Effect } from "react-notification-badge";
 import { getSender } from "../../../config/ChatLogics";
 import Navbar from "../../Navbar";
 
@@ -134,7 +134,7 @@ const SideDrawer = () => {
           Chat
         </Text>
         <div >
-          {/* <Menu>
+          <Menu>
             <MenuButton p={1}>
               <NotificationBadge
                 count={notification.length}
@@ -158,7 +158,7 @@ const SideDrawer = () => {
                 </MenuItem>
               ))}
             </MenuList>
-          </Menu> */}
+          </Menu>
           {/* <Menu>
             <MenuButton as={Button} bg="blue.700"  rightIcon={<ChevronDownIcon/>}  
               _hover={{background: "purple.800", color:"yellow.400"}} _active={{background: "purple.800", color:"yellow.400"}}>
