@@ -446,13 +446,6 @@ export default function Details({ projectData, organization, setProjectData }) {
                 {copied ? "Copied!" : "Copy the link"}
               </Button>
             </Form.Group>
-            <Form.Group controlId="formExistingUser">
-              <Form.Label>Choose user</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter an existing user in our web application"
-              />
-            </Form.Group>
             <hr />
             <p>
               If you want to share the project with an external user, send an

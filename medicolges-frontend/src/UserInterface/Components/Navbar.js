@@ -163,7 +163,7 @@ function Navbar() {
             <p className="navbar-links cursor-pointer">Organization</p>
             {dropdownOpen && (
               <ul className="dropdown-content">
-                {user.role === "admin" && (<li>
+                {user.role !== "Patient" && (<li>
                   <Link to="/organizationFront">Create Organization</Link>
                 </li>)}
                 <li>
