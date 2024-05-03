@@ -2,10 +2,12 @@ from flask import Flask, request, jsonify
 import pandas as pd
 import numpy as np
 import requests
+from flask_cors import CORS  # Import CORS module
 
 from scipy.stats import pearsonr
 
 app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes
 
 @app.route('/project', methods=['GET'])
 def get_project():
@@ -17,7 +19,7 @@ def get_project():
         file_name = project_data['file']
         # Download the file from the Node.js backend
         file_response = requests.get(f'http://localhost:5000/api/project/download/{file_name}', stream=True)
-        print("fillllle:",file_name)
+        print("fillllle:", file_name)
         if file_response.status_code == 200:
             # Save the file to a temporary location
             with open('temp_file.csv', 'wb') as f:

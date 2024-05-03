@@ -18,6 +18,7 @@ import {
   fetchFormById,
 } from "../../../../Dashboard/Dashboard/compnents/api";
 import { useNavigate } from "react-router-dom";
+import TreatmentExcelFile from "./Treatement";
 
 export default function Details({ projectData, organization, setProjectData }) {
   console.log("🚀 ~ Details ~ projectData:", projectData)
@@ -419,6 +420,11 @@ export default function Details({ projectData, organization, setProjectData }) {
           </Col>
         </Row>
       )}
+      <Row className="justify-content-center">
+        {projectData.file !== null &&(
+        <TreatmentExcelFile projectData={projectData} />
+        )}
+      </Row>
       <Modal
         show={showShareFeedBackModal}
         onHide={handleCloseShareFeedBackModal}

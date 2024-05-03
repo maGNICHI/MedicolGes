@@ -46,6 +46,7 @@ import TwoFactorAuthSetup from './userScreens/qrcode.js'
 import FacialAuthLive from './userScreens/live picture.js'
 import VerificationPage from "./userScreens/Email.js";
 import ForgotPassword from "./userScreens/ForgotPassword.js";
+import TreatmentExcelFile from "./UserInterface/Components/ProjectManagement/ConsultProject/Treatement.js";
 
 const ChatPage = React.lazy(() => import("./UserInterface/Pages/ChatPage"));
 
@@ -111,6 +112,7 @@ function App() {
       <Route path="/afficheForm" element={<AfficheForm />} />
       <Route path="/homeNew" element={<HomePost1 />} />
       <Route path="/disease" element={<DiseaseAI />} />
+      <Route path="/treatement" element={<TreatmentExcelFile />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>
