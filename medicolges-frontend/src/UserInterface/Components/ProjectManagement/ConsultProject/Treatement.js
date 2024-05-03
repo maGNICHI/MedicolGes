@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const TreatmentExcelFile = ({projectDat}) => {
+const TreatmentExcelFile = ({ projectData }) => {
     const [tables, setTables] = useState({});
     const [crossTables, setCrossTables] = useState({});
     const [loading, setLoading] = useState(false);
@@ -10,29 +10,31 @@ const TreatmentExcelFile = ({projectDat}) => {
         const fetchProjectData = async () => {
             setLoading(true);
             try {
-                const response = await axios.get('http://localhost:2000/project');
+                const response = await axios.get(`http://localhost:2000/project/${projectData._id}`);
                 const { tables, cross_tables } = response.data;
                 setTables(tables);
                 setCrossTables(cross_tables);
-                setLoading(false);
             } catch (error) {
                 console.error('Error fetching project data:', error);
+            } finally {
                 setLoading(false);
             }
         };
 
-        fetchProjectData();
-    }, []);
+        if (projectData && projectData._id) {
+            fetchProjectData();
+        }
+    }, [projectData]);
 
     return (
         <div>
             {loading ? (
                 <p>Loading...</p>
             ) : (
-                <div style={{ overflowY: 'auto' }}> {/* Apply overflowY to the div */}
+                <div style={{ overflowY: 'auto' }}>
                     <h2>Tables:</h2>
                     {Object.entries(tables).map(([columnName, columnData]) => (
-                        <div key={columnName}> {/* Remove overflowY from here */}
+                        <div key={columnName}>
                             <h3>{columnName}</h3>
                             <table style={{ border: '1px solid black', borderCollapse: 'collapse', width: '100%' }}>
                                 <thead>

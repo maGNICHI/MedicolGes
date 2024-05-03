@@ -9,10 +9,10 @@ from scipy.stats import pearsonr
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
 
-@app.route('/project', methods=['GET'])
-def get_project():
+@app.route('/project/<string:project_id>', methods=['GET'])
+def get_project(project_id):
     # Send a GET request to your Node.js backend to fetch the project
-    url = 'http://localhost:5000/api/project/662eb7a61e1cfe7652f9b419'
+    url = f'http://localhost:5000/api/project/{project_id}'
     response = requests.get(url)
     if response.status_code == 200:
         project_data = response.json()['success']['project']  # Access 'project' under 'success'
