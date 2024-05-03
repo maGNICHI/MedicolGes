@@ -534,13 +534,13 @@ export default function Details({ projectData, organization, setProjectData }) {
                 }
               />
             </Form.Group>
-            <Form.Group className="mb-3" controlId="formProjectFile">
+            {/* <Form.Group className="mb-3" controlId="formProjectFile">
               <Form.Label>Upload Excel File</Form.Label>
               <Form.Control
                 type="file"
                 onChange={(e) => handleFileChange(e.target.files[0])}
               />
-            </Form.Group>
+            </Form.Group> */}
           </Form>
         </Modal.Body>
         <Modal.Footer>
